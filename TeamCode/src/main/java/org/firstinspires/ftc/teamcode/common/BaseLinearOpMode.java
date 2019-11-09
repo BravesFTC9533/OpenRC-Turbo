@@ -156,7 +156,8 @@ public class BaseLinearOpMode extends LinearOpMode {
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
+        //VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
+        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromFile("/sdcard/FIRST/DatasetName");
 
         stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
