@@ -5,24 +5,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
+import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 @Autonomous(name = "Java: Autonomous", group = "Concept")
 public class AutonomousOpMode extends BaseLinearOpMode {
 
-    private static final double LEFT_MIN = 22.0;
-    private static final double LEFT_MAX = 14.0;
-
-    private static final double RIGHT_MAX = 9.9;
-    private static final double RIGHT_MIN = 0.0;
-
     private ElapsedTime runtime = new ElapsedTime();
+
+    private FtcGamePad ftcGamePad;
 
     private LiftController liftController;
     private Config config;
 
     private Config.Position startingPosition;
-    private BrickPosition brickPosition = BrickPosition.CENTER;
+    private BrickPosition brickPosition;
 
     public enum BrickPosition {
         LEFT,
@@ -36,6 +34,9 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         telemetry.update();
 
         Initialize(hardwareMap);
+        ftcGamePad = new FtcGamePad("Gamepad 1", gamepad1);
+        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight,
+                ftcGamePad);
 
         config = new Config(hardwareMap.appContext);
         startingPosition = config.getPosition();
@@ -83,173 +84,105 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     boolean isTargetFound = false;
 
     private void redBricks() {
-        moveByInches(0.5, 4);
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
+        moveByInches(0.7, 4, 1.5);
 
-        moveByInches(0.6, 20);
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
+        moveByInches(0.7, 16, 3);
 
-        moveByInches(0.6, 8);
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 3);
 
-        runtime.reset();
+        moveByInches(0.7, 5, 1.5);
 
-        while(opModeIsActive() && !isTargetFound && runtime.seconds() <= 12) {
-            updateVuforia();
-            if(targetVisible) {
-                telemetry.addLine("Did Stuff");
-                if(positionY <= LEFT_MAX && positionY >= LEFT_MIN) {
-                    brickPosition = BrickPosition.LEFT;
-                } else if(positionY <= RIGHT_MAX && positionY >= RIGHT_MIN) {
-                    brickPosition = BrickPosition.RIGHT;
-                }
+        turnDegrees(TurnDirection.CLOCKWISE, 180, 0.7, 3);
 
-                isTargetFound = true;
-            }
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", firstAngle, secondAngle, thirdAngle);
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    positionX / mmPerInch, positionY / mmPerInch, positionZ / mmPerInch);
-            telemetry.update();
-        }
+        moveByInches(0.6, -15, 1.5);
 
-        if(isTargetFound) {
-            telemetry.addLine("Yay");
-            switch (brickPosition) {
-                case CENTER:
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
+        liftController.toggleDragServo();
 
-                    moveByInches(0.6, 3);
+        sleep(1000);
 
-                    turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
+        moveByInches(0.7, 15, 1.5);
 
-                    moveByInches(0.6, 3);
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 100, 0.9, 2);
 
-                    turnDegrees(TurnDirection.CLOCKWISE, 180, 0.6);
+        moveByInches(0.6, 70, 5);
 
-                    moveByInches(0.6, 5);
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 2);
 
-                    liftController.toggleDragServo();
+        liftController.toggleDragServo();
 
-                    moveByInches(0.6, 8);
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 3);
 
-                    turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
+        moveByInches(0.6, 26, 3);
 
-                    moveByInches(0.6, 90);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
-
-                    liftController.toggleDragServo();
-
-                    moveByInches(0.6, -3);
-
-                    moveByInches(0.6, 3);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 180);
-
-                    moveByInches(0.6, 30);
-                    break;
-                case LEFT:
-                    moveByInches(0.6, 3);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 180, 0.6);
-
-                    moveByInches(0.6, 5);
-
-                    liftController.toggleDragServo();
-
-                    moveByInches(0.6, 8);
-
-                    turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
-
-                    moveByInches(0.6, 90);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
-
-                    liftController.toggleDragServo();
-
-                    moveByInches(0.6, -3);
-
-                    moveByInches(0.6, 3);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 180);
-
-                    moveByInches(0.6, 30);
-                    break;
-                case RIGHT:
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
-
-                    moveByInches(0.6, 6);
-
-                    turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
-
-                    moveByInches(0.6, 3);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 180, 0.6);
-
-                    moveByInches(0.6, 5);
-
-                    liftController.toggleDragServo();
-
-                    moveByInches(0.6, 8);
-
-                    turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
-
-                    moveByInches(0.6, 90);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
-
-                    liftController.toggleDragServo();
-
-                    moveByInches(0.6, -3);
-
-                    moveByInches(0.6, 3);
-
-                    turnDegrees(TurnDirection.CLOCKWISE, 90, 180);
-
-                    moveByInches(0.6, 30);
-                    break;
-            }
-        } else {
-            telemetry.addLine("Could not find the target");
-            telemetry.update();
-
-            moveByInches(0.6, 3);
-
-            turnDegrees(TurnDirection.CLOCKWISE, 180, 0.6);
-
-            moveByInches(0.6, 5);
-
-            liftController.toggleDragServo();
-
-            moveByInches(0.6, 8);
-
-            turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.5);
-
-            moveByInches(0.6, 90);
-
-            turnDegrees(TurnDirection.CLOCKWISE, 90, 0.5);
-
-            liftController.toggleDragServo();
-
-            moveByInches(0.6, -3);
-
-            moveByInches(0.6, 3);
-
-            turnDegrees(TurnDirection.CLOCKWISE, 90, 180);
-
-            moveByInches(0.6, 30);
-        }
     }
 
     private void blueBricks() {
+        moveByInches(0.7, 4, 1.5);
 
-    }
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 3);
 
-    private void blueBuilding() {
+        moveByInches(0.7, 14, 3);
+
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 3);
+
+        moveByInches(0.7, 5, 1.5);
+
+        turnDegrees(TurnDirection.CLOCKWISE, 180, 0.7, 3);
+
+        moveByInches(0.6, -15, 1.5);
+
+        liftController.toggleDragServo();
+
+        sleep(1000);
+
+        moveByInches(0.7, 14, 1.5);
+
+        turnDegrees(TurnDirection.CLOCKWISE, 100, 0.9, 2);
+
+        moveByInches(0.6, 70, 5);
+
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 2);
+
+        liftController.toggleDragServo();
+
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 3);
+
+        moveByInches(0.6, 26, 3);
 
     }
 
     private void redBuilding() {
+        moveByInches(0.6, 10, 2);
+
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
+
+        moveByInches(0.6, 17, 2);
+
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
+
+        moveByInches(0.6, -11, 2);
+
+        liftController.toggleDragServo();
+
+        sleep(1000);
+
+        moveByInches(0.6, 26, 1.5);
+
+        liftController.toggleDragServo();
+
+        sleep(1000);
+
+        runtime.reset();
+        while(runtime.seconds() <= 4) {
+            drive.drive(0, 0.5, 0);
+        }
+        drive.drive(0, 0, 0);
+
+    }
+
+    private void blueBuilding() {
 
     }
 }

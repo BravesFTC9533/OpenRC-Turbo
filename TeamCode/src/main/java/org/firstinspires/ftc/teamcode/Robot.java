@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Robot {
 
-    public static final double WHEEL_DISTANCE_INCHES = 17.85;
+    public static final double WHEEL_DISTANCE_INCHES = 18.1;
 
     public static final double     NEVE_COUNTS_PER_MOTOR_NEVE = 1120;      // eg: Rev Side motor
     public static final double            DRIVE_GEAR_REDUCTION    = 45.0 / 35.0;             // This is < 1.0 if geared UP

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -134,7 +135,6 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     protected void Initialize(HardwareMap hardwareMap, FtcGamePad driverGamePad) {
         this.robot = new Robot(hardwareMap);
-        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight, driverGamePad);
     }
 
     protected void initializeVuforia() {
@@ -395,20 +395,20 @@ public class BaseLinearOpMode extends LinearOpMode {
         return true;
     }
 
-    public void moveByInches(double power, double inches) {
-        moveByInches(power, inches, inches);
+    public void moveByInches(double power, double inches, double timeoutSeconds) {
+        moveByInches(power, inches, inches, timeoutSeconds);
     }
 
-    public void moveByInches(double power, double leftInches, double rightInches) {
+    public void moveByInches(double power, double leftInches, double rightInches, double timeoutSeconds) {
         encoderDrive(power, (int) Robot.COUNTS_PER_INCH * leftInches,
-                (int) Robot.COUNTS_PER_INCH * rightInches);
+                (int) Robot.COUNTS_PER_INCH * rightInches, timeoutSeconds);
     }
 
-    public void moveByMillimeters(int millimeters, double power) {
-        moveByInches(millimeters / mmPerInch, power);
+    public void moveByMillimeters(int millimeters, double power, double timeoutSeconds) {
+        moveByInches(millimeters / mmPerInch, power, timeoutSeconds);
     }
 
-    public void turnDegrees(TurnDirection direction, int degrees, double power) {
+    public void turnDegrees(TurnDirection direction, int degrees, double power, double timeoutSeconds) {
         double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 90; // Find how many inches are in a degree
         degrees *= inchesPerDegree;
 
@@ -416,10 +416,10 @@ public class BaseLinearOpMode extends LinearOpMode {
             degrees = -degrees;
         }
 
-        moveByInches(power, degrees, -degrees);
+        moveByInches(power, degrees, -degrees, timeoutSeconds);
     }
 
-    public void encoderDrive(double targetSpeed, double leftTicks, double rightTicks) {
+    public void encoderDrive(double targetSpeed, double leftTicks, double rightTicks, double timeoutSeconds) {
         addTargetPositions(robot.leftMotors, (int) -leftTicks);
         addTargetPositions(robot.rightMotors, (int) -rightTicks);
 
@@ -427,7 +427,10 @@ public class BaseLinearOpMode extends LinearOpMode {
 
         setMotorsPowers(robot.allMotors, targetSpeed);
 
-        while(opModeIsActive() && robot.isBusy()) {
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(opModeIsActive() && robot.isBusy() && timer.seconds() <= timeoutSeconds) {
             idle();
         }
 

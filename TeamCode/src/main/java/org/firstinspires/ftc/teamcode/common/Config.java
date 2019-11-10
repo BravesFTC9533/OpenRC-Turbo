@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class Config {
+public class
+Config {
 
     private static final String PREFERENCES = "RobotPref";
     private SharedPreferences sp;
