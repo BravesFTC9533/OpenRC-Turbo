@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 @TeleOp(name="Java: Teleop", group="Java")
 public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHandler {
@@ -23,12 +24,13 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
         config = new Config(hardwareMap.appContext);
         driverGamePad = new FtcGamePad("Driver", gamepad1, this);
         operatorGamePad = new FtcGamePad("Operator", gamepad2, this);
 
         Initialize(hardwareMap, driverGamePad);
+
+        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
 
         liftController = new LiftController(hardwareMap, config, telemetry);
 
@@ -38,7 +40,7 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
         liftController.initLift();
 
         while (opModeIsActive()) {
-            drive.handle();
+            drive.handle(driverGamePad);
             driverGamePad.update();
             telemetry.update();
         }

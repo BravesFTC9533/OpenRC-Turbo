@@ -14,8 +14,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private FtcGamePad ftcGamePad;
-
     private Config config;
 
     private Config.Position startingPosition;
@@ -33,9 +31,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         telemetry.update();
 
         Initialize(hardwareMap);
-        ftcGamePad = new FtcGamePad("Gamepad 1", gamepad1);
-        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight,
-                ftcGamePad);
+        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
 
         config = new Config(hardwareMap.appContext);
         startingPosition = config.getPosition();

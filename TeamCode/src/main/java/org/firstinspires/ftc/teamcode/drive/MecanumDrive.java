@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
 public class MecanumDrive implements IDrive {
 
-    private final FtcGamePad driverGamepad;
     //private final Robot robot;
 
     private static final double MIN_SPEED = 0.2;
@@ -29,12 +28,11 @@ public class MecanumDrive implements IDrive {
 //        this.robot = robot;
 //    }
 
-    public MecanumDrive(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, FtcGamePad driverGamepad) {
+    public MecanumDrive(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br) {
         this.fl = fl;
         this.fr = fr;
         this.bl = bl;
         this.br = br;
-        this.driverGamepad = driverGamepad;
     }
 
     public boolean getIsReverse(){
@@ -45,7 +43,7 @@ public class MecanumDrive implements IDrive {
         reverse = value;
     }
 
-    public void handle(){
+    public void handle(FtcGamePad driverGamepad){
 
         //mechDrive.Drive(-gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
