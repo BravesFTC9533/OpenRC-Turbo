@@ -151,7 +151,7 @@ public class MecanumDrive implements IDrive {
 
     @Override
     public void stop() {
-
+        drive(0, 0, 0);
     }
 
     @Override

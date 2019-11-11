@@ -16,7 +16,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
     private FtcGamePad ftcGamePad;
 
-    private LiftController liftController;
     private Config config;
 
     private Config.Position startingPosition;
@@ -162,27 +161,51 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.6, -11, 2);
+        moveByInches(0.6, -11, 1.5);
 
         liftController.toggleDragServo();
 
-        sleep(1000);
+        sleep(500);
 
         moveByInches(0.6, 26, 1.5);
 
         liftController.toggleDragServo();
 
-        sleep(1000);
+        sleep(500);
 
         runtime.reset();
         while(runtime.seconds() <= 4) {
             drive.drive(0, 0.5, 0);
         }
-        drive.drive(0, 0, 0);
+        drive.stop();
 
     }
 
     private void blueBuilding() {
+        moveByInches(0.6, 10, 2);
 
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
+
+        moveByInches(0.6, 17, 2);
+
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
+
+        moveByInches(0.6, -11, 1.5);
+
+        liftController.toggleDragServo();
+
+        sleep(500);
+
+        moveByInches(0.6, 26, 1.5);
+
+        liftController.toggleDragServo();
+
+        sleep(500);
+
+        runtime.reset();
+        while(runtime.seconds() <= 4) {
+            drive.drive(0, -0.5, 0);
+        }
+        drive.stop();
     }
 }

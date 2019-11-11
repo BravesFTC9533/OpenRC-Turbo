@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.IDrive;
-import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,12 @@ public class BaseLinearOpMode extends LinearOpMode {
     // Add access to the robot class
     protected Robot robot;
 
+    // Add access to the lift controller
+    protected LiftController liftController;
+
     // Setup Drive System
     protected IDrive drive;
+
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
     // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
@@ -41,7 +45,7 @@ public class BaseLinearOpMode extends LinearOpMode {
     // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     //
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = true  ;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -361,6 +365,14 @@ public class BaseLinearOpMode extends LinearOpMode {
             //telemetry.addData("Visible Target", "none");
         }
         //telemetry.update();
+    }
+
+    protected void handleEmergencyStop() {
+        while(opModeIsActive()) {}
+        stop();
+        if(liftController != null) {
+            liftController.stop();
+        }
     }
 
     public void addTargetPositions(ArrayList<DcMotor> motors, int ticks) {
