@@ -17,13 +17,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     private Config config;
 
     private Config.Position startingPosition;
-    private BrickPosition brickPosition;
-
-    public enum BrickPosition {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
 
     @Override
     public void runOpMode() {
@@ -60,42 +53,42 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         liftController.initLift(this);
 
-        test();
+//        test();
 
-//        switch(startingPosition) {
-//            case BLUE_BRICKS:
-//                blueBricks();
-//                break;
-//            case BLUE_BUILDING:
-//                blueBuilding();
-//                break;
-//            case RED_BRICKS:
-//                redBricks();
-//                break;
-//            case RED_BUILDING:
-//                redBuilding();
-//                break;
-//        }
-    }
-
-    private void test() {
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 3) {
-            drive.drive(0, 0.5, 0);
-        }
-        drive.stop();
-
-        moveByInches(0.8, 20, 1.5);
-
-        while(opModeIsActive()) {
-            updateVuforia();
-            if(targetVisible) {
+        switch(startingPosition) {
+            case BLUE_BRICKS:
+                blueBricks();
                 break;
-            }
+            case BLUE_BUILDING:
+                blueBuilding();
+                break;
+            case RED_BRICKS:
+                redBricks();
+                break;
+            case RED_BUILDING:
+                redBuilding();
+                break;
         }
-
     }
+
+//    private void test() {
+//
+//        runtime.reset();
+//        while(opModeIsActive() && runtime.seconds() < 3) {
+//            drive.drive(0, 0.5, 0);
+//        }
+//        drive.stop();
+//
+//        moveByInches(0.8, 20, 1.5);
+//
+//        while(opModeIsActive()) {
+//            updateVuforia();
+//            if(targetVisible) {
+//                break;
+//            }
+//        }
+
+//    }
 
     boolean isTargetFound = false;
 
