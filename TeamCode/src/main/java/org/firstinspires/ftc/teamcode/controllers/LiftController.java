@@ -16,13 +16,13 @@ import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
 public class LiftController extends BaseController {
 
-    public static final int MAX_LIFT_HEIGHT_IN_TICKS = 400;
-    public static final int MIN_LIFT_HEIGHT_IN_TICKS = 10;
+    public static final int MAX_LIFT_HEIGHT_IN_TICKS = 400*2;
+    public static final int MIN_LIFT_HEIGHT_IN_TICKS = 10*2;
 
 
-    public static final int LIFT_STAGE_1 = 133;
-    public static final int LIFT_STAGE_2 = 266;
-    public static final int LIFT_STAGE_3 = 400;
+    public static final int LIFT_STAGE_1 = 133*2;
+    public static final int LIFT_STAGE_2 = 266*2;
+    public static final int LIFT_STAGE_3 = 400*2;
 
     public static double LIFT_SPEED_UP = 1.00;
     public static double LIFT_SPEED_DOWN = 0.05;
@@ -131,6 +131,9 @@ public class LiftController extends BaseController {
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
         telemetry.addData("Lift: ", lift.getCurrentPosition());
+
+
+
         switch(button) {
 
             case FtcGamePad.GAMEPAD_DPAD_LEFT:
