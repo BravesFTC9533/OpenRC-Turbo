@@ -59,7 +59,7 @@ public class LiftController extends BaseController {
         //I = 0.1 * P = 0.55
         //D = 0
 
-        
+
 
         lift.setVelocityPIDFCoefficients(5.46, 0.55, 0, 54.6);
         lift.setPositionPIDFCoefficients(5.0);
