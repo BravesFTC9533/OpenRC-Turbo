@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.controllers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,10 +16,18 @@ import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
 public class LiftController extends BaseController {
 
-    public static double MAX_LIFT_HEIGHT_IN_TICKS = 1000.0;
-    public static double LIFT_SPEED = 1.0;
+    public static final int MAX_LIFT_HEIGHT_IN_TICKS = 400;
+    public static final int MIN_LIFT_HEIGHT_IN_TICKS = 10;
 
-    public DcMotor lift;
+
+    public static final int LIFT_STAGE_1 = 133;
+    public static final int LIFT_STAGE_2 = 266;
+    public static final int LIFT_STAGE_3 = 400;
+
+    public static double LIFT_SPEED_UP = 1.00;
+    public static double LIFT_SPEED_DOWN = 0.05;
+
+    public DcMotorEx lift;
     private Telemetry telemetry;
 
     public Servo dragServo;
@@ -29,6 +38,7 @@ public class LiftController extends BaseController {
     private boolean isClosed = true;
     private boolean isGrabbing = true;
     private boolean isDragging = false;
+    private boolean isMoving = false;
 
     public enum ServoPosition {
         SERVO_POSITION_OPEN,
@@ -38,10 +48,20 @@ public class LiftController extends BaseController {
     public LiftController(HardwareMap hardwareMap, Config config, Telemetry telemetry) {
         super(hardwareMap, config);
         this.telemetry = telemetry;
-        lift = hardwareMap.dcMotor.get("lift");
+        lift = hardwareMap.get(DcMotorEx.class, "lift");
+
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //F = 32767 / 600 = 54.6
+        //P = 0.1 * F = 5.46
+        //I = 0.1 * P = 0.55
+        //D = 0
+
+        lift.setVelocityPIDFCoefficients(5.46, 0.55, 0, 54.6);
+        lift.setPositionPIDFCoefficients(5.0);
+
 
         flipper        = hardwareMap.servo.get("flipper");
         dragServo      = hardwareMap.servo.get("dragservo");
@@ -57,7 +77,7 @@ public class LiftController extends BaseController {
         ElapsedTime elapsedTime = new ElapsedTime();
         elapsedTime.reset();
 
-        while(elapsedTime.seconds() < 3) {}
+        //while(elapsedTime.seconds() < 3) {}
 
         bServo.setPosition(0.5);
         fServo.setPosition(0);
@@ -68,17 +88,12 @@ public class LiftController extends BaseController {
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void toggleLift() {
-        if(lift.getCurrentPosition() > 0) {
-            lift.setTargetPosition(0);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(LIFT_SPEED);
+    public void handle() {
+        if(lift.isBusy() == false && isMoving == true) {
+
+            lift.setPower(0);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        } else {
-            lift.setTargetPosition((int) MAX_LIFT_HEIGHT_IN_TICKS);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(LIFT_SPEED);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            isMoving = false;
         }
     }
 
@@ -117,34 +132,87 @@ public class LiftController extends BaseController {
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
         telemetry.addData("Lift: ", lift.getCurrentPosition());
         switch(button) {
-            case FtcGamePad.GAMEPAD_DPAD_DOWN:
+
+            case FtcGamePad.GAMEPAD_DPAD_LEFT:
                 if(pressed) {
-                    if(lift.getCurrentPosition() >= 10) {
-                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        lift.setPower(-LIFT_SPEED);
-                    } else {
-                        lift.setPower(0);
-                    }
-                } else{
-                    lift.setPower(0);
-                    lift.setTargetPosition(lift.getCurrentPosition());
+                    isMoving = true;
+                    lift.setTargetPosition(LIFT_STAGE_1);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    if(lift.getCurrentPosition() > LIFT_STAGE_1) {
+                        lift.setPower(LIFT_SPEED_DOWN);
+                    }
+                    else {
+                        lift.setPower(LIFT_SPEED_UP);
+                    }
                 }
                 break;
             case FtcGamePad.GAMEPAD_DPAD_UP:
                 if(pressed) {
-                    if(lift.getCurrentPosition() <= 450) {
-                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        lift.setPower(LIFT_SPEED);
-                    } else {
-                        lift.setPower(0);
-                    }
-                } else {
-                    lift.setPower(0);
-                    lift.setTargetPosition(lift.getCurrentPosition());
+                    isMoving = true;
+                    lift.setTargetPosition(LIFT_STAGE_2);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    if(lift.getCurrentPosition() > LIFT_STAGE_2) {
+                        lift.setPower(LIFT_SPEED_DOWN);
+                    }
+                    else {
+                        lift.setPower(LIFT_SPEED_UP);
+                    }
                 }
                 break;
+            case FtcGamePad.GAMEPAD_DPAD_RIGHT:
+                if(pressed) {
+                    isMoving = true;
+                    lift.setTargetPosition(LIFT_STAGE_3);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    if(lift.getCurrentPosition() > LIFT_STAGE_3) {
+                        lift.setPower(LIFT_SPEED_DOWN);
+                    }
+                    else {
+                        lift.setPower(LIFT_SPEED_UP);
+                    }
+                }
+                break;
+            case FtcGamePad.GAMEPAD_DPAD_DOWN:
+                if(pressed) {
+                    lift.setTargetPosition(MIN_LIFT_HEIGHT_IN_TICKS);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //lift.setPower(LIFT_SPEED_DOWN);
+
+                    lift.setVelocity(288);
+                }
+
+                break;
+//            case FtcGamePad.GAMEPAD_DPAD_DOWN:
+//                if(pressed) {
+//                    if(lift.getCurrentPosition() >= MIN_LIFT_HEIGHT_IN_TICKS) {
+//                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                        lift.setPower(-LIFT_SPEED_DOWN);
+//                    } else {
+//                        lift.setPower(0);
+//                    }
+//                } else{
+//                    lift.setPower(0);
+//                    lift.setTargetPosition(lift.getCurrentPosition());
+//                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                }
+//                break;
+//            case FtcGamePad.GAMEPAD_DPAD_UP:
+//                if(pressed) {
+//                    if(lift.getCurrentPosition() <= MAX_LIFT_HEIGHT_IN_TICKS) {
+//                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                        lift.setPower(LIFT_SPEED_UP);
+//                    } else {
+//                        lift.setPower(0);
+//                    }
+//                } else {
+//                    lift.setPower(0);
+//                    lift.setTargetPosition(lift.getCurrentPosition());
+//                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                }
+//                break;
             case FtcGamePad.GAMEPAD_B:
                 if(pressed) {
                     if(isDragging) {
