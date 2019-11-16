@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -24,22 +23,33 @@ public class LiftController extends BaseController {
     public static final int LIFT_STAGE_2 = 266*2;
     public static final int LIFT_STAGE_3 = 400*2;
 
-    public static double LIFT_SPEED_UP = 1.00;
-    public static double LIFT_SPEED_DOWN = 0.05;
+    public static double LIFT_SPEED_UP = 600;
+    public static double LIFT_SPEED_DOWN = 288;
+
+    public static final double OPEN_GRABBER_DELAY = 2.0;
 
     public DcMotorEx lift;
     private Telemetry telemetry;
+
+
+
+    private static final double FLIPPER_UP_POS = 1.0 ;//0.5;
+    private static final double FLIPPER_DOWN_POS = 0.5; // 1.0;
+
+    private static final double DRAG_UP_POS = 0.0;
+    private static final double DRAG_DOWN_POS = 1.0;
 
     public Servo dragServo;
     public Servo flipper;
     public Servo bServo;
     public Servo fServo;
 
-    private boolean isClosed = true;
+    private boolean isFlipperDown = true;
     private boolean isGrabbing = true;
     private boolean isDragging = false;
     private boolean isMoving = false;
-
+    private boolean initialServoHandled = false;
+    private ElapsedTime runTime;
     public enum ServoPosition {
         SERVO_POSITION_OPEN,
         SERVO_POSITION_CLOSED
@@ -52,7 +62,7 @@ public class LiftController extends BaseController {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //F = 32767 / 600 = 54.6
         //P = 0.1 * F = 5.46
@@ -66,69 +76,80 @@ public class LiftController extends BaseController {
 
 
         flipper        = hardwareMap.servo.get("flipper");
+
         dragServo      = hardwareMap.servo.get("dragservo");
         fServo         = hardwareMap.servo.get("fservo");
         fServo.setDirection(Servo.Direction.REVERSE);
         bServo         = hardwareMap.servo.get("bservo");
+
+        runTime = new ElapsedTime();
     }
 
     public void initLift(LinearOpMode opMode) {
+
         dragServo.setPosition(1);
-        flipper.setPosition(1);
 
-        ElapsedTime elapsedTime = new ElapsedTime();
-        elapsedTime.reset();
+        //put flipper in down position
+        flipper.setPosition(FLIPPER_DOWN_POS);
 
-        //while(elapsedTime.seconds() < 3) {}
 
-        bServo.setPosition(0.5);
-        fServo.setPosition(0);
+        runTime.reset();
+
     }
 
     public void stop() {
-        lift.setPower(0);
+        lift.setVelocity(0);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void handle() {
+
+        if(runTime.seconds() >= OPEN_GRABBER_DELAY && initialServoHandled == false) {
+            initialServoHandled =true;
+            openGrabbers();
+        }
+
         if(lift.isBusy() == false && isMoving == true) {
 
-            lift.setPower(0);
+            lift.setVelocity(0);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             isMoving = false;
         }
     }
 
+
+
+    public void putDragArmDown() {
+        dragServo.setPosition(DRAG_DOWN_POS);
+    }
+    public void putDragArmUp() {
+        dragServo.setPosition(DRAG_UP_POS);
+    }
+
+    public void putFlipperDown() {
+        flipper.setPosition(FLIPPER_DOWN_POS);
+    }
+    public void putFlipperUp() {
+        flipper.setPosition(FLIPPER_UP_POS);
+    }
+
     public void toggleDragServo() {
         if(dragServo.getPosition() > 0) {
-            dragServo.setPosition(0);
+            putDragArmUp();
         } else {
-            dragServo.setPosition(1);
+            putDragArmDown();
         }
     }
 
-    public void setFlipperPosition(ServoPosition servoPosition) {
-        switch (servoPosition) {
-            case SERVO_POSITION_OPEN:
-                flipper.setPosition(1);
-                break;
-            case SERVO_POSITION_CLOSED:
-                flipper.setPosition(0);
-                break;
-        }
+    private void openGrabbers() {
+        bServo.setPosition(0.5);
+        fServo.setPosition(0);
+    }
+    private void closeGrabbers() {
+        bServo.setPosition(1);
+        fServo.setPosition(1);
     }
 
-    public void setGrabPosition(ServoPosition servoPosition) {
-        switch (servoPosition) {
-            case SERVO_POSITION_OPEN:
-                bServo.setPosition(1);
-                fServo.setPosition(1);
-                break;
-            case SERVO_POSITION_CLOSED:
-                bServo.setPosition(0);
-                fServo.setPosition(0);
-        }
-    }
 
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
@@ -145,10 +166,10 @@ public class LiftController extends BaseController {
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     if(lift.getCurrentPosition() > LIFT_STAGE_1) {
-                        lift.setPower(LIFT_SPEED_DOWN);
+                        lift.setVelocity(LIFT_SPEED_DOWN);
                     }
                     else {
-                        lift.setPower(LIFT_SPEED_UP);
+                        lift.setVelocity(LIFT_SPEED_UP);
                     }
                 }
                 break;
@@ -159,10 +180,10 @@ public class LiftController extends BaseController {
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     if(lift.getCurrentPosition() > LIFT_STAGE_2) {
-                        lift.setPower(LIFT_SPEED_DOWN);
+                        lift.setVelocity(LIFT_SPEED_DOWN);
                     }
                     else {
-                        lift.setPower(LIFT_SPEED_UP);
+                        lift.setVelocity(LIFT_SPEED_UP);
                     }
                 }
                 break;
@@ -173,10 +194,10 @@ public class LiftController extends BaseController {
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     if(lift.getCurrentPosition() > LIFT_STAGE_3) {
-                        lift.setPower(LIFT_SPEED_DOWN);
+                        lift.setVelocity(LIFT_SPEED_DOWN);
                     }
                     else {
-                        lift.setPower(LIFT_SPEED_UP);
+                        lift.setVelocity(LIFT_SPEED_UP);
                     }
                 }
                 break;
@@ -184,9 +205,9 @@ public class LiftController extends BaseController {
                 if(pressed) {
                     lift.setTargetPosition(MIN_LIFT_HEIGHT_IN_TICKS);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    //lift.setPower(LIFT_SPEED_DOWN);
+                    //lift.setVelocity(LIFT_SPEED_DOWN);
 
-                    lift.setVelocity(288);
+                    lift.setVelocity(LIFT_SPEED_DOWN);
                 }
 
                 break;
@@ -194,12 +215,12 @@ public class LiftController extends BaseController {
 //                if(pressed) {
 //                    if(lift.getCurrentPosition() >= MIN_LIFT_HEIGHT_IN_TICKS) {
 //                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                        lift.setPower(-LIFT_SPEED_DOWN);
+//                        lift.setVelocity(-LIFT_SPEED_DOWN);
 //                    } else {
-//                        lift.setPower(0);
+//                        lift.setVelocity(0);
 //                    }
 //                } else{
-//                    lift.setPower(0);
+//                    lift.setVelocity(0);
 //                    lift.setTargetPosition(lift.getCurrentPosition());
 //                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                }
@@ -208,47 +229,48 @@ public class LiftController extends BaseController {
 //                if(pressed) {
 //                    if(lift.getCurrentPosition() <= MAX_LIFT_HEIGHT_IN_TICKS) {
 //                        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                        lift.setPower(LIFT_SPEED_UP);
+//                        lift.setVelocity(LIFT_SPEED_UP);
 //                    } else {
-//                        lift.setPower(0);
+//                        lift.setVelocity(0);
 //                    }
 //                } else {
-//                    lift.setPower(0);
+//                    lift.setVelocity(0);
 //                    lift.setTargetPosition(lift.getCurrentPosition());
 //                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                }
 //                break;
             case FtcGamePad.GAMEPAD_B:
+
                 if(pressed) {
                     if(isDragging) {
-                        dragServo.setPosition(0);
+                        putDragArmUp();
                     } else {
-                        dragServo.setPosition(1);
+                        //dragServo.setPosition(DRAG_DOWN_POS);
+                        putDragArmDown();
                     }
                     isDragging = !isDragging;
                 }
                 break;
             case FtcGamePad.GAMEPAD_A:
                 if(pressed) {
-                    if(isClosed) {
-                        flipper.setPosition(1);
+                    if(isFlipperDown) {
+                        putFlipperUp();
                     } else {
-                        flipper.setPosition(0.5);
+                        putFlipperDown();
                     }
-                    isClosed = !isClosed;
+                    isFlipperDown = !isFlipperDown;
                 }
+                break;
             case FtcGamePad.GAMEPAD_Y:
                 if(pressed) {
                     if (isGrabbing) {
-                        bServo.setPosition(0.5);
-                        fServo.setPosition(0);
+                        openGrabbers();
                     } else {
-                        bServo.setPosition(1);
-                        fServo.setPosition(1);
+                        closeGrabbers();
                     }
                     isGrabbing = !isGrabbing;
                 }
-
+                break;
         }
     }
 }
