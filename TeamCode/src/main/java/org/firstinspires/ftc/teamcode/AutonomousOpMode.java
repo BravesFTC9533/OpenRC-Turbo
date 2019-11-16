@@ -58,7 +58,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-        liftController.initLift();
+        liftController.initLift(this);
 
         switch(startingPosition) {
             case BLUE_BRICKS:
@@ -85,31 +85,25 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         moveByInches(0.7, 16, 3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 3);
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 2);
 
-        moveByInches(0.7, 5, 1.5);
-
-        turnDegrees(TurnDirection.CLOCKWISE, 180, 0.7, 3);
-
-        moveByInches(0.6, -15, 1.5);
+        moveByInches(0.6, -20, 1.5);
 
         liftController.toggleDragServo();
 
         sleep(1000);
 
-        moveByInches(0.7, 15, 1.5);
+        moveByInches(0.7, 10, 1.5);
 
         turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 100, 0.9, 2);
 
-        moveByInches(0.6, 70, 5);
+        moveByInches(0.6, 60, 4.5);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 2);
+        turnDegrees(TurnDirection.CLOCKWISE, 180, 0.7, 2.5);
 
         liftController.toggleDragServo();
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 3);
-
-        moveByInches(0.6, 26, 3);
+        moveByInches(0.6, 24, 2);
 
     }
 
@@ -149,32 +143,31 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     }
 
     private void redBuilding() {
-        moveByInches(0.6, 10, 2);
+        moveByInches(0.7, -15, 1.3);
 
         turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.6, 17, 2);
+        moveByInches(0.7, -15, 1.3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.6, -11, 1.5);
-
-        liftController.toggleDragServo();
-
-        sleep(500);
-
-        moveByInches(0.6, 26, 1.5);
+        moveByInches(0.7, -10, 2);
 
         liftController.toggleDragServo();
 
-        sleep(500);
+        sleep(400);
+
+        moveByInches(0.7, 30, 2);
+
+        liftController.toggleDragServo();
+
+        sleep(400);
 
         runtime.reset();
-        while(runtime.seconds() <= 4) {
+        while(runtime.seconds() < 4) {
             drive.drive(0, 0.5, 0);
         }
         drive.stop();
-
     }
 
     private void blueBuilding() {

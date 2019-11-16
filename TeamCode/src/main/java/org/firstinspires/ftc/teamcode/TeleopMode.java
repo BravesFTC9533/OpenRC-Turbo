@@ -37,7 +37,7 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
         waitForStart();
         runtime.reset();
 
-        liftController.initLift();
+        liftController.initLift(this);
 
         while (opModeIsActive()) {
             drive.handle(driverGamePad);
@@ -49,5 +49,6 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
         liftController.gamepadButtonEvent(gamepad, button, pressed);
+        drive.gamePadButtonEvent(gamepad, button, pressed);
     }
 }

@@ -43,15 +43,19 @@ public class MecanumDrive implements IDrive {
         reverse = value;
     }
 
+    public void gamePadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
+
+    }
+
     public void handle(FtcGamePad driverGamepad){
 
         //mechDrive.Drive(-gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         double h, v, r;
 
-        h = driverGamepad.getLeftStickX();
-        v = driverGamepad.getLeftStickY();
-        r = driverGamepad.getRightStickX();
+        h = -driverGamepad.getLeftStickX();
+        v = -driverGamepad.getLeftStickY();
+        r = -driverGamepad.getRightStickX();
 
         if(Math.abs(h) < MIN_SPEED) {
             h = 0;
@@ -102,11 +106,7 @@ public class MecanumDrive implements IDrive {
         bl.setPower(backLeft);
         br.setPower(backRight);
 
-        //robot.Drive(frontLeft, frontRight, backLeft, backRight);
-
-
-
-
+        //robot.Drive(frontLeft, frontRight, backLeft, backRight)
     }
 
     @Override

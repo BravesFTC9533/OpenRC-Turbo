@@ -18,6 +18,8 @@ public interface IDrive {
     void drive(double ly, double lx, double rx);
     void drive(double left, double right);
 
+    void gamePadButtonEvent(FtcGamePad gamepad, int button, boolean pressed);
+
     void stop();
 
     void setMode(DcMotor.RunMode runMode);
