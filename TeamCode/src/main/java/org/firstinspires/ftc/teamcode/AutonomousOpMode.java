@@ -60,20 +60,41 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         liftController.initLift(this);
 
-        switch(startingPosition) {
-            case BLUE_BRICKS:
-                blueBricks();
-                break;
-            case BLUE_BUILDING:
-                blueBuilding();
-                break;
-            case RED_BRICKS:
-                redBricks();
-                break;
-            case RED_BUILDING:
-                redBuilding();
-                break;
+        test();
+
+//        switch(startingPosition) {
+//            case BLUE_BRICKS:
+//                blueBricks();
+//                break;
+//            case BLUE_BUILDING:
+//                blueBuilding();
+//                break;
+//            case RED_BRICKS:
+//                redBricks();
+//                break;
+//            case RED_BUILDING:
+//                redBuilding();
+//                break;
+//        }
+    }
+
+    private void test() {
+
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 3) {
+            drive.drive(0, 0.5, 0);
         }
+        drive.stop();
+
+        moveByInches(0.8, 20, 1.5);
+
+        while(opModeIsActive()) {
+            updateVuforia();
+            if(targetVisible) {
+                break;
+            }
+        }
+
     }
 
     boolean isTargetFound = false;

@@ -39,6 +39,14 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
 
         liftController.initLift(this);
 
+        telemetry.log().add("(B) Drag Servo");
+        telemetry.log().add("(Y) Grab Brick");
+        telemetry.log().add("(A) Brick Flipper");
+        telemetry.log().add("(D-Pad Down) Puts the lift down");
+        telemetry.log().add("(D-Pad Left) Puts the lift at position one");
+        telemetry.log().add("(D-Pad Up) Puts the lift at position two");
+        telemetry.log().add("(D-Pad Right) Puts the lift at position three");
+
         while (opModeIsActive()) {
             drive.handle(driverGamePad);
             liftController.handle();
