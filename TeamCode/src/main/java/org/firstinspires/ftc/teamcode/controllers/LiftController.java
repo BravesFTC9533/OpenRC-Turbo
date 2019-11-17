@@ -62,7 +62,7 @@ public class LiftController extends BaseController {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //F = 32767 / 600 = 54.6
         //P = 0.1 * F = 5.46
