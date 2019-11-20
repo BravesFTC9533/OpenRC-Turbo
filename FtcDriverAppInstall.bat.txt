@@ -1,0 +1,3 @@
+cd C:\Users\45563\AppData\Local\Android\sdk\platform-tools
+
+./adb.exe install C:\Users\45563\Dev\OpenRC-Turbo\doc\apk\FtcDriverStation-release.apk

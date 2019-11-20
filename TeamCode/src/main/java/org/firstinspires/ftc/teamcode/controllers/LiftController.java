@@ -180,7 +180,7 @@ public class LiftController extends BaseController {
                     lift.setTargetPosition(LIFT_STAGE_2);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    if(lift.getCurrentPosition() > LIFT_STAGE_2) {
+                    if(lift.getCurrentPosition() > LIFT_STAGE_1) {
                         lift.setVelocity(LIFT_SPEED_DOWN);
                     }
                     else {
@@ -191,7 +191,7 @@ public class LiftController extends BaseController {
             case FtcGamePad.GAMEPAD_DPAD_RIGHT:
                 if(pressed) {
                     isMoving = true;
-                    lift.setTargetPosition(LIFT_STAGE_3);
+                    lift.setTargetPosition(LIFT_STAGE_1);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     if(lift.getCurrentPosition() > LIFT_STAGE_3) {

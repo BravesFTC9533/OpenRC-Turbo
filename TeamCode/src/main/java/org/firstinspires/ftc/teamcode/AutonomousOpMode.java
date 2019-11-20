@@ -54,8 +54,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         liftController.initLift(this);
         liftController.putFlipperUp();
 
-//        test();
-
         switch(startingPosition) {
             case BLUE_BRICKS:
                 blueBricks();
@@ -71,25 +69,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
                 break;
         }
     }
-
-//    private void test() {
-//
-//        runtime.reset();
-//        while(opModeIsActive() && runtime.seconds() < 3) {
-//            drive.drive(0, 0.5, 0);
-//        }
-//        drive.stop();
-//
-//        moveByInches(0.8, 20, 1.5);
-//
-//        while(opModeIsActive()) {
-//            updateVuforia();
-//            if(targetVisible) {
-//                break;
-//            }
-//        }
-
-//    }
 
     boolean isTargetFound = false;
 
@@ -108,9 +87,13 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         sleep(1000);
 
-        moveByInches(0.7, 10, 1.5);
+        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
+            moveByInches(0.7, 10, 1.5);
+        } else {
+            moveByInches(0.7, 20, 1.5);
+        }
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 100, 0.9, 2);
+        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.9, 2);
 
         moveByInches(0.6, 60, 4.5);
 
@@ -127,7 +110,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 3);
 
-        moveByInches(0.7, 16, 3);
+        moveByInches(0.7, 14, 3);
 
         turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 2);
 
@@ -137,9 +120,13 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         sleep(1000);
 
-        moveByInches(0.7, 10, 1.5);
+        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
+            moveByInches(0.7, 10, 1.5);
+        } else {
+            moveByInches(0.7, 20, 1.5);
+        }
 
-        turnDegrees(TurnDirection.CLOCKWISE, 100, 0.9, 2);
+        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.9, 2);
 
         moveByInches(0.6, 60, 4.5);
 
@@ -172,6 +159,10 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         sleep(400);
 
+        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
+            moveByInches(0.7, 20, 1.5);
+        }
+
         runtime.reset();
         while(runtime.seconds() < 4) {
             drive.drive(0, 0.5, 0);
@@ -199,6 +190,10 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         liftController.toggleDragServo();
 
         sleep(400);
+
+        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
+            moveByInches(0.7, 20, 1.5);
+        }
 
         runtime.reset();
         while(runtime.seconds() < 4.25) {
