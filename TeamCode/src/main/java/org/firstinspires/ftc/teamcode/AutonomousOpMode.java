@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
-import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+import org.firstinspires.ftc.teamcode.sensors.Sensors;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 
@@ -15,6 +17,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     private Config config;
+    private Sensors sensors;
 
     private Config.Position startingPosition;
 
@@ -30,6 +33,8 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         startingPosition = config.getPosition();
 
         liftController = new LiftController(hardwareMap, config, telemetry);
+
+        sensors = new Sensors(hardwareMap);
 
         telemetry.addData("Status", "Robot Initialized");
         telemetry.update();
@@ -51,23 +56,32 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-        liftController.initLift(this);
-        liftController.putFlipperUp();
+        sensors.colorSensor.enableLed(true);
 
-        switch(startingPosition) {
-            case BLUE_BRICKS:
-                blueBricks();
-                break;
-            case BLUE_BUILDING:
-                blueBuilding();
-                break;
-            case RED_BRICKS:
-                redBricks();
-                break;
-            case RED_BUILDING:
-                redBuilding();
-                break;
+        while(opModeIsActive()) {
+
+            telemetry.addData("Sensor ARGB: ", sensors.colorSensor.argb());
+            telemetry.update();
         }
+
+
+//        liftController.initLift(this);
+//        liftController.putFlipperUp();
+//
+//        switch(startingPosition) {
+//            case BLUE_BRICKS:
+//                blueBricks();
+//                break;
+//            case BLUE_BUILDING:
+//                blueBuilding();
+//                break;
+//            case RED_BRICKS:
+//                redBricks();
+//                break;
+//            case RED_BUILDING:
+//                redBuilding();
+//                break;
+//        }
     }
 
     boolean isTargetFound = false;
