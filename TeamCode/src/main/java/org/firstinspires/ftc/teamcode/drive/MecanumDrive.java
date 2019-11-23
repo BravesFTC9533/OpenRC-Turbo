@@ -203,6 +203,7 @@ public class MecanumDrive implements IDrive {
         while(opMode.opModeIsActive() && timer.seconds() <= seconds) {}
 
         stop();
+
     }
 
 

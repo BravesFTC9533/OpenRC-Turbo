@@ -109,13 +109,19 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         // Start moving forward
         drive.drive(0.5, 0, 0);
 
-        // Find SkyStone
-//        while(opModeIsActive()) {
-//            if(foundSkyStone) {
-//                drive.stop();
-//                break;
-//            }
-//        }
+        // Turn on color sensor LED
+        sensors.colorSensor.enableLed(true);
+
+        // Scan for SkyStone
+        while(opModeIsActive()) {
+            if(sensors.isSkyStone()) {
+                drive.stop();
+                break;
+            }
+        }
+
+        // Turn off the color sensor LED
+        sensors.colorSensor.enableLed(false);
 
         // Figure out the distance the robot moved
         int movedAmount = startingPosition = robot.frontLeft.getCurrentPosition();
@@ -148,12 +154,18 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         // Drive Backwards over the tape
         drive.drive(0, -0.5, 0);
 
-//        while(opModeIsActive()) {
-//            if(foundSkyStone) {
-//                drive.stop();
-//                break;
-//            }
-//        }
+        // Turn on the color sensor LED
+        sensors.colorSensor.enableLed(true);
+
+        while(opModeIsActive()) {
+            if(sensors.isSkyStone()) {
+                drive.stop();
+                break;
+            }
+        }
+
+        // Turn off the color sensor LED
+        sensors.colorSensor.enableLed(false);
 
         // Straif next to the brick
         ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.LEFT, 0.5, straifTime);
