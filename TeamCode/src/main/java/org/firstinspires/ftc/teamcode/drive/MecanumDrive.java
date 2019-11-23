@@ -19,9 +19,8 @@ import java.util.ArrayList;
 
 public class MecanumDrive implements IDrive {
 
-    //private final Robot robot;
-
-    private Robot robot;
+    private final LinearOpMode opMode;
+    private final Robot robot;
 
     private static final double MIN_SPEED = 0.2;
     protected static final float mmPerInch        = 25.4f;
@@ -31,18 +30,10 @@ public class MecanumDrive implements IDrive {
     private final DcMotor bl;
     private final DcMotor br;
 
-    private LinearOpMode opMode;
-
-    boolean reverse = false;
 
     public enum StraifDirection {
         LEFT, RIGHT
     }
-//
-//    public MecanumDrive(Robot robot, FtcGamePad driveGamepad){
-//        this.driverGamepad = driveGamepad;
-//        this.robot = robot;
-//    }
 
     public MecanumDrive(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
@@ -54,11 +45,11 @@ public class MecanumDrive implements IDrive {
     }
 
     public boolean getIsReverse(){
-        return reverse;
+        return robot.isReverse();
     }
 
     public void setIsReverse(boolean value){
-        reverse = value;
+        robot.reverse(value);
     }
 
     public void gamePadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
@@ -66,9 +57,6 @@ public class MecanumDrive implements IDrive {
     }
 
     public void handle(FtcGamePad driverGamepad){
-
-        //mechDrive.Drive(-gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-
         double h, v, r;
 
         h = -driverGamepad.getLeftStickX();
@@ -123,8 +111,6 @@ public class MecanumDrive implements IDrive {
         fr.setPower(frontRight);
         bl.setPower(backLeft);
         br.setPower(backRight);
-
-        //robot.Drive(frontLeft, frontRight, backLeft, backRight)
     }
 
     @Override
@@ -162,7 +148,10 @@ public class MecanumDrive implements IDrive {
 
     @Override
     public void drive(double left, double right) {
-
+        fl.setPower(left);
+        bl.setPower(left);
+        br.setPower(right);
+        fr.setPower(right);
     }
 
     @Override
@@ -246,24 +235,9 @@ public class MecanumDrive implements IDrive {
         }
     }
 
-    public void setZeroPowerBehaviors(ArrayList<DcMotor> motors, DcMotor.ZeroPowerBehavior behavior) {
-        for(DcMotor motor : motors) {
-            motor.setZeroPowerBehavior(behavior);
-        }
-    }
-
     public void driveByEncoderTicks(int ticks, double power) {
         addTargetPositions(robot.allMotors, ticks);
         setMotorsPowers(robot.allMotors, power);
-    }
-
-    public boolean atPosition(ArrayList<DcMotor> motors, int expectedPosition) {
-        for(DcMotor motor : motors) {
-            if(motor.getCurrentPosition() != expectedPosition) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public void moveByInches(double power, double inches, double timeoutSeconds) {
@@ -273,10 +247,6 @@ public class MecanumDrive implements IDrive {
     public void moveByInches(double power, double leftInches, double rightInches, double timeoutSeconds) {
         encoderDrive(power, (int) Robot.COUNTS_PER_INCH * leftInches,
                 (int) Robot.COUNTS_PER_INCH * rightInches, timeoutSeconds);
-    }
-
-    public void moveByMillimeters(int millimeters, double power, double timeoutSeconds) {
-        moveByInches(millimeters / mmPerInch, power, timeoutSeconds);
     }
 
     public void turnDegrees(TurnDirection direction, int degrees, double power, double timeoutSeconds) {

@@ -93,7 +93,6 @@ public class LiftController extends BaseController {
         //put flipper in down position
         flipper.setPosition(FLIPPER_DOWN_POS);
 
-
         runTime.reset();
 
     }
@@ -130,9 +129,7 @@ public class LiftController extends BaseController {
     public void putFlipperDown() {
         flipper.setPosition(FLIPPER_DOWN_POS);
     }
-    public void putFlipperUp() {
-        flipper.setPosition(FLIPPER_UP_POS);
-    }
+    public void putFlipperUp() {flipper.setPosition(FLIPPER_UP_POS);}
 
     public void toggleDragServo() {
         if(dragServo.getPosition() > 0) {

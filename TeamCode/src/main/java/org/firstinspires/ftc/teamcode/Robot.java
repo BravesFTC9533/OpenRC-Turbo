@@ -28,6 +28,8 @@ public class Robot {
     public ArrayList<DcMotor> leftMotors  = new ArrayList<DcMotor>();
     public ArrayList<DcMotor> rightMotors = new ArrayList<DcMotor>();
 
+    private boolean isReverse = false;
+
     public Robot(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         setupMotors();
@@ -74,6 +76,11 @@ public class Robot {
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
             backLeft.setDirection(DcMotor.Direction.FORWARD);
         }
+        isReverse = !isReverse;
+    }
+
+    public boolean isReverse() {
+        return isReverse;
     }
 
     public void setMotorMode(DcMotor.RunMode mode) {

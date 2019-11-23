@@ -19,7 +19,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private Config config;
     private Sensors sensors;
 
     private Config.ParkPosition parkPosition;
@@ -34,43 +33,25 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         Initialize(hardwareMap);
         drive = new MecanumDrive(this, robot);
 
-        config = new Config(hardwareMap.appContext);
-        startingPosition = config.getPosition();
-
         liftController = new LiftController(hardwareMap, config, telemetry);
 
         sensors = new Sensors(hardwareMap);
 
+        telemetry.addData("Status", "Setting the configuration variables.");
+        telemetry.update();
+
+        parkPosition = config.getParkPosition();
+        startingPosition = config.getPosition();
+
+        telemetry.addData("Park Position", parkPosition);
+        telemetry.addData("Starting Position", startingPosition);
+        telemetry.update();
+
         telemetry.addData("Status", "Robot Initialized");
-        telemetry.update();
-
-        telemetry.addData("Status", "Initializing Vuforia");
-        telemetry.update();
-
-        try {
-            initializeVuforia();
-        } catch (Exception e) {
-            telemetry.addData("Status", "Vuforia Could not be Initialized!");
-            telemetry.update();
-            return;
-        }
-
-        telemetry.addData("Status", "Vuforia Initialized");
         telemetry.update();
 
         waitForStart();
         runtime.reset();
-
-        sensors.colorSensor.enableLed(true);
-
-        parkPosition = config.getParkPosition();
-
-        while(opModeIsActive()) {
-
-            telemetry.addData("Sensor ARGB: ", sensors.colorSensor.argb());
-            telemetry.update();
-        }
-
 
         liftController.initLift(this);
         liftController.putFlipperUp();
@@ -125,7 +106,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         sensors.colorSensor.enableLed(false);
 
         // Figure out the distance the robot moved
-        int movedAmount = startingPosition = robot.frontLeft.getCurrentPosition();
+        int movedAmount = startingPosition - robot.frontLeft.getCurrentPosition();
         double movedAmountInches = movedAmount * Robot.COUNTS_PER_INCH;
 
         // Grab the SkyStone

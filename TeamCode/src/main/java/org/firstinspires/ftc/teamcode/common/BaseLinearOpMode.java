@@ -121,14 +121,18 @@ public class BaseLinearOpMode extends LinearOpMode {
     // List of all the trackable targets in the SkyStone game
     protected List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
+    protected Config config;
+
     @Override public void runOpMode() {}
 
     protected void Initialize(HardwareMap hardwareMap) {
         this.robot = new Robot(hardwareMap);
+        config = new Config(hardwareMap.appContext);
     }
 
     protected void Initialize(HardwareMap hardwareMap, FtcGamePad driverGamePad) {
         this.robot = new Robot(hardwareMap);
+        config = new Config(hardwareMap.appContext);
     }
 
     protected void initializeVuforia() {
