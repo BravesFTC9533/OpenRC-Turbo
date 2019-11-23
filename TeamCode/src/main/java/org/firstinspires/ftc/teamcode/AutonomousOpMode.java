@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import android.hardware.Sensor;
 
+import com.qualcomm.hardware.broadcom.BroadcomColorSensor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -90,7 +92,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     }
 
     private void redBricks() {
-
         // Move Off Wall
         drive.moveByInches(0.7, 10, 1.5);
 
@@ -197,7 +198,6 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         // Park on tape
         drive.moveByInches(1, -10, 1);
-
     }
 
     private void blueBricks() {
