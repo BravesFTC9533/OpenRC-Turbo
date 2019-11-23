@@ -121,16 +121,6 @@ public class BaseLinearOpMode extends LinearOpMode {
     // List of all the trackable targets in the SkyStone game
     protected List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    // Enum to control the direction of turning
-    public enum TurnDirection {
-        /** Robot will turn in a CLOCKWISE direction
-         */
-        CLOCKWISE,
-        /** Robot wll turn in a Counter Clockwise Direction
-         */
-        COUNTER_CLOCKWISE
-    }
-
     @Override public void runOpMode() {}
 
     protected void Initialize(HardwareMap hardwareMap) {
@@ -376,81 +366,6 @@ public class BaseLinearOpMode extends LinearOpMode {
         if(liftController != null) {
             liftController.stop();
         }
-    }
-
-    public void addTargetPositions(ArrayList<DcMotor> motors, int ticks) {
-        for(DcMotor motor : motors) {
-            motor.setTargetPosition(motor.getCurrentPosition() + ticks);
-        }
-    }
-
-    public void setMotorsPowers(ArrayList<DcMotor> motors, double power) {
-        for(DcMotor motor : motors) {
-            motor.setPower(power);
-        }
-    }
-
-    public void setZeroPowerBehaviors(ArrayList<DcMotor> motors, DcMotor.ZeroPowerBehavior behavior) {
-        for(DcMotor motor : motors) {
-            motor.setZeroPowerBehavior(behavior);
-        }
-    }
-
-    public void driveByEncoderTicks(int ticks, double power) {
-        addTargetPositions(robot.allMotors, ticks);
-        setMotorsPowers(robot.allMotors, power);
-    }
-
-    public boolean atPosition(ArrayList<DcMotor> motors, int expectedPosition) {
-        for(DcMotor motor : motors) {
-            if(motor.getCurrentPosition() != expectedPosition) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void moveByInches(double power, double inches, double timeoutSeconds) {
-        moveByInches(power, inches, inches, timeoutSeconds);
-    }
-
-    public void moveByInches(double power, double leftInches, double rightInches, double timeoutSeconds) {
-        encoderDrive(power, (int) Robot.COUNTS_PER_INCH * leftInches,
-                (int) Robot.COUNTS_PER_INCH * rightInches, timeoutSeconds);
-    }
-
-    public void moveByMillimeters(int millimeters, double power, double timeoutSeconds) {
-        moveByInches(millimeters / mmPerInch, power, timeoutSeconds);
-    }
-
-    public void turnDegrees(TurnDirection direction, int degrees, double power, double timeoutSeconds) {
-        double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 90; // Find how many inches are in a degree
-        degrees *= inchesPerDegree;
-
-        if(direction == TurnDirection.COUNTER_CLOCKWISE) {
-            degrees = -degrees;
-        }
-
-        moveByInches(power, degrees, -degrees, timeoutSeconds);
-    }
-
-    public void encoderDrive(double targetSpeed, double leftTicks, double rightTicks, double timeoutSeconds) {
-        addTargetPositions(robot.leftMotors, (int) -leftTicks);
-        addTargetPositions(robot.rightMotors, (int) -rightTicks);
-
-        robot.setMotorMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        setMotorsPowers(robot.allMotors, targetSpeed);
-
-        ElapsedTime timer = new ElapsedTime();
-        timer.reset();
-
-        while(opModeIsActive() && robot.isBusy() && timer.seconds() <= timeoutSeconds) {
-            idle();
-        }
-
-        robot.stop();
-        robot.setMotorMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 }

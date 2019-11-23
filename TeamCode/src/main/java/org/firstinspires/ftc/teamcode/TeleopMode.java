@@ -30,7 +30,7 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
 
         Initialize(hardwareMap, driverGamePad);
 
-        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
+        drive = new MecanumDrive(this, robot);
 
         liftController = new LiftController(hardwareMap, config, telemetry);
 

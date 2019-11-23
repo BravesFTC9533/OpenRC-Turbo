@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+
+import java.util.ArrayList;
 
 
 /**
@@ -15,11 +21,17 @@ public class MecanumDrive implements IDrive {
 
     //private final Robot robot;
 
+    private Robot robot;
+
     private static final double MIN_SPEED = 0.2;
+    protected static final float mmPerInch        = 25.4f;
+
     private final DcMotor fl;
     private final DcMotor fr;
     private final DcMotor bl;
     private final DcMotor br;
+
+    private LinearOpMode opMode;
 
     boolean reverse = false;
 //
@@ -28,11 +40,13 @@ public class MecanumDrive implements IDrive {
 //        this.robot = robot;
 //    }
 
-    public MecanumDrive(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br) {
-        this.fl = fl;
-        this.fr = fr;
-        this.bl = bl;
-        this.br = br;
+    public MecanumDrive(LinearOpMode opMode, Robot robot) {
+        this.opMode = opMode;
+        this.robot = robot;
+        this.fl = robot.frontLeft;
+        this.fr = robot.frontRight;
+        this.bl = robot.backLeft;
+        this.br = robot.backRight;
     }
 
     public boolean getIsReverse(){
@@ -161,8 +175,16 @@ public class MecanumDrive implements IDrive {
     }
 
     @Override
-    public void driveToPosition(int leftPosition, int rightPosition) {
+    public void driveToPosition(int leftPosition, int rightPosition, double power) {
+        addTargetPositions(robot.leftMotors, leftPosition);
+        addTargetPositions(robot.rightMotors, rightPosition);
+        setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        setMotorsPowers(robot.allMotors, power);
+
+        while(opMode.opModeIsActive() && robot.isBusy()) {}
+
+        stop();
     }
 
 
@@ -191,5 +213,78 @@ public class MecanumDrive implements IDrive {
         }
 
         return  (power * power * modifier);
+    }
+
+    public void addTargetPositions(ArrayList<DcMotor> motors, int ticks) {
+        for(DcMotor motor : motors) {
+            motor.setTargetPosition(motor.getCurrentPosition() + ticks);
+        }
+    }
+
+    public void setMotorsPowers(ArrayList<DcMotor> motors, double power) {
+        for(DcMotor motor : motors) {
+            motor.setPower(power);
+        }
+    }
+
+    public void setZeroPowerBehaviors(ArrayList<DcMotor> motors, DcMotor.ZeroPowerBehavior behavior) {
+        for(DcMotor motor : motors) {
+            motor.setZeroPowerBehavior(behavior);
+        }
+    }
+
+    public void driveByEncoderTicks(int ticks, double power) {
+        addTargetPositions(robot.allMotors, ticks);
+        setMotorsPowers(robot.allMotors, power);
+    }
+
+    public boolean atPosition(ArrayList<DcMotor> motors, int expectedPosition) {
+        for(DcMotor motor : motors) {
+            if(motor.getCurrentPosition() != expectedPosition) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void moveByInches(double power, double inches, double timeoutSeconds) {
+        moveByInches(power, inches, inches, timeoutSeconds);
+    }
+
+    public void moveByInches(double power, double leftInches, double rightInches, double timeoutSeconds) {
+        encoderDrive(power, (int) Robot.COUNTS_PER_INCH * leftInches,
+                (int) Robot.COUNTS_PER_INCH * rightInches, timeoutSeconds);
+    }
+
+    public void moveByMillimeters(int millimeters, double power, double timeoutSeconds) {
+        moveByInches(millimeters / mmPerInch, power, timeoutSeconds);
+    }
+
+    public void turnDegrees(TurnDirection direction, int degrees, double power, double timeoutSeconds) {
+        double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 90; // Find how many inches are in a degree
+        degrees *= inchesPerDegree;
+
+        if(direction == TurnDirection.COUNTER_CLOCKWISE) {
+            degrees = -degrees;
+        }
+
+        moveByInches(power, degrees, -degrees, timeoutSeconds);
+    }
+
+    public void encoderDrive(double targetSpeed, double leftTicks, double rightTicks, double timeoutSeconds) {
+        addTargetPositions(robot.leftMotors, (int) leftTicks);
+        addTargetPositions(robot.rightMotors, (int) rightTicks);
+
+        robot.setMotorMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        setMotorsPowers(robot.allMotors, targetSpeed);
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(opMode.opModeIsActive() && robot.isBusy() && timer.seconds() <= timeoutSeconds) {}
+
+        robot.stop();
+        robot.setMotorMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

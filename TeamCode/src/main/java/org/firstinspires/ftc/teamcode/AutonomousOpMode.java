@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
+import org.firstinspires.ftc.teamcode.drive.IDrive;
 import org.firstinspires.ftc.teamcode.sensors.Sensors;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
@@ -27,7 +28,7 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         telemetry.update();
 
         Initialize(hardwareMap);
-        drive = new MecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
+        drive = new MecanumDrive(this, robot);
 
         config = new Config(hardwareMap.appContext);
         startingPosition = config.getPosition();
@@ -87,94 +88,94 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     boolean isTargetFound = false;
 
     private void redBricks() {
-        moveByInches(0.7, 4, 1.5);
+        drive.moveByInches(0.7, 4, 1.5);
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 3);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 3);
 
-        moveByInches(0.7, 16, 3);
+        drive.moveByInches(0.7, 16, 3);
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 2);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 2);
 
-        moveByInches(0.6, -20, 1.5);
+        drive.moveByInches(0.6, -20, 1.5);
 
         liftController.toggleDragServo();
 
         sleep(1000);
 
         if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            moveByInches(0.7, 10, 1.5);
+            drive.moveByInches(0.7, 10, 1.5);
         } else {
-            moveByInches(0.7, 20, 1.5);
+            drive.moveByInches(0.7, 20, 1.5);
         }
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.9, 2);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.9, 2);
 
-        moveByInches(0.6, 60, 4.5);
+        drive.moveByInches(0.6, 60, 4.5);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 180, 0.7, 2.5);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 180, 0.7, 2.5);
 
         liftController.toggleDragServo();
 
-        moveByInches(0.6, 24, 2);
+        drive.moveByInches(0.6, 24, 2);
 
     }
 
     private void blueBricks() {
-        moveByInches(0.7, 4, 1.5);
+        drive.moveByInches(0.7, 4, 1.5);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 3);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 3);
 
-        moveByInches(0.7, 14, 3);
+        drive.moveByInches(0.7, 14, 3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.7, 2);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.7, 2);
 
-        moveByInches(0.6, -20, 1.5);
+        drive.moveByInches(0.6, -20, 1.5);
 
         liftController.toggleDragServo();
 
         sleep(1000);
 
         if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            moveByInches(0.7, 10, 1.5);
+            drive.moveByInches(0.7, 10, 1.5);
         } else {
-            moveByInches(0.7, 20, 1.5);
+            drive.moveByInches(0.7, 20, 1.5);
         }
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.9, 2);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.9, 2);
 
-        moveByInches(0.6, 60, 4.5);
+        drive.moveByInches(0.6, 60, 4.5);
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 180, 0.7, 2.5);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 180, 0.7, 2.5);
 
         liftController.toggleDragServo();
 
-        moveByInches(0.6, 24, 2);
+        drive.moveByInches(0.6, 24, 2);
 
     }
 
     private void redBuilding() {
-        moveByInches(0.7, -15, 1.3);
+        drive.moveByInches(0.7, -15, 1.3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.7, -18.5, 1.3);
+        drive.moveByInches(0.7, -18.5, 1.3);
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.7, -6, 2);
+        drive.moveByInches(0.7, -6, 2);
 
         liftController.toggleDragServo();
 
         sleep(400);
 
-        moveByInches(0.7, 30, 2);
+        drive.moveByInches(0.7, 30, 2);
 
         liftController.toggleDragServo();
 
         sleep(400);
 
         if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            moveByInches(0.7, 20, 1.5);
+            drive.moveByInches(0.7, 20, 1.5);
         }
 
         runtime.reset();
@@ -185,28 +186,28 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     }
 
     private void blueBuilding() {
-        moveByInches(0.7, -15, 1.3);
+        drive.moveByInches(0.7, -15, 1.3);
 
-        turnDegrees(TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
+        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.7, -18.5, 1.3);
+        drive.moveByInches(0.7, -18.5, 1.3);
 
-        turnDegrees(TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
 
-        moveByInches(0.7, -6, 2);
+        drive.moveByInches(0.7, -6, 2);
 
         liftController.toggleDragServo();
 
         sleep(400);
 
-        moveByInches(0.7, 30, 2);
+        drive.moveByInches(0.7, 30, 2);
 
         liftController.toggleDragServo();
 
         sleep(400);
 
         if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            moveByInches(0.7, 20, 1.5);
+            drive.moveByInches(0.7, 20, 1.5);
         }
 
         runtime.reset();
