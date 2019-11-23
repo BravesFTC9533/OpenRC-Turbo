@@ -41,8 +41,6 @@ public class Robot {
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
 
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -62,6 +60,20 @@ public class Robot {
 
         setMotorMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMotorMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void reverse(boolean state) {
+        if(state) {
+            frontRight.setDirection(DcMotor.Direction.FORWARD);
+            backRight.setDirection(DcMotor.Direction.FORWARD);
+            frontLeft.setDirection(DcMotor.Direction.REVERSE);
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
+        } else {
+            frontRight.setDirection(DcMotor.Direction.REVERSE);
+            backRight.setDirection(DcMotor.Direction.REVERSE);
+            frontLeft.setDirection(DcMotor.Direction.FORWARD);
+            backLeft.setDirection(DcMotor.Direction.FORWARD);
+        }
     }
 
     public void setMotorMode(DcMotor.RunMode mode) {

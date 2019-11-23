@@ -34,6 +34,10 @@ public class MecanumDrive implements IDrive {
     private LinearOpMode opMode;
 
     boolean reverse = false;
+
+    public enum StraifDirection {
+        LEFT, RIGHT
+    }
 //
 //    public MecanumDrive(Robot robot, FtcGamePad driveGamepad){
 //        this.driverGamepad = driveGamepad;
@@ -183,6 +187,20 @@ public class MecanumDrive implements IDrive {
         setMotorsPowers(robot.allMotors, power);
 
         while(opMode.opModeIsActive() && robot.isBusy()) {}
+
+        stop();
+    }
+
+    public void straif(StraifDirection direction, double power, float seconds) {
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        if(direction == StraifDirection.RIGHT)
+            power = -power;
+
+        drive(0, power, 0);
+
+        while(opMode.opModeIsActive() && timer.seconds() <= seconds) {}
 
         stop();
     }

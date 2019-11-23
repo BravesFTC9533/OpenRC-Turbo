@@ -20,6 +20,8 @@ public class AutonomousOpMode extends BaseLinearOpMode {
     private Config config;
     private Sensors sensors;
 
+    private Config.ParkPosition parkPosition;
+
     private Config.Position startingPosition;
 
     @Override
@@ -59,6 +61,8 @@ public class AutonomousOpMode extends BaseLinearOpMode {
 
         sensors.colorSensor.enableLed(true);
 
+        parkPosition = config.getParkPosition();
+
         while(opModeIsActive()) {
 
             telemetry.addData("Sensor ARGB: ", sensors.colorSensor.argb());
@@ -66,154 +70,134 @@ public class AutonomousOpMode extends BaseLinearOpMode {
         }
 
 
-//        liftController.initLift(this);
-//        liftController.putFlipperUp();
-//
-//        switch(startingPosition) {
-//            case BLUE_BRICKS:
-//                blueBricks();
-//                break;
-//            case BLUE_BUILDING:
-//                blueBuilding();
-//                break;
-//            case RED_BRICKS:
-//                redBricks();
-//                break;
-//            case RED_BUILDING:
-//                redBuilding();
-//                break;
-//        }
+        liftController.initLift(this);
+        liftController.putFlipperUp();
+
+        switch(startingPosition) {
+            case BLUE_BRICKS:
+                blueBricks();
+                break;
+            case BLUE_BUILDING:
+                blueBuilding();
+                break;
+            case RED_BRICKS:
+                redBricks();
+                break;
+            case RED_BUILDING:
+                redBuilding();
+                break;
+        }
     }
 
-    boolean isTargetFound = false;
-
     private void redBricks() {
-        drive.moveByInches(0.7, 4, 1.5);
 
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 3);
+        // Move Off Wall
+        drive.moveByInches(0.7, 10, 1.5);
 
-        drive.moveByInches(0.7, 16, 3);
+        // Turn towards SkyBridge
+        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.7, 1.5);
 
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.7, 2);
+        // Move backwards into the wall
+        drive.moveByInches(0.8, -30, 2);
 
-        drive.moveByInches(0.6, -20, 1.5);
+        // Straif close to the bricks.
+        ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.LEFT, 0.5, 1);
 
+        // Save the position where the robot started
+        int startingPosition = robot.frontLeft.getCurrentPosition();
+
+        // Start moving forward
+        drive.drive(0.5, 0, 0);
+
+        // Find SkyStone
+//        while(opModeIsActive()) {
+//            if(foundSkyStone) {
+//                drive.stop();
+//                break;
+//            }
+//        }
+
+        // Figure out the distance the robot moved
+        int movedAmount = startingPosition = robot.frontLeft.getCurrentPosition();
+        double movedAmountInches = movedAmount * Robot.COUNTS_PER_INCH;
+
+        // Grab the SkyStone
         liftController.toggleDragServo();
 
-        sleep(1000);
+        // Give the robot time to move the servo arm
+        sleep(500);
 
-        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            drive.moveByInches(0.7, 10, 1.5);
+        float straifTime = 0;
+        if(parkPosition == Config.ParkPosition.WALL) {
+            straifTime = 2;
+            ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.RIGHT, 0.5, straifTime);
         } else {
-            drive.moveByInches(0.7, 20, 1.5);
+            straifTime = 1;
+            ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.RIGHT, 0.5, straifTime);
         }
 
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.9, 2);
+        // Move across the tape
+        drive.moveByInches(0.7, 50 - movedAmountInches, 2);
 
-        drive.moveByInches(0.6, 60, 4.5);
-
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 180, 0.7, 2.5);
-
+        // Drop off the SkyStone
         liftController.toggleDragServo();
 
-        drive.moveByInches(0.6, 24, 2);
+        // Save the position where the robot started
+        startingPosition = robot.frontLeft.getCurrentPosition();
+
+        // Drive Backwards over the tape
+        drive.drive(0, -0.5, 0);
+
+//        while(opModeIsActive()) {
+//            if(foundSkyStone) {
+//                drive.stop();
+//                break;
+//            }
+//        }
+
+        // Straif next to the brick
+        ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.LEFT, 0.5, straifTime);
+
+        // Grab the last SkyStone
+        liftController.toggleDragServo();
+
+        // Give robot time
+        sleep(500);
+
+        // Figure movement
+        movedAmount = startingPosition - robot.frontLeft.getCurrentPosition();
+        movedAmountInches = movedAmount * Robot.COUNTS_PER_INCH;
+
+        // Straif over
+        if(parkPosition == Config.ParkPosition.WALL) {
+            straifTime = 2;
+            ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.RIGHT, 0.5, straifTime);
+        } else {
+            straifTime = 1;
+            ((MecanumDrive) drive).straif(MecanumDrive.StraifDirection.RIGHT, 0.5, straifTime);
+        }
+
+        // Move Across the tape
+        drive.moveByInches(0.8, 50 - movedAmountInches, 2);
+
+        // Drop off the final SkyStone
+        liftController.toggleDragServo();
+
+        // Park on tape
+        drive.moveByInches(1, -10, 1);
 
     }
 
     private void blueBricks() {
-        drive.moveByInches(0.7, 4, 1.5);
 
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 3);
-
-        drive.moveByInches(0.7, 14, 3);
-
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.7, 2);
-
-        drive.moveByInches(0.6, -20, 1.5);
-
-        liftController.toggleDragServo();
-
-        sleep(1000);
-
-        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            drive.moveByInches(0.7, 10, 1.5);
-        } else {
-            drive.moveByInches(0.7, 20, 1.5);
-        }
-
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.9, 2);
-
-        drive.moveByInches(0.6, 60, 4.5);
-
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 180, 0.7, 2.5);
-
-        liftController.toggleDragServo();
-
-        drive.moveByInches(0.6, 24, 2);
 
     }
 
     private void redBuilding() {
-        drive.moveByInches(0.7, -15, 1.3);
 
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
-
-        drive.moveByInches(0.7, -18.5, 1.3);
-
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
-
-        drive.moveByInches(0.7, -6, 2);
-
-        liftController.toggleDragServo();
-
-        sleep(400);
-
-        drive.moveByInches(0.7, 30, 2);
-
-        liftController.toggleDragServo();
-
-        sleep(400);
-
-        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            drive.moveByInches(0.7, 20, 1.5);
-        }
-
-        runtime.reset();
-        while(runtime.seconds() < 4) {
-            drive.drive(0, 0.5, 0);
-        }
-        drive.stop();
     }
 
     private void blueBuilding() {
-        drive.moveByInches(0.7, -15, 1.3);
 
-        drive.turnDegrees(IDrive.TurnDirection.COUNTER_CLOCKWISE, 90, 0.6, 1.5);
-
-        drive.moveByInches(0.7, -18.5, 1.3);
-
-        drive.turnDegrees(IDrive.TurnDirection.CLOCKWISE, 90, 0.6, 1.5);
-
-        drive.moveByInches(0.7, -6, 2);
-
-        liftController.toggleDragServo();
-
-        sleep(400);
-
-        drive.moveByInches(0.7, 30, 2);
-
-        liftController.toggleDragServo();
-
-        sleep(400);
-
-        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-            drive.moveByInches(0.7, 20, 1.5);
-        }
-
-        runtime.reset();
-        while(runtime.seconds() < 4.25) {
-            drive.drive(0, -0.5, 0);
-        }
-        drive.stop();
     }
 }
