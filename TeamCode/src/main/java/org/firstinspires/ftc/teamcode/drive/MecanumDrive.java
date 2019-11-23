@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class MecanumDrive implements IDrive {
     private final DcMotor br;
 
 
-    public enum StraifDirection {
+    public enum StrafeDirection {
         LEFT, RIGHT
     }
 
@@ -180,11 +179,11 @@ public class MecanumDrive implements IDrive {
         stop();
     }
 
-    public void straif(StraifDirection direction, double power, float seconds) {
+    public void strafe(StrafeDirection direction, double power, float seconds) {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
-        if(direction == StraifDirection.RIGHT)
+        if(direction == StrafeDirection.RIGHT)
             power = -power;
 
         drive(0, power, 0);
