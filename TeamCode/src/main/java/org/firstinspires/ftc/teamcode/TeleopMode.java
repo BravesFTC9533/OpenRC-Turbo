@@ -34,6 +34,8 @@ public class TeleopMode extends BaseLinearOpMode implements FtcGamePad.ButtonHan
         waitForStart();
         runtime.reset();
 
+
+
         liftController.initLift(this);
 
         telemetry.log().add("(B) Drag Servo");

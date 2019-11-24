@@ -23,4 +23,6 @@ dependencies {
     extremeTurboImplementation project(':Hardware')
     extremeTurboImplementation project(':RobotCore')
     extremeTurboImplementation project(':FtcCommon')
+
+    implementation 'com.acmerobotics.dashboard:dashboard:0.3.6'
 }
