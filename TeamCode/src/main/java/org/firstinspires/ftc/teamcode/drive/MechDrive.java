@@ -4,10 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 import org.firstinspires.ftc.teamcode.common.Robot;
 
 public class MechDrive extends Drive {
+
+    private static final double MIN_SPEED = 0.2;
 
     public final Robot robot;
 
@@ -15,6 +19,7 @@ public class MechDrive extends Drive {
     public final DcMotorEx fr;
     public final DcMotorEx bl;
     public final DcMotorEx br;
+
 
     public MechDrive(Robot robot, LinearOpMode opMode) {
         super(opMode);
@@ -32,6 +37,10 @@ public class MechDrive extends Drive {
         return  value / max;
     }
 
+    public static double clipMotorPower(double value){
+        return Range.clip(value, -1, 1);
+    }
+
     public void addTargetPosition(int leftTicks, int rightTicks) {
         fl.setTargetPosition(fl.getCurrentPosition() + leftTicks);
         bl.setTargetPosition(bl.getCurrentPosition() + leftTicks);
@@ -41,6 +50,64 @@ public class MechDrive extends Drive {
 
     @Override
     public void drive(double v, double h, double r) {
+        // add vectors
+        double frontLeft =  v-h+r;
+        double frontRight = v+h-r;
+        double backRight =  v-h-r;
+        double backLeft =   v+h+r;
+
+        // since adding vectors can go over 1, figure out max to scale other wheels
+        double max = Math.max(
+                Math.abs(backLeft),
+                Math.max(
+                        Math.abs(backRight),
+                        Math.max(
+                                Math.abs(frontLeft), Math.abs(frontRight)
+                        )
+                )
+        );
+        // only need to scale power if max > 1
+        if(max > 1){
+            frontLeft = scalePower(frontLeft, max);
+            frontRight = scalePower(frontRight, max);
+            backLeft = scalePower(backLeft, max);
+            backRight = scalePower(backRight, max);
+        }
+
+        fl.setPower(frontLeft);
+        fr.setPower(frontRight);
+        bl.setPower(backLeft);
+        br.setPower(backRight);
+    }
+
+    @Override
+    public void handleTeleop(FtcGamePad driverGamepad){
+        double h, v, r;
+
+        h = -driverGamepad.getLeftStickX();
+        v = -driverGamepad.getLeftStickY();
+        r = -driverGamepad.getRightStickX();
+
+        if(Math.abs(h) < MIN_SPEED) {
+            h = 0;
+        }
+        if(Math.abs(v) < MIN_SPEED) {
+            v = 0;
+        }
+        if(Math.abs(r) < MIN_SPEED){
+            r = 0;
+        }
+
+        if(robot.isReverse()) {
+            h *= -1;
+            v *= -1;
+        }
+
+
+        h = clipMotorPower(h);
+        v = clipMotorPower(v);
+        r = clipMotorPower(r);
+
         // add vectors
         double frontLeft =  v-h+r;
         double frontRight = v+h-r;

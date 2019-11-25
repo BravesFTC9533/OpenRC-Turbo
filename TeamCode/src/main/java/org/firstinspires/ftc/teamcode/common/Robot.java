@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Robot {
@@ -18,6 +19,8 @@ public class Robot {
     public final DcMotorEx fr;
     public final DcMotorEx bl;
     public final DcMotorEx br;
+
+    private boolean isReverse = false;
 
     public Robot(HardwareMap hardwareMap) {
         fl = hardwareMap.get(DcMotorEx.class, "fl");
@@ -39,6 +42,25 @@ public class Robot {
         fr.setMode(runMode);
         bl.setMode(runMode);
         br.setMode(runMode);
+    }
+
+    public void setReverse(boolean value) {
+        if(value) {
+            fl.setDirection(DcMotorEx.Direction.REVERSE);
+            bl.setDirection(DcMotorEx.Direction.REVERSE);
+            fr.setDirection(DcMotorEx.Direction.FORWARD);
+            br.setDirection(DcMotorEx.Direction.FORWARD);
+        } else {
+            fl.setDirection(DcMotorEx.Direction.FORWARD);
+            bl.setDirection(DcMotorEx.Direction.FORWARD);
+            fr.setDirection(DcMotorEx.Direction.REVERSE);
+            br.setDirection(DcMotorEx.Direction.REVERSE);
+        }
+        isReverse = value;
+    }
+
+    public boolean isReverse() {
+        return isReverse;
     }
 
     public boolean isBusy() {
