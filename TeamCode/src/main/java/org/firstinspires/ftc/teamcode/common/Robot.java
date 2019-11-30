@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
 
 public class Robot {
 
@@ -20,6 +23,9 @@ public class Robot {
     public final DcMotorEx bl;
     public final DcMotorEx br;
 
+    public final ColorSensor colorSensorLeft;
+    public final ColorSensor colorSensorRight;
+
     private boolean isReverse = false;
 
     public Robot(HardwareMap hardwareMap) {
@@ -35,6 +41,9 @@ public class Robot {
 
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
+
+        colorSensorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
+        colorSensorRight = hardwareMap.get(ColorSensor.class, "colorRight");
     }
 
     public void setMode(DcMotor.RunMode runMode) {

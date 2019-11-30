@@ -20,6 +20,9 @@ public class MechDrive extends Drive {
     public final DcMotorEx bl;
     public final DcMotorEx br;
 
+    public enum StrafeDirection {
+        LEFT, RIGHT
+    }
 
     public MechDrive(Robot robot, LinearOpMode opMode) {
         super(opMode);
@@ -138,9 +141,39 @@ public class MechDrive extends Drive {
         br.setPower(backRight);
     }
 
+    public void strafeSeconds(double power, StrafeDirection direction, double seconds) {
+        ElapsedTime timer = new ElapsedTime();
+
+        if(direction == StrafeDirection.RIGHT) {
+            power = -power;
+        }
+
+        timer.reset();
+        drive(0, power, 0);
+        while(timer.seconds() < seconds) {}
+        stop();
+    }
+
     @Override
     public void moveByInches(double power, float inches, double timeoutSeconds) {
-        encoderDrive(power, (int) (Robot.COUNTS_PER_INCH * inches), (int) (Robot.COUNTS_PER_INCH * inches), timeoutSeconds);
+        moveByInches(power, inches, inches, timeoutSeconds);
+    }
+
+    @Override
+    public void moveByInches(double power, float leftInches, float rightInches, double timeoutSeconds) {
+        encoderDrive(power, (int) (Robot.COUNTS_PER_INCH * leftInches), (int) (Robot.COUNTS_PER_INCH * rightInches), timeoutSeconds);
+    }
+
+    @Override
+    public void turnDegrees(double power, TurnDirection turnDirection, int degrees, double timeoutSeconds) {
+        double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 90; // Find how many inches are in a degree
+        degrees *= inchesPerDegree;
+
+        if(turnDirection == TurnDirection.COUNTER_CLOCKWISE) {
+            degrees = -degrees;
+        }
+
+        moveByInches(power, degrees, -degrees, timeoutSeconds);
     }
 
     @Override

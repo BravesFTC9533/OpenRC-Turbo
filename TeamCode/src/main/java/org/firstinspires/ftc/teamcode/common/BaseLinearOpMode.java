@@ -33,16 +33,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
+import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
+import org.firstinspires.ftc.teamcode.sensor.Sensor;
 
 public class BaseLinearOpMode extends LinearOpMode {
 
     protected Robot robot;
+    protected Config config;
     protected Drive drive;
+    protected Sensor sensors;
 
     @Override
     public void runOpMode() {
         robot = new Robot(hardwareMap);
+        config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
+        sensors = new ColorSensors(robot, this);
 
         waitForStart();
     }
