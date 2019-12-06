@@ -35,11 +35,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
-@TeleOp(name="Teleop", group="Linear Opmode")
-public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler {
-
-    private FtcGamePad driverGamePad;
-    private FtcGamePad operatorGamePad;
+@TeleOp(name="Values", group="Linear Opmode")
+public class Values extends BaseLinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -50,35 +47,15 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
 
         super.runOpMode();
 
-        driverGamePad = new FtcGamePad("Driver Gampad", gamepad1, this);
-        operatorGamePad = new FtcGamePad("Operator Gampad", gamepad2, this);
-
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive()) {
-            drive.handleTeleop(driverGamePad);
-            driverGamePad.update();
-            operatorGamePad.update();
+            telemetry.addData("X: ", robot.x);
+            telemetry.addData("Y: ", robot.y);
+            telemetry.addData("Z: ", robot.z);
             telemetry.update();
         }
-    }
-
-    @Override
-    public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
-        if(gamepad == driverGamePad) {
-            handleDriverGamepad(button, pressed);
-        } else {
-            handleOperatorGamepad(button, pressed);
-        }
-    }
-
-    private void handleDriverGamepad(int button, boolean pressed) {
-
-    }
-
-    private void handleOperatorGamepad(int button, boolean pressed) {
-
     }
 
 }

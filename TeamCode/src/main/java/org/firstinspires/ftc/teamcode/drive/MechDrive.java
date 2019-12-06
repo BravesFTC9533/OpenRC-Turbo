@@ -51,6 +51,13 @@ public class MechDrive extends Drive {
         br.setTargetPosition(br.getCurrentPosition() + rightTicks);
     }
 
+    public void strafe() {
+        fl.setVelocity(-1000);
+        bl.setVelocity(1000);
+        fr.setVelocity(1000);
+        br.setVelocity(-1000);
+    }
+
     @Override
     public void drive(double v, double h, double r) {
         // add vectors
@@ -89,7 +96,7 @@ public class MechDrive extends Drive {
 
         h = -driverGamepad.getLeftStickX();
         v = -driverGamepad.getLeftStickY();
-        r = -driverGamepad.getRightStickX();
+        r = driverGamepad.getRightStickX();
 
         if(Math.abs(h) < MIN_SPEED) {
             h = 0;

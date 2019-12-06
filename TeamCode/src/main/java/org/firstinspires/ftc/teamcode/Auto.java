@@ -65,6 +65,8 @@ public class Auto extends BaseLinearOpMode {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
+        super.runOpMode();
+
         parkPosition = config.getParkPosition();
         startingPosition = config.getPosition();
 
@@ -74,21 +76,25 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-        switch (startingPosition) {
-            case RED_BRICKS:
-                redBricks();
-                break;
-            case BLUE_BRICKS:
-                blueBricks();
-                break;
-            case RED_BUILDING:
-                redBuilding();
-                break;
-            case BLUE_BUILDING:
-                blueBuilding();
-                break;
-        }
+//        switch (startingPosition) {
+//            case RED_BRICKS:
+//                redBricks();
+//                break;
+//            case BLUE_BRICKS:
+//                blueBricks();
+//                break;
+//            case RED_BUILDING:
+//                redBuilding();
+//                break;
+//            case BLUE_BUILDING:
+//                blueBuilding();
+//                break;
+//        }
 
+        ((MechDrive) drive).strafe();
+
+        while (opModeIsActive()) {
+        }
     }
 
     private void redBricks() {

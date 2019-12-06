@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,8 +14,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Robot {
+public class Robot implements SensorEventListener {
 
     public static final double WHEEL_DISTANCE_INCHES = 18.1;
 
@@ -23,12 +31,20 @@ public class Robot {
     public final DcMotorEx bl;
     public final DcMotorEx br;
 
-    public final ColorSensor colorSensorLeft;
-    public final ColorSensor colorSensorRight;
+    public float x, y, z;
+
+    private Telemetry telemetry;
+
+    public ColorSensor colorSensorLeft;
+    public ColorSensor colorSensorRight;
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
 
     private boolean isReverse = false;
 
-    public Robot(HardwareMap hardwareMap) {
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
         fl = hardwareMap.get(DcMotorEx.class, "fl");
         fr = hardwareMap.get(DcMotorEx.class, "fr");
         bl = hardwareMap.get(DcMotorEx.class, "bl");
@@ -42,8 +58,26 @@ public class Robot {
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
 
-        colorSensorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
-        colorSensorRight = hardwareMap.get(ColorSensor.class, "colorRight");
+        sensorManager = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
+
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+//        colorSensorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
+//        colorSensorRight = hardwareMap.get(ColorSensor.class, "colorRight");
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        x = sensorEvent.values[0];
+        y = sensorEvent.values[1];
+        z = sensorEvent.values[2];
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
     public void setMode(DcMotor.RunMode runMode) {
