@@ -51,9 +51,9 @@ public class Values extends BaseLinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            telemetry.addData("X: ", robot.x);
-            telemetry.addData("Y: ", robot.y);
-            telemetry.addData("Z: ", robot.z);
+            telemetry.addData("X: ", (int) robot.dx);
+            telemetry.addData("Y: ", (int) robot.dy);
+            telemetry.addData("Z: ", (int) robot.dz);
             telemetry.update();
         }
     }

@@ -6,14 +6,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot implements SensorEventListener {
@@ -31,7 +28,7 @@ public class Robot implements SensorEventListener {
     public final DcMotorEx bl;
     public final DcMotorEx br;
 
-    public float x, y, z;
+    public float dx, dy, dz;
 
     private Telemetry telemetry;
 
@@ -62,7 +59,7 @@ public class Robot implements SensorEventListener {
 
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 
 //        colorSensorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
 //        colorSensorRight = hardwareMap.get(ColorSensor.class, "colorRight");
@@ -70,9 +67,9 @@ public class Robot implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        x = sensorEvent.values[0];
-        y = sensorEvent.values[1];
-        z = sensorEvent.values[2];
+        dx = sensorEvent.values[0];
+        dy = sensorEvent.values[1];
+        dz = sensorEvent.values[2];
     }
 
     @Override

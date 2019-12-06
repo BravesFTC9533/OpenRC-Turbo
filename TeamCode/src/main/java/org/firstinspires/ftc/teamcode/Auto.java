@@ -91,10 +91,13 @@ public class Auto extends BaseLinearOpMode {
 //                break;
 //        }
 
-        ((MechDrive) drive).strafe();
-
         while (opModeIsActive()) {
+            drive.drive(meterToInches(robot.dy), 0.5, 0);
         }
+    }
+
+    private double meterToInches(double meters) {
+        return 39.3701 * meters;
     }
 
     private void redBricks() {
