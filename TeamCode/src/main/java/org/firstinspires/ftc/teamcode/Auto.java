@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
@@ -91,12 +92,13 @@ public class Auto extends BaseLinearOpMode {
 //        }
 
         while (opModeIsActive()) {
-            drive.drive(meterToInches(robot.dy), 0.5, 0);
+            
         }
+
     }
 
     private double meterToInches(double meters) {
-        return 39.3701 * meters;
+        return (1.0 / 38.3701) * meters;
     }
 
     private void redBricks() {
