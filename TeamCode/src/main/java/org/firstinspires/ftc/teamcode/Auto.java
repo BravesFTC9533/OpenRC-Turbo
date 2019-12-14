@@ -76,25 +76,20 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-//        switch (startingPosition) {
-//            case RED_BRICKS:
-//                redBricks();
-//                break;
-//            case BLUE_BRICKS:
-//                blueBricks();
-//                break;
-//            case RED_BUILDING:
-//                redBuilding();
-//                break;
-//            case BLUE_BUILDING:
-//                blueBuilding();
-//                break;
-//        }
-
-        while (opModeIsActive()) {
-            
+        switch (startingPosition) {
+            case RED_BRICKS:
+                redBricks();
+                break;
+            case BLUE_BRICKS:
+                blueBricks();
+                break;
+            case RED_BUILDING:
+                redBuilding();
+                break;
+            case BLUE_BUILDING:
+                blueBuilding();
+                break;
         }
-
     }
 
     private double meterToInches(double meters) {
@@ -102,31 +97,20 @@ public class Auto extends BaseLinearOpMode {
     }
 
     private void redBricks() {
-        // Move off the wall
-        drive.moveByInches(1, 15, 1.5);
 
-        // Turn away from the wall
-        drive.turnDegrees(0.8, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+        // Move off the wall.
+        drive.moveByInches(0.8, 20, 1.75);
 
-        // Back up against the wall
-        drive.moveByInches(1, -17, 1.75);
+        // Turn 90 degrees away from the wall.
+        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
 
-        // Move close the the bricks
-        ((MechDrive) drive).strafeSeconds(0.25, MechDrive.StrafeDirection.LEFT, 2);
+        // Move backwards.
+        drive.moveByInches(0.6, 30, 2);
 
-        // Square up against the wall
-        drive.moveByInches(0.5, -5, 1);
+        drive.drive(0, -1, 0);
 
-        // Move forward slowly
-        drive.drive(0.25, 0, 0);
-
-        // Check for SkyStone
-        while (opModeIsActive()) {
-            if (((ColorSensors) sensors).isSkyStone(ColorSensors.SensorSide.LEFT)) {
-                drive.stop();
-                break;
-            }
-        }
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 3) {}
     }
 
     private void redBuilding() {
