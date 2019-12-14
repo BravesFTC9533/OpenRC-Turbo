@@ -57,7 +57,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
         runtime.reset();
 
         while (opModeIsActive()) {
-            drive.handleTeleop(driverGamePad);
+            //drive.handleTeleop(driverGamePad);
             driverGamePad.update();
             operatorGamePad.update();
             telemetry.update();
@@ -66,17 +66,14 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
 
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
-        if(gamepad == driverGamePad) {
-            handleDriverGamepad(button, pressed);
-        } else {
-            handleOperatorGamepad(button, pressed);
-        }
+        handleDriverGamepad(button, pressed);
     }
 
     private void handleDriverGamepad(int button, boolean pressed) {
         switch (button) {
             case FtcGamePad.GAMEPAD_LBUMPER:
                 if(pressed) {
+                    telemetry.update();
                     drive.drive(0, 0.1, 0);
                 } else {
                     drive.stop();
