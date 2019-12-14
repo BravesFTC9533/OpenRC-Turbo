@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.sensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public abstract class Sensor {
 
-    protected final LinearOpMode opMode;
+    protected final HardwareMap hardwareMap;
 
-    public Sensor(LinearOpMode opMode) {this.opMode = opMode;}
+    public Sensor(HardwareMap hardwareMap) {this.hardwareMap = hardwareMap;}
 
 }

@@ -137,10 +137,10 @@ public class MechDrive extends Drive {
             backRight = scalePower(backRight, max);
         }
 
-        fl.setPower(frontLeft);
-        fr.setPower(frontRight);
-        bl.setPower(backLeft);
-        br.setPower(backRight);
+        fl.setVelocity(frontLeft * Robot.MAX_NEVE_VELOCITY);
+        fr.setVelocity(frontRight * Robot.MAX_NEVE_VELOCITY);
+        bl.setVelocity(backLeft * Robot.MAX_NEVE_VELOCITY);
+        br.setVelocity(backRight * Robot.MAX_NEVE_VELOCITY);
     }
 
     public void strafeSeconds(double power, StrafeDirection direction, double seconds) {
@@ -150,12 +150,8 @@ public class MechDrive extends Drive {
             power = -power;
         }
 
+        drive(0, power, 0);
         timer.reset();
-
-        fl.setPower(-power);
-        bl.setPower(power);
-        fr.setPower(-power);
-        br.setPower(power);
 
         while(opMode.opModeIsActive() && timer.seconds() < seconds) {}
         stop();
@@ -194,6 +190,8 @@ public class MechDrive extends Drive {
         runtime.reset();
 
         while(opMode.opModeIsActive() && robot.isBusy() && runtime.seconds() <= timeoutSeconds) {}
+
+        robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         stop();
     }

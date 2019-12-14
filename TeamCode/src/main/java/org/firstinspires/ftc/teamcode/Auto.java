@@ -92,10 +92,6 @@ public class Auto extends BaseLinearOpMode {
         }
     }
 
-    private double meterToInches(double meters) {
-        return (1.0 / 38.3701) * meters;
-    }
-
     private void redBricks() {
 
         // Move off the wall.
@@ -107,10 +103,8 @@ public class Auto extends BaseLinearOpMode {
         // Move backwards.
         drive.moveByInches(0.6, 30, 2);
 
-        drive.drive(0, -1, 0);
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 3) {}
+        // Move towards bricks.
+        ((MechDrive) drive).strafeSeconds(0.5, MechDrive.StrafeDirection.RIGHT, 1);
     }
 
     private void redBuilding() {

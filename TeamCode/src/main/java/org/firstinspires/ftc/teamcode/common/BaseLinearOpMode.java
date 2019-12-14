@@ -48,7 +48,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         robot = new Robot(hardwareMap, telemetry);
         config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
-        sensors = new ColorSensors(robot, this);
+        sensors = new ColorSensors(hardwareMap);
 
         waitForStart();
     }

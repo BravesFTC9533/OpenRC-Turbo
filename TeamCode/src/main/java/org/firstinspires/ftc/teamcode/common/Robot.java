@@ -11,11 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Robot implements SensorEventListener {
+public class Robot {
 
     public static final double WHEEL_DISTANCE_INCHES = 18.1;
+    public static final double MAX_NEVE_VELOCITY = 3120.0;
 
     public static final double     NEVE_COUNTS_PER_MOTOR_NEVE = 1120;      // eg: Rev Side motor
     public static final double            DRIVE_GEAR_REDUCTION    = 45.0 / 35.0;             // This is < 1.0 if geared UP
@@ -28,15 +30,7 @@ public class Robot implements SensorEventListener {
     public final DcMotorEx bl;
     public final DcMotorEx br;
 
-    public float dx, dy, dz;
-
     private Telemetry telemetry;
-
-    public ColorSensor colorSensorLeft;
-    public ColorSensor colorSensorRight;
-
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
 
     private boolean isReverse = false;
 
@@ -54,27 +48,6 @@ public class Robot implements SensorEventListener {
 
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
-
-        sensorManager = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
-
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-
-//        colorSensorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
-//        colorSensorRight = hardwareMap.get(ColorSensor.class, "colorRight");
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        dx = sensorEvent.values[0];
-        dy = sensorEvent.values[1];
-        dz = sensorEvent.values[2];
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
     public void setMode(DcMotor.RunMode runMode) {
