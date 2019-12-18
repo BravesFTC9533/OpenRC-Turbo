@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.sensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public abstract class Sensor {
