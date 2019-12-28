@@ -6,7 +6,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import static org.firstinspires.ftc.teamcode.sensor.ColorSensors.SensorSide.FRONT;
+
 public class ColorSensors extends Sensor {
+
+    public static final int SKY_STONE_CONDITION_NUMBER_MAX = 270;
 
     public final DistanceSensor frontDistance;
     public final ColorSensor frontColor;
@@ -29,7 +33,7 @@ public class ColorSensors extends Sensor {
     }
 
     public double getSensorDistance(SensorSide sensorSide, DistanceUnit distanceUnit) {
-        if(sensorSide == SensorSide.FRONT) {
+        if(sensorSide == FRONT) {
             return frontDistance.getDistance(distanceUnit);
         } else if(sensorSide == SensorSide.BACK) {
             return backDistance.getDistance(distanceUnit);
@@ -65,6 +69,15 @@ public class ColorSensors extends Sensor {
                 return backColor.green();
         }
         return frontColor.green();
+    }
+
+    public boolean isSkystone(SensorSide sensorSide) {
+        int r = getR(sensorSide);
+        int g = getG(sensorSide);
+        int b = getB(sensorSide);
+        int condition = (r * g) / (b ^ 2);
+        if(condition <= SKY_STONE_CONDITION_NUMBER_MAX) return true;
+        else return false;
     }
 
 }

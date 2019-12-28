@@ -31,10 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @TeleOp(name="Values", group="Linear Opmode")
 public class Values extends BaseLinearOpMode {
@@ -50,12 +50,10 @@ public class Values extends BaseLinearOpMode {
 
         waitForStart();
         runtime.reset();
+
         while (opModeIsActive()) {
-            telemetry.addData("X: ", (int) robot.dx);
-            telemetry.addData("Y: ", (int) robot.dy);
-            telemetry.addData("Z: ", (int) robot.dz);
+            telemetry.addData("SkyStone", sensors.isSkystone(ColorSensors.SensorSide.FRONT));
             telemetry.update();
         }
     }
-
 }

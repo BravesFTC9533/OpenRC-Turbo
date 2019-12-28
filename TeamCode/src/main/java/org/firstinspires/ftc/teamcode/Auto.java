@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.common.ArmsController;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.drive.Drive;
@@ -64,27 +65,27 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-        switch (startingPosition) {
-            case RED_BRICKS:
-                redBricks();
-                break;
-            case BLUE_BRICKS:
-                blueBricks();
-                break;
-            case RED_BUILDING:
-                redBuilding();
-                break;
-            case BLUE_BUILDING:
-                blueBuilding();
-                break;
-        }
+//        switch (startingPosition) {
+//            case RED_BRICKS:
+//                redBricks();
+//                break;
+//            case BLUE_BRICKS:
+//                blueBricks();
+//                break;
+//            case RED_BUILDING:
+//                redBuilding();
+//                break;
+//            case BLUE_BUILDING:
+//                blueBuilding();
+//                break;
+//        }
     }
 
     private void redBricks() {
         // Move off the wall.
         drive.moveByInches(0.8, 20, 1.75);
 
-        // Turn 90 degrees away from the wall.
+        // Turn 90 degrees towards the wall.
         drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
 
         // Move backwards.
@@ -93,9 +94,30 @@ public class Auto extends BaseLinearOpMode {
         // Move towards bricks.
         drive.drive(0, 0.5, 0);
 
-        // Wait until we are 5mm away from the bricks.
-        while(opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.BACK, DistanceUnit.MM) > 5) {}
-        drive.stop();
+        // Wait until we are 70mm away from the bricks.
+        while(opModeIsActive()) {
+            if(sensors.getSensorDistance(ColorSensors.SensorSide.FRONT, DistanceUnit.MM) <= 70) {
+                drive.stop();
+                break;
+            }
+        }
+
+        // Hit against the wall to straighten out.
+        drive.moveByInches(0.5, 5, 1);
+
+        // Move forward slowly.
+        drive.drive(0.6, 0, 0);
+
+        // Check for the yellow brick.
+        while(opModeIsActive()) {
+            if(sensors.isSkystone(ColorSensors.SensorSide.FRONT)) {
+                drive.stop();
+                break;
+            }
+        }
+
+        // Grab the yellow brick with front arm.
+        armsController.closeArm(ArmsController.ArmSide.FRONT);
     }
 
     private void redBuilding() {
