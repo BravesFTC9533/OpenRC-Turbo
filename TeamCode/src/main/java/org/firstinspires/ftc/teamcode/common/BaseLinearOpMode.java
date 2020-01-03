@@ -42,6 +42,7 @@ public class BaseLinearOpMode extends LinearOpMode {
     protected Drive drive;
     protected ColorSensors sensors;
     protected ArmsController armsController;
+    protected LiftController liftController;
 
     @Override
     public void runOpMode() {
@@ -50,6 +51,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         drive = new MechDrive(robot, this);
         sensors = new ColorSensors(hardwareMap);
         armsController = new ArmsController(hardwareMap);
+        liftController = new LiftController(hardwareMap);
 
         waitForStart();
 

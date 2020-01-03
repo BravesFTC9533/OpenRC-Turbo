@@ -66,14 +66,18 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
 
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
-        handleDriverGamepad(button, pressed);
+        if(gamepad == driverGamePad)
+            handleDriverGamepad(button, pressed);
+        else
+            handleOperatorGamepad(button, pressed);
     }
 
     private void handleDriverGamepad(int button, boolean pressed) {
+        drive.handleTeleop(driverGamePad);
     }
 
     private void handleOperatorGamepad(int button, boolean pressed) {
-
+        liftController.handle(button, pressed);
     }
 
 }
