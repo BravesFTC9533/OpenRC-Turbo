@@ -9,6 +9,8 @@ public class LiftController {
 
     public LiftController(HardwareMap hardwareMap) {
         lift = hardwareMap.dcMotor.get("lift");
+
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setLiftPower(double power) {
@@ -21,15 +23,22 @@ public class LiftController {
                 if(pressed)
                     setLiftPower(1);
                 else
-                    setLiftPower(0);
+                    holdPosition();
                 break;
             case FtcGamePad.GAMEPAD_DPAD_DOWN:
                 if(pressed)
                     setLiftPower(-1);
                 else
-                    setLiftPower(0);
+                    holdPosition();
                 break;
         }
+    }
+
+    public void holdPosition() {
+        lift.setTargetPosition(lift.getTargetPosition());
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setLiftPower(1);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 }
