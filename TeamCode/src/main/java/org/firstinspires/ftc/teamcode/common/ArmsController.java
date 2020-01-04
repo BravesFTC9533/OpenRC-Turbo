@@ -17,21 +17,21 @@ public class ArmsController {
         frontArm = hardwareMap.get(Servo.class, "frontArm");
         backArm = hardwareMap.get(Servo.class, "backArm");
 
-        frontArm.setPosition(0.2);
+        backArm.setDirection(Servo.Direction.REVERSE);
     }
 
     public void init() {
-        frontArm.setPosition(1);
+        frontArm.setPosition(0.8);
         backArm.setPosition(1);
     }
 
     public void toggleArm(ArmSide armSide) {
         switch (armSide) {
             case FRONT:
-                if(frontArm.getPosition() > 0.2) {
-                    frontArm.setPosition(0.2);
+                if(frontArm.getPosition() > 0) {
+                    frontArm.setPosition(0);
                 } else {
-                    frontArm.setPosition(1);
+                    frontArm.setPosition(0.8);
                 }
                 break;
             case BACK:
@@ -58,10 +58,10 @@ public class ArmsController {
     public void closeArm(ArmSide armSide) {
         switch (armSide) {
             case FRONT:
-                frontArm.setPosition(0);
+                frontArm.setPosition(-1);
                 break;
             case BACK:
-                backArm.setPosition(0);
+                backArm.setPosition(-1);
                 break;
         }
     }

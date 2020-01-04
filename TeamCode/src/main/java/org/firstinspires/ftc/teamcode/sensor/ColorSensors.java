@@ -10,7 +10,7 @@ import static org.firstinspires.ftc.teamcode.sensor.ColorSensors.SensorSide.FRON
 
 public class ColorSensors extends Sensor {
 
-    public static final int SKY_STONE_CONDITION_NUMBER_MAX = 270;
+    public static final int SKY_STONE_CONDITION_NUMBER_MAX = 80;
 
     public final DistanceSensor frontDistance;
     public final ColorSensor frontColor;
@@ -69,6 +69,13 @@ public class ColorSensors extends Sensor {
                 return backColor.green();
         }
         return frontColor.green();
+    }
+
+    public int getCondition(SensorSide sensorSide) {
+        int r = getR(sensorSide);
+        int g = getG(sensorSide);
+        int b = getB(sensorSide);
+        return (r * g) / (b ^ 2);
     }
 
     public boolean isSkystone(SensorSide sensorSide) {

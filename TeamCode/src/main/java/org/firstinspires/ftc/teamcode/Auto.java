@@ -63,61 +63,87 @@ public class Auto extends BaseLinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
 
-//        switch (startingPosition) {
-//            case RED_BRICKS:
-//                redBricks();
-//                break;
-//            case BLUE_BRICKS:
-//                blueBricks();
-//                break;
-//            case RED_BUILDING:
-//                redBuilding();
-//                break;
-//            case BLUE_BUILDING:
-//                blueBuilding();
-//                break;
-//        }
+        switch (startingPosition) {
+            case RED_BRICKS:
+                redBricks();
+                break;
+            case BLUE_BRICKS:
+                blueBricks();
+                break;
+            case RED_BUILDING:
+                redBuilding();
+                break;
+            case BLUE_BUILDING:
+                blueBuilding();
+                break;
+        }
     }
 
     private void redBricks() {
         // Move off the wall.
-        drive.moveByInches(0.8, 20, 1.75);
+        drive.moveByInches(0.8, 20, 1);
 
         // Turn 90 degrees towards the wall.
-        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
+        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1);
 
         // Move backwards.
-        drive.moveByInches(0.6, 30, 2);
+        drive.moveByInches(1, 30, 1);
 
         // Move towards bricks.
-        drive.drive(0, 0.5, 0);
+        drive.drive(0, -0.5, 0);
 
-        // Wait until we are 70mm away from the bricks.
+        // Wait until we are 90mm away from the bricks.
         while(opModeIsActive()) {
-            if(sensors.getSensorDistance(ColorSensors.SensorSide.FRONT, DistanceUnit.MM) <= 70) {
+            if(sensors.getSensorDistance(ColorSensors.SensorSide.FRONT, DistanceUnit.MM) <= 90) {
                 drive.stop();
                 break;
             }
         }
 
         // Hit against the wall to straighten out.
-        drive.moveByInches(0.5, 5, 1);
-
-        // Move forward slowly.
-        drive.drive(0.6, 0, 0);
+        drive.moveByInches(1, 5, 1);
 
         // Check for the yellow brick.
         while(opModeIsActive()) {
             if(sensors.isSkystone(ColorSensors.SensorSide.FRONT)) {
                 drive.stop();
                 break;
+            } else {
+                // Move forward slowly
+                drive.drive(-0.5, 0, 0);
             }
         }
 
         // Grab the yellow brick with front arm.
-        armsController.closeArm(ArmsController.ArmSide.FRONT);
+        armsController.frontArm.setPosition(-1);
+
+        // Wait for arm to move
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1) {}
+
+        drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 115, 2);
+
+        // Move forward depending on the park position
+        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
+            drive.moveByInches(1, -10, 2);
+        } else {
+            drive.moveByInches(1, -25, 2);
+        }
+
+        // Turn back.
+        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 2);
+
+        // Move under the sky bridge
+        drive.moveByInches(1, -75, 3);
+
+        // Drop off the brick
+        armsController.frontArm.setPosition(1);
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1) {}
+
+        // Move backwards.
+        drive.moveByInches(1, 35, 1.5);
     }
 
     private void redBuilding() {
