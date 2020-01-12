@@ -56,7 +56,7 @@ public class LiftController {
 
     public void handle(int button, boolean pressed) {
         switch (button) {
-//            case FtcGamePad.GAMEPAD_A:
+//            case FtcGamePad.GAMEPAD_DPAD_DOWN:
 //                if(pressed) {
 //                    if(lift.getCurrentPosition() <= 0) {setLiftPower(0);} else
 //                    setLiftPower(-1);
@@ -64,7 +64,7 @@ public class LiftController {
 //                    setLiftPower(0);
 //                }
 //                break;
-//            case FtcGamePad.GAMEPAD_Y:
+//            case FtcGamePad.GAMEPAD_DPAD_UP:
 //                if(pressed) {
 //                    if(lift.getCurrentPosition() >= MAX_LIFT) {setLiftPower(0);} else
 //                    setLiftPower(1);
@@ -94,47 +94,26 @@ public class LiftController {
             case FtcGamePad.GAMEPAD_DPAD_DOWN:
                 if(pressed)
                     goTo(1, POSITION_1, 1.25);
-                else
-                    holdPosition();
                 break;
             case FtcGamePad.GAMEPAD_DPAD_LEFT:
                 if(pressed)
                     goTo(1, POSITION_2, 1.25);
-                else
-                    holdPosition();
                 break;
             case FtcGamePad.GAMEPAD_DPAD_UP:
                 if(pressed)
                     goTo(1, POSITION_3, 1.25);
-                else
-                    holdPosition();
                 break;
             case FtcGamePad.GAMEPAD_DPAD_RIGHT:
                 if(pressed)
                     goTo(1, POSITION_4, 1.25);
-                else
-                    holdPosition();
                 break;
         }
-    }
-
-    public void goTo(int power, int position) {
-        lift.setTargetPosition(position);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setLiftPower(power);
-        while(opMode.opModeIsActive() && lift.isBusy()) {}
-        setLiftPower(0);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void goTo(int power, int position, double timeoutSeconds) {
         lift.setTargetPosition(position);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         setLiftPower(power);
-        ElapsedTime timer = new ElapsedTime();
-        while(opMode.opModeIsActive() && lift.isBusy() && timer.seconds() < timeoutSeconds) {}
-        setLiftPower(0);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void holdPosition() {

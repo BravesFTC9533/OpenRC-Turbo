@@ -65,6 +65,9 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
             telemetry.addData("Lift", liftController.lift.getCurrentPosition());
             telemetry.update();
         }
+        drive.stop();
+        liftController.setLiftPower(0);
+        intakeController.intake.setPower(0);
     }
 
     @Override

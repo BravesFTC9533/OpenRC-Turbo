@@ -48,6 +48,14 @@ public class IntakeController {
                     rightIntake.setPosition(0.5);
                 }
                 break;
+            case FtcGamePad.GAMEPAD_RBUMPER:
+                if(pressed) {
+                    leftIntake.setPosition(1);
+                    rightIntake.setPosition(1);
+                } else {
+                    leftIntake.setPosition(0.5);
+                    rightIntake.setPosition(0.5);
+                }
 //            case FtcGamePad.GAMEPAD_B:
 //                if(pressed) {
 //                    if(intake.getCurrentPosition() > 0) {
