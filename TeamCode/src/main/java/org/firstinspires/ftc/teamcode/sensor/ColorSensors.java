@@ -6,69 +6,67 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-import static org.firstinspires.ftc.teamcode.sensor.ColorSensors.SensorSide.FRONT;
-
 public class ColorSensors extends Sensor {
 
     public static final int SKY_STONE_CONDITION_NUMBER_MAX = 80;
 
-    public final DistanceSensor frontDistance;
-    public final ColorSensor frontColor;
+    public final DistanceSensor leftDistance;
+    public final ColorSensor leftColor;
 
-    public final DistanceSensor backDistance;
-    public final ColorSensor backColor;
+    public final DistanceSensor rightDistance;
+    public final ColorSensor rightColor;
 
     public enum SensorSide {
-        FRONT, BACK
+        LEFT, RIGHT
     }
 
     public ColorSensors(HardwareMap hardwareMap) {
         super(hardwareMap);
 
-        frontDistance = hardwareMap.get(DistanceSensor.class, "front_sensor");
-        frontColor = hardwareMap.get(ColorSensor.class, "front_sensor");
+        leftDistance = hardwareMap.get(DistanceSensor.class, "left_sensor");
+        leftColor = hardwareMap.get(ColorSensor.class, "left_sensor");
 
-        backDistance = hardwareMap.get(DistanceSensor.class, "back_sensor");
-        backColor = hardwareMap.get(ColorSensor.class, "back_sensor");
+        rightDistance = hardwareMap.get(DistanceSensor.class, "right_sensor");
+        rightColor = hardwareMap.get(ColorSensor.class, "right_sensor");
     }
 
     public double getSensorDistance(SensorSide sensorSide, DistanceUnit distanceUnit) {
-        if(sensorSide == FRONT) {
-            return frontDistance.getDistance(distanceUnit);
-        } else if(sensorSide == SensorSide.BACK) {
-            return backDistance.getDistance(distanceUnit);
+        if(sensorSide == SensorSide.LEFT) {
+            return leftDistance.getDistance(distanceUnit);
+        } else if(sensorSide == SensorSide.RIGHT) {
+            return rightDistance.getDistance(distanceUnit);
         }
-        return frontDistance.getDistance(distanceUnit);
+        return leftDistance.getDistance(distanceUnit);
     }
 
     public int getR(SensorSide sensorSide) {
         switch (sensorSide) {
-            case FRONT:
-                return frontColor.red();
-            case BACK:
-                return backColor.red();
+            case LEFT:
+                return leftColor.red();
+            case RIGHT:
+                return rightColor.red();
         }
-        return frontColor.red();
+        return leftColor.red();
     }
 
     public int getB(SensorSide sensorSide) {
         switch (sensorSide) {
-            case FRONT:
-                return frontColor.blue();
-            case BACK:
-                return backColor.blue();
+            case LEFT:
+                return leftColor.blue();
+            case RIGHT:
+                return rightColor.blue();
         }
-        return frontColor.blue();
+        return leftColor.blue();
     }
 
     public int getG(SensorSide sensorSide) {
         switch (sensorSide) {
-            case FRONT:
-                return frontColor.green();
-            case BACK:
-                return backColor.green();
+            case LEFT:
+                return leftColor.green();
+            case RIGHT:
+                return rightColor.green();
         }
-        return frontColor.green();
+        return leftColor.green();
     }
 
     public int getCondition(SensorSide sensorSide) {

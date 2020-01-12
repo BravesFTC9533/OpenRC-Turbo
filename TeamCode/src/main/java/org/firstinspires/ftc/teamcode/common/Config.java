@@ -21,6 +21,20 @@ public class Config {
         }
     }
 
+    public static final String STOP_POSITION = "StopPosition";
+    public static StopPosition _stopPosition;
+    public enum StopPosition {
+        BRIDGE, WALL;
+
+        public static StopPosition toStopPosition(String position) {
+            try {
+                return valueOf(position);
+            } catch (Exception e) {
+                return WALL;
+            }
+        }
+    }
+
     public static final String PARK_POSITION = "ParkPosition";
     public static ParkPosition _parkPosition;
     public enum ParkPosition {
@@ -51,6 +65,7 @@ public class Config {
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putString(POSITION, _position.name());
+        editor.putString(STOP_POSITION, _stopPosition.name());
         editor.putString(PARK_POSITION, _parkPosition.name());
         editor.putInt(MAX_LIFT_TICKS, _maxLiftTicks);
         editor.putFloat(MAX_SERVO_POSITION, _maxServoPosition);
@@ -60,7 +75,8 @@ public class Config {
 
     public void load() {
         _position = Position.toPosition(sp.getString(POSITION, "BLUE_BRICKS"));
-        _parkPosition = ParkPosition.toParkPosition(sp.getString(PARK_POSITION, "TAPE"));
+        _stopPosition = StopPosition.toStopPosition(sp.getString(STOP_POSITION, "WALL"));
+        _parkPosition = ParkPosition.toParkPosition(sp.getString(PARK_POSITION, "WALL"));
         _maxLiftTicks = sp.getInt(MAX_LIFT_TICKS, 1000);
         _maxServoPosition = sp.getFloat(MAX_SERVO_POSITION, 0.5f);
     }
@@ -71,13 +87,18 @@ public class Config {
 
     public ParkPosition getParkPosition() {return _parkPosition;}
 
+    public StopPosition getStopPosition() {return _stopPosition;}
+
     public void setPosition(Position position) {
         this._position = position;
     }
 
+    public void setStopPosition(StopPosition position) {this._stopPosition = position;}
+
     public int getMaxLiftTicks() {
         return _maxLiftTicks;
     }
+
 
     public void setMaxLiftTicks(int maxLiftTicks) {
         _maxLiftTicks = maxLiftTicks;
@@ -87,7 +108,7 @@ public class Config {
         _maxServoPosition = maxServoPosition;
     }
 
-    public void setParkPosition(ParkPosition parkPosition) {this._parkPosition = parkPosition;}
+    public void setParkPosition(ParkPosition parkPosition) {_parkPosition = parkPosition;}
 
     public float getMaxServoPosition() {
         return _maxServoPosition;

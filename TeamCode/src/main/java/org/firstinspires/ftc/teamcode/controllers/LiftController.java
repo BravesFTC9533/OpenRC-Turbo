@@ -45,8 +45,8 @@ public class LiftController {
     }
 
     public void init() {
-        goTo(1, POSITION_2, 1);
-        swing.setPosition(MAX_SWING_POSITION);
+//        goTo(1, POSITION_2, 1);
+//        swing.setPosition(MAX_SWING_POSITION);
         grab.setPosition(1);
     }
 

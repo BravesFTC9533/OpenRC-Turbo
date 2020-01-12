@@ -22,7 +22,7 @@ public class AutonomousConfig extends LinearOpMode {
         menu.clearOptions();
 
         menu.addOption("Position", Config.Position.class, config.getPosition());
-        menu.addOption("Park Position", Config.ParkPosition.class, config.getParkPosition());
+        menu.addOption("StopPosition", Config.StopPosition.class, config.getStopPosition());
         menu.addOption("Max Lift Ticks", 10000, 0, 1, config.getMaxLiftTicks());
         menu.addOption("Max Servo Position", 1, 0, 0.1, config.getMaxLiftTicks());
         menu.setGamepad(gamepad1);
@@ -33,6 +33,15 @@ public class AutonomousConfig extends LinearOpMode {
 
         while (opModeIsActive()) {
             menu.displayMenu();
+
+            switch (menu.getCurrentChoiceOf("StopPosition")) {
+                case "WALL":
+                    config.setStopPosition(Config.StopPosition.WALL);
+                    break;
+                case "BRIDGE":
+                    config.setStopPosition(Config.StopPosition.BRIDGE);
+                    break;
+            }
 
             switch (menu.getCurrentChoiceOf("Position")) {
                 case "BLUE_BRICKS":
@@ -49,20 +58,11 @@ public class AutonomousConfig extends LinearOpMode {
                     break;
             }
 
-            switch (menu.getCurrentChoiceOf("ParkPosition")) {
-                case "TAPE":
-                    config.setParkPosition(Config.ParkPosition.BRIDGE);
-                    break;
-                case "WALL":
-                    config.setParkPosition(Config.ParkPosition.WALL);
-            }
-
             config.setMaxLiftTicks((int) Double.parseDouble(menu.getCurrentChoiceOf("Max Lift Ticks")));
             config.setMaxServoPosition((float) Double.parseDouble(menu.getCurrentChoiceOf("Max Servo Position")));
 
             sleep(50);
         }
-
         config.save();
     }
 }

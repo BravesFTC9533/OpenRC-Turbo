@@ -20,7 +20,10 @@ public class ArmsController {
         rightArm.setDirection(Servo.Direction.REVERSE);
     }
 
-    public void init() {}
+    public void init() {
+        rightArm.setPosition(-1);
+        leftArm.setPosition(1);
+    }
 
     public void toggleArm(ArmSide armSide) {
         switch (armSide) {

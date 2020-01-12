@@ -50,6 +50,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
 
         super.initIntake();
         super.runOpMode();
+        super.initLift();
 
         driverGamePad = new FtcGamePad("Driver Gampad", gamepad1, this);
         operatorGamePad = new FtcGamePad("Operator Gampad", gamepad2, this);

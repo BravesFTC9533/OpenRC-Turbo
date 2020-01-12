@@ -52,7 +52,6 @@ public class Values extends BaseLinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            telemetry.addData("SkyStone", sensors.isSkystone(ColorSensors.SensorSide.FRONT));
             telemetry.update();
         }
     }
