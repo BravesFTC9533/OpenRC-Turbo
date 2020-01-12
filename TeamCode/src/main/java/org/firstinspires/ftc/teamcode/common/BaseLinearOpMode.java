@@ -31,6 +31,9 @@ package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.controllers.ArmsController;
+import org.firstinspires.ftc.teamcode.controllers.IntakeController;
+import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
@@ -43,6 +46,7 @@ public class BaseLinearOpMode extends LinearOpMode {
     protected ColorSensors sensors;
     protected ArmsController armsController;
     protected LiftController liftController;
+    protected IntakeController intakeController;
 
     @Override
     public void runOpMode() {
@@ -51,10 +55,16 @@ public class BaseLinearOpMode extends LinearOpMode {
         drive = new MechDrive(robot, this);
         sensors = new ColorSensors(hardwareMap);
         armsController = new ArmsController(hardwareMap);
-        liftController = new LiftController(hardwareMap);
+        liftController = new LiftController(this, hardwareMap);
 
         waitForStart();
 
         armsController.init();
+        liftController.init();
+    }
+
+    public void initIntake() {
+        intakeController = new IntakeController(this, hardwareMap);
+        intakeController.init();
     }
 }

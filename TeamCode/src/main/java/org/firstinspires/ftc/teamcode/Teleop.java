@@ -48,6 +48,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        super.initIntake();
         super.runOpMode();
 
         driverGamePad = new FtcGamePad("Driver Gampad", gamepad1, this);
@@ -60,6 +61,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
             drive.handleTeleop(driverGamePad);
             driverGamePad.update();
             operatorGamePad.update();
+            telemetry.addData("Lift", liftController.lift.getCurrentPosition());
             telemetry.update();
         }
     }
@@ -78,6 +80,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
 
     private void handleOperatorGamepad(int button, boolean pressed) {
         liftController.handle(button, pressed);
+        intakeController.handle(button, pressed);
     }
 
 }

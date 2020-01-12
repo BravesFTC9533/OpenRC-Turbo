@@ -29,16 +29,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.common.ArmsController;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
+import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
@@ -64,6 +65,13 @@ public class Auto extends BaseLinearOpMode {
 
         waitForStart();
 
+        // FRONT IS RIGHT
+
+        while(opModeIsActive()) {
+            telemetry.addData("Sensor", sensors.getSensorDistance(ColorSensors.SensorSide.BACK, DistanceUnit.MM));
+            telemetry.update();
+        }
+
         switch (startingPosition) {
             case RED_BRICKS:
                 redBricks();
@@ -84,6 +92,12 @@ public class Auto extends BaseLinearOpMode {
         // Move off the wall.
         drive.moveByInches(0.8, 20, 1);
 
+        // Init Intake
+        super.initIntake();
+
+        // Move Swing to Inside
+        liftController.swing.setPosition(LiftController.MIN_SWING_POSITION);
+
         // Turn 90 degrees towards the wall.
         drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1);
 
@@ -93,9 +107,11 @@ public class Auto extends BaseLinearOpMode {
         // Move towards bricks.
         drive.drive(0, -0.5, 0);
 
+        while(opModeIsActive()) {}
+
         // Wait until we are 90mm away from the bricks.
         while(opModeIsActive()) {
-            if(sensors.getSensorDistance(ColorSensors.SensorSide.FRONT, DistanceUnit.MM) <= 90) {
+            if(sensors.getSensorDistance(ColorSensors.SensorSide.BACK, DistanceUnit.MM) <= 100) {
                 drive.stop();
                 break;
             }
@@ -106,17 +122,19 @@ public class Auto extends BaseLinearOpMode {
 
         // Check for the yellow brick.
         while(opModeIsActive()) {
-            if(sensors.isSkystone(ColorSensors.SensorSide.FRONT)) {
-                drive.stop();
-                break;
-            } else {
-                // Move forward slowly
-                drive.drive(-0.5, 0, 0);
-            }
+            telemetry.addData("Is Skystone", sensors.isSkystone(ColorSensors.SensorSide.BACK));
+            telemetry.update();
+//            if(sensors.isSkystone(ColorSensors.SensorSide.FRONT)) {
+//                drive.stop();
+//                break;
+//            } else {
+//                // Move forward slowly
+//                drive.drive(-0.5, 0, 0);
+//            }
         }
 
         // Grab the yellow brick with front arm.
-        armsController.frontArm.setPosition(-1);
+        armsController.rightArm.setPosition(-1);
 
         // Wait for arm to move
         runtime.reset();
@@ -138,7 +156,7 @@ public class Auto extends BaseLinearOpMode {
         drive.moveByInches(1, -75, 3);
 
         // Drop off the brick
-        armsController.frontArm.setPosition(1);
+        armsController.rightArm.setPosition(1);
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 1) {}
 
