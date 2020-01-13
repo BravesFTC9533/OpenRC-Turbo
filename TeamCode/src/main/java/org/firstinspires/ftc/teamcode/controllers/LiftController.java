@@ -17,7 +17,7 @@ public class LiftController {
     public static final int MAX_LIFT = 1325;
 
     public static final int POSITION_1 = 0;
-    public static final int POSITION_2 = 552;
+    public static final int POSITION_2 = 500;
     public static final int POSITION_3 = 618;
     public static final int POSITION_4 = 869;
     public static final int POSITION_5 = 1112;
@@ -48,6 +48,38 @@ public class LiftController {
 //        goTo(1, POSITION_2, 1);
 //        swing.setPosition(MAX_SWING_POSITION);
         grab.setPosition(1);
+    }
+
+    public void positionForBrick() {
+        if(lift.getCurrentPosition() != POSITION_3) {
+            goTo(1, POSITION_3);
+        }
+
+        swing.setPosition(1);
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        while(opMode.opModeIsActive() && timer.seconds() < 1.25) {}
+
+        grab.setPosition(0.5);
+    }
+
+    public void grabAndMoveBrick() {
+        if(lift.getCurrentPosition() != POSITION_2) {
+            goTo(1, POSITION_2);
+        }
+
+        grab.setPosition(1);
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        while(opMode.opModeIsActive() && timer.seconds() < 0.5) {}
+
+        if(lift.getCurrentPosition() != POSITION_4) {
+            goTo(1, POSITION_4);
+        }
+
+        swing.setPosition(MAX_SWING_POSITION);
     }
 
     public void setLiftPower(double power) {
@@ -84,8 +116,8 @@ public class LiftController {
                 break;
             case FtcGamePad.GAMEPAD_Y:
                 if(pressed) {
-                    if (swing.getPosition() > 0) {
-                        swing.setPosition(0);
+                    if (swing.getPosition() > MAX_SWING_POSITION) {
+                        swing.setPosition(MAX_SWING_POSITION);
                     } else {
                         swing.setPosition(MIN_SWING_POSITION);
                     }
@@ -93,24 +125,24 @@ public class LiftController {
                 break;
             case FtcGamePad.GAMEPAD_DPAD_DOWN:
                 if(pressed)
-                    goTo(1, POSITION_1, 1.25);
+                    goTo(1, POSITION_1);
                 break;
             case FtcGamePad.GAMEPAD_DPAD_LEFT:
                 if(pressed)
-                    goTo(1, POSITION_2, 1.25);
+                    goTo(1, POSITION_2);
                 break;
             case FtcGamePad.GAMEPAD_DPAD_UP:
                 if(pressed)
-                    goTo(1, POSITION_3, 1.25);
+                    goTo(1, POSITION_3);
                 break;
             case FtcGamePad.GAMEPAD_DPAD_RIGHT:
                 if(pressed)
-                    goTo(1, POSITION_4, 1.25);
+                    goTo(1, POSITION_4);
                 break;
         }
     }
 
-    public void goTo(int power, int position, double timeoutSeconds) {
+    public void goTo(int power, int position) {
         lift.setTargetPosition(position);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         setLiftPower(power);

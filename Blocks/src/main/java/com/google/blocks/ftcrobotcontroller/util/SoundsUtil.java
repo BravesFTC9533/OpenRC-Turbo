@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * A class that provides utility methods related to sound files.
+ * A class that provides utility methods related to raw files.
  *
  * @author lizlooney@google.com (Liz Looney)
  */
@@ -24,7 +24,7 @@ public class SoundsUtil {
   }
 
   /**
-   * Returns the names of existing sound files.
+   * Returns the names of existing raw files.
    */
   public static String fetchSounds() throws IOException {
     File[] files = BLOCKS_SOUNDS_DIR.listFiles();
@@ -49,8 +49,8 @@ public class SoundsUtil {
   }
 
   /**
-   * Returns true if the given sound name is not null and contains only valid characters.
-   * This function does not check whether the sound exists.
+   * Returns true if the given raw name is not null and contains only valid characters.
+   * This function does not check whether the raw exists.
    */
   public static boolean isValidSoundName(String soundName) {
     if (soundName != null) {
@@ -60,9 +60,9 @@ public class SoundsUtil {
   }
 
   /**
-   * Returns the content of the sound file with the given name.
+   * Returns the content of the raw file with the given name.
    *
-   * @param soundName the name of the sound
+   * @param soundName the name of the raw
    */
   public static String fetchSoundFileContent(String soundName) throws IOException {
     if (!isValidSoundName(soundName)) {
@@ -73,10 +73,10 @@ public class SoundsUtil {
   }
 
   /**
-   * Save a sound file.
+   * Save a raw file.
    *
-   * @param soundName the name of the sound
-   * @param content the content to write to the sound file.
+   * @param soundName the name of the raw
+   * @param content the content to write to the raw file.
    */
   public static void saveSoundFile(String soundName, String base64Content) throws IOException {
     if (!isValidSoundName(soundName)) {
@@ -106,10 +106,10 @@ public class SoundsUtil {
   }
 
   /**
-   * Renames the sound file with the given name.
+   * Renames the raw file with the given name.
    *
-   * @param oldSoundName the old name of the sound
-   * @param newSoundName the new name of the sound
+   * @param oldSoundName the old name of the raw
+   * @param newSoundName the new name of the raw
    */
   public static void renameSound(String oldSoundName, String newSoundName)
       throws IOException {
@@ -125,10 +125,10 @@ public class SoundsUtil {
   }
 
   /**
-   * Copies the sound file with the given name.
+   * Copies the raw file with the given name.
    *
-   * @param oldSoundName the old name of the sound
-   * @param newSoundName the new name of the sound
+   * @param oldSoundName the old name of the raw
+   * @param newSoundName the new name of the raw
    */
   public static void copySound(String oldSoundName, String newSoundName)
       throws IOException {
@@ -145,7 +145,7 @@ public class SoundsUtil {
   }
 
   /**
-   * Delete the sound files with the given names.
+   * Delete the raw files with the given names.
    *
    * @param soundNames the names of the sounds to delete
    */

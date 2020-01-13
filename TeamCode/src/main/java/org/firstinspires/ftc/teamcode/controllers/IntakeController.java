@@ -76,6 +76,16 @@ public class IntakeController {
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void turnOnIntake() {
+        leftIntake.setPosition(0);
+        rightIntake.setPosition(0);
+    }
+
+    public void stopIntake() {
+        leftIntake.setPosition(0.5);
+        rightIntake.setPosition(0.5);
+    }
+
     public void lockPosition() {
         intake.setTargetPosition(intake.getCurrentPosition());
         intake.setVelocity(MAX_REV_VELOCITY);

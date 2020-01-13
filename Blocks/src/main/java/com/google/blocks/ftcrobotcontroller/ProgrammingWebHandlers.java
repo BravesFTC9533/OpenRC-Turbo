@@ -500,7 +500,7 @@ public class ProgrammingWebHandlers implements ProgrammingMode {
   }
 
   /**
-   * Saves a sound file.
+   * Saves a raw file.
    */
   private static class SaveSound implements WebHandler {
 
@@ -525,7 +525,7 @@ public class ProgrammingWebHandlers implements ProgrammingMode {
 
 
   /**
-   * Fetches the content of the sound file with the given sound name.
+   * Fetches the content of the raw file with the given raw name.
    */
   private static class FetchSound implements WebHandler {
 
@@ -548,7 +548,7 @@ public class ProgrammingWebHandlers implements ProgrammingMode {
   }
 
   /**
-   * Fetches the mime type of the sound file with the given sound name.
+   * Fetches the mime type of the raw file with the given raw name.
    */
   private static class FetchSoundType implements WebHandler {
 
@@ -575,7 +575,7 @@ public class ProgrammingWebHandlers implements ProgrammingMode {
 
 
   /**
-   * Renames the given sound.
+   * Renames the given raw.
    */
   private static class RenameSound implements WebHandler {
 
@@ -601,7 +601,7 @@ public class ProgrammingWebHandlers implements ProgrammingMode {
 
 
   /**
-   * Copies the given sound.
+   * Copies the given raw.
    */
   private static class CopySound implements WebHandler {
 

@@ -150,11 +150,11 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Instantiates a new sound player.
+     * Instantiates a new raw player.
      *
      * @param simultaneousStreams the number of sounds that can simultaneously play from this player.
-     *                            If one, then playing any new sound interrupts the playing of a
-     *                            a previous sound
+     *                            If one, then playing any new raw interrupts the playing of a
+     *                            a previous raw
      * @param cacheSize           the maximum size of the cache of loaded sounds.
      */
     public SoundPlayer(int simultaneousStreams, int cacheSize)
@@ -249,7 +249,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         /** an additional volume scaling that will be applied to this particular play action */
         public float volume = 1.0f;
 
-        /** whether to wait for any currently-playing non-looping sound to finish before playing */
+        /** whether to wait for any currently-playing non-looping raw to finish before playing */
         public boolean waitForNonLoopingSoundsToFinish = true;
 
         /** -1 means playing loops forever, 0 is play once, 1 is play twice, etc */
@@ -279,11 +279,11 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         }
 
     /**
-     * Asynchronously loads the indicated sound from its resource (if not already loaded), then
-     * initiates its play once any current non-looping sound is finished playing.
+     * Asynchronously loads the indicated raw from its resource (if not already loaded), then
+     * initiates its play once any current non-looping raw is finished playing.
      *
      * @param context   the context in which resId is to be interpreted
-     * @param resId     the resource id of the raw resource containing the sound.
+     * @param resId     the resource id of the raw resource containing the raw.
      */
     public void startPlaying(final Context context, @RawRes final int resId)
         {
@@ -295,11 +295,11 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         }
 
     /**
-     * Asynchronously loads the indicated sound from its resource (if not already loaded), then
+     * Asynchronously loads the indicated raw from its resource (if not already loaded), then
      * initiates its play, optionally waiting for any currently non-looping playing sounds to finish first.
      *
      * @param context   the context in which resId is to be interpreted
-     * @param resId     the resource id of the raw resource containing the sound.
+     * @param resId     the resource id of the raw resource containing the raw.
      * @param params    controls how the playback proceeds
      * @param runWhenStarted   executed when the stream starts to play
      * @param runWhenFinished  executed when the stream finishes playing
@@ -370,7 +370,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
 
 
     /**
-     * Preloads the sound so as to to reduce delays if the sound is subsequently played.
+     * Preloads the raw so as to to reduce delays if the raw is subsequently played.
      */
     @Override
     public boolean preload(Context context, @RawRes int resourceId)
@@ -389,7 +389,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         }
 
     /**
-     * Preloads the sound so as to to reduce delays if the sound is subsequently played.
+     * Preloads the raw so as to to reduce delays if the raw is subsequently played.
      */
     @Override
     public boolean preload(Context context, File file)
@@ -491,7 +491,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                     waitForLoadCompletion();
                     }
                 else
-                    tracer.traceError("unable to load sound resource 0x%08x", resourceId);
+                    tracer.traceError("unable to load raw resource 0x%08x", resourceId);
                 }
             return result;
             }
@@ -515,7 +515,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                     waitForLoadCompletion();
                     }
                 else
-                    tracer.traceError("unable to load sound %s", file);
+                    tracer.traceError("unable to load raw %s", file);
                 }
             return result;
             }
@@ -646,7 +646,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
 
                 if (msDelay > 0)
                     {
-                    // Wait for any current sound to finish playing.
+                    // Wait for any current raw to finish playing.
                     scheduledThreadPool.schedule(playSound, msDelay, TimeUnit.MILLISECONDS);
                     }
                 else
@@ -745,7 +745,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
             }
         }
 
-    /** Ensures this local sound is also in the local cache. */
+    /** Ensures this local raw is also in the local cache. */
     protected void ensureCached(Context context, @RawRes int resId)
         {
         final SoundInfo soundInfo = ensureLoaded(context, resId);
@@ -771,7 +771,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                         safeClose(outputStream);
                         safeClose(inputStream);
                         }
-                    return null; // we don't need the actual sound
+                    return null; // we don't need the actual raw
                     }
                 });
             if (cachedSoundInfo != null)
@@ -797,7 +797,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                     {
                     // It's not loaded. Do we have a cache?
                     boolean success = false;
-                    File file = new File(AppUtil.SOUNDS_CACHE, hashString + ".sound"); // we don't know the actual format, so can't guess an extension
+                    File file = new File(AppUtil.SOUNDS_CACHE, hashString + ".raw"); // we don't know the actual format, so can't guess an extension
                     if (file.exists())
                         {
                         SoundInfo soundInfo = ensureLoaded(AppUtil.getDefContext(), file);
@@ -842,7 +842,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
             long msDelay = msPresentation - msNow;
 
             // Ideally, if msDelay is positive, and if we know we're in good time synch, we'd wait until
-            // the presentation time to actually play the sound. But we're a little queasy about relying
+            // the presentation time to actually play the raw. But we're a little queasy about relying
             // on the time synch, especially as we reduce heartbeats to save network traffic, so we omit
             // that, for now at least. As a consequence, it only makes sense for the RC to sends us stuff
             // it wants to play immediately, which is all that it presently ever sends, so we're OK.
@@ -882,7 +882,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
             // Start listening on an ephemeral local port
             serverSocket = new ServerSocket(0); // 0 == port assigned by the OS
 
-            // Ask the other guy to send us that sound
+            // Ask the other guy to send us that raw
             CommandList.CmdRequestSound cmdRequestSound = new CommandList.CmdRequestSound(hashString, serverSocket.getLocalPort());
             tracer.trace("handleCommandPlaySound(): requesting: port=%d hash=%s", cmdRequestSound.port, cmdRequestSound.hashString);
             NetworkConnectionHandler.getInstance().sendCommand(new Command(CommandList.CmdRequestSound.Command, cmdRequestSound.serialize()));
@@ -911,14 +911,14 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                         result = ensureLoaded(AppUtil.getDefContext(), file);
                         }
                     else
-                        tracer.traceError("handleCommandPlaySound(): client couldn't send sound");
+                        tracer.traceError("handleCommandPlaySound(): client couldn't send raw");
                     }
                 else
                     throw new IOException("framing error");
                 }
             catch (SocketTimeoutException e)
                 {
-                tracer.traceError("timed out awaiting sound file");
+                tracer.traceError("timed out awaiting raw file");
                 }
             }
         catch (IOException|RuntimeException e)
@@ -1064,7 +1064,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         public final File        file;
         public final long        msDuration;
         public       int         sampleId;
-        public       String      hashString; // String form of hash of the contents of the sound
+        public       String      hashString; // String form of hash of the contents of the raw
         public       int         cbSize;
         public       long        msLastPlay = 0;
 
@@ -1099,7 +1099,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
 
         @Override protected void destructor()
             {
-            tracer.trace("unloading sound %s", this);
+            tracer.trace("unloading raw %s", this);
             soundPool.unload(sampleId);
             super.destructor();
             }
@@ -1183,8 +1183,8 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
         }
 
     /**
-     * {@link LoadedSoundCache} keeps track of loaded sounds, mapping sound resource id to loaded
-     * sound id. It keeps track of which sounds have been recently used, and unloads neglected
+     * {@link LoadedSoundCache} keeps track of loaded sounds, mapping raw resource id to loaded
+     * raw id. It keeps track of which sounds have been recently used, and unloads neglected
      * songs when a configured capacity of loaded sounds has been reached.
      */
     protected class LoadedSoundCache
@@ -1195,7 +1195,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
 
         private final Object lock = new Object();
         private final int capacity;         // max number of cached sounds
-        private boolean unloadOnRemove;     // whether we should unload a sound when it's removed
+        private boolean unloadOnRemove;     // whether we should unload a raw when it's removed
         private final Map<Object, SoundInfo> keyMap;
         private final Map<String, SoundInfo> hashMap;
 
@@ -1285,12 +1285,12 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener, SoundPoolI
                 }
             }
 
-        /** update the fact that this sound has been just used, again */
+        /** update the fact that this raw has been just used, again */
         public void noteSoundUsage(SoundInfo info)
             {
             synchronized (lock)
                 {
-                // We're updating the MRU, we don't want to unload the sound during the remove() below.
+                // We're updating the MRU, we don't want to unload the raw during the remove() below.
                 unloadOnRemove = false;
                 try {
                     // Make this key most recently used

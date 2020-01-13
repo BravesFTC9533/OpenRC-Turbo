@@ -108,10 +108,10 @@ public class SoundPlayingRobotMonitor implements RobotStateMonitor
         {
         if (!SoundPlayer.getInstance().isLocalSoundOn())
             {
-            // If the last sound played is 'running', but that sound was in fact transmitted
+            // If the last raw played is 'running', but that raw was in fact transmitted
             // to the remote before this 'connect' happened, then (probably) the remote didn't
             // hear the 'running', so send it out again. This is a pretty reliable but not
-            // perfect heuristic. Fortunately, the failure mode is only that a sound is repeated, 
+            // perfect heuristic. Fortunately, the failure mode is only that a raw is repeated,
             // and we can live with that.
             if (lastSoundPlayed==Sound.Running)
                 {

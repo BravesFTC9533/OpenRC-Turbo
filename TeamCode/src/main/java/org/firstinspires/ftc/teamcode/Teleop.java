@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+import org.firstinspires.ftc.teamcode.controllers.LiftController;
 
 @TeleOp(name="Teleop", group="Linear Opmode")
 public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler {
@@ -58,13 +59,28 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-            drive.handleTeleop(driverGamePad);
-            driverGamePad.update();
-            operatorGamePad.update();
-            telemetry.addData("Lift", liftController.lift.getCurrentPosition());
-            telemetry.update();
-        }
+
+        //TODO INTAKE AUTO
+//        intakeController.turnOnIntake();
+//
+//        liftController.positionForBrick();
+//
+//        runtime.reset();
+//        while(opModeIsActive() && runtime.seconds() < 5) {}
+//
+//        intakeController.stopIntake();
+//
+//        liftController.grabAndMoveBrick();
+
+        // TODO NORMAL SEQUENCE
+
+//        while (opModeIsActive()) {
+//            drive.handleTeleop(driverGamePad);
+//            driverGamePad.update();
+//            operatorGamePad.update();
+//            telemetry.addData("Lift", liftController.lift.getCurrentPosition());
+//            telemetry.update();
+//        }
         drive.stop();
         liftController.setLiftPower(0);
         intakeController.intake.setPower(0);

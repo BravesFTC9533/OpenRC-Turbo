@@ -90,7 +90,7 @@ public class FtcRobotControllerSettingsActivity extends ThemedActivity {
 
       PreferencesHelper preferencesHelper = new PreferencesHelper(getTag());
       if (!preferencesHelper.readBoolean(getString(R.string.pref_has_speaker), true)) {
-        // Disable turning on and off sound if there's no speaker
+        // Disable turning on and off raw if there's no speaker
         Preference prefSoundOnOff = findPreference(getString(R.string.pref_sound_on_off));
         prefSoundOnOff.setEnabled(false);
       }

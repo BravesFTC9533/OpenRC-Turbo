@@ -29,18 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
 public class Auto extends BaseLinearOpMode {
@@ -64,10 +59,6 @@ public class Auto extends BaseLinearOpMode {
         telemetry.update();
 
         waitForStart();
-
-        // FRONT IS RIGHT
-
-        // RIGHT ARM 1 is DOWN -1 is up
 
 //        while(opModeIsActive()) {
 //            telemetry.addData("Distance", sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM));
@@ -98,7 +89,7 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            liftController.goTo(1, LiftController.POSITION_1, 2);
+            liftController.goTo(1, LiftController.POSITION_1);
 
             runtime.reset();
             drive.drive(0, -0.5, 0);
@@ -112,7 +103,7 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            liftController.goTo(1, LiftController.POSITION_1, 2);
+            liftController.goTo(1, LiftController.POSITION_1);
 
             drive.moveByInches(1, 25, 1.5);
         }
@@ -206,7 +197,7 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            liftController.goTo(1, LiftController.POSITION_1, 2);
+            liftController.goTo(1, LiftController.POSITION_1);
 
             runtime.reset();
             drive.drive(0, 0.5, 0);
@@ -220,7 +211,7 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            liftController.goTo(1, LiftController.POSITION_1, 2);
+            liftController.goTo(1, LiftController.POSITION_1);
 
             drive.moveByInches(1, 25, 1.5);
         }
