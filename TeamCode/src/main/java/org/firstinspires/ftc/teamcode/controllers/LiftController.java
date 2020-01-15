@@ -17,7 +17,7 @@ public class LiftController {
     public static final int MAX_LIFT = 1325;
 
     public static final int POSITION_1 = 0;
-    public static final int POSITION_2 = 500;
+    public static final int POSITION_GRAB = 200;
     public static final int POSITION_3 = 618;
     public static final int POSITION_4 = 869;
     public static final int POSITION_5 = 1112;
@@ -38,6 +38,7 @@ public class LiftController {
         grab = hardwareMap.get(Servo.class, "grabArm");
 
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        swing.setDirection(Servo.Direction.REVERSE);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -45,7 +46,7 @@ public class LiftController {
     }
 
     public void init() {
-//        goTo(1, POSITION_2, 1);
+//        goTo(1, POSITION_GRAB, 1);
 //        swing.setPosition(MAX_SWING_POSITION);
         grab.setPosition(1);
     }
@@ -65,19 +66,25 @@ public class LiftController {
     }
 
     public void grabAndMoveBrick() {
-        if(lift.getCurrentPosition() != POSITION_2) {
-            goTo(1, POSITION_2);
+        if(lift.getCurrentPosition() != POSITION_GRAB) {
+            goTo(1, POSITION_GRAB);
         }
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        while(opMode.opModeIsActive() && timer.seconds() < 0.85) {}
 
         grab.setPosition(1);
 
-        ElapsedTime timer = new ElapsedTime();
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.5) {}
 
         if(lift.getCurrentPosition() != POSITION_4) {
             goTo(1, POSITION_4);
         }
+
+        timer.reset();
+        while(opMode.opModeIsActive() && timer.seconds() < 0.75) {}
 
         swing.setPosition(MAX_SWING_POSITION);
     }
@@ -104,7 +111,16 @@ public class LiftController {
 //                    setLiftPower(0);
 //                }
 //                break;
-
+            case FtcGamePad.GAMEPAD_LBUMPER:
+                if(pressed) {
+                    positionForBrick();
+                }
+                break;
+            case FtcGamePad.GAMEPAD_RBUMPER:
+                if(pressed) {
+                    grabAndMoveBrick();
+                }
+                break;
             case FtcGamePad.GAMEPAD_B:
                 if(pressed) {
                     if (grab.getPosition() > 0.5) {
@@ -129,15 +145,15 @@ public class LiftController {
                 break;
             case FtcGamePad.GAMEPAD_DPAD_LEFT:
                 if(pressed)
-                    goTo(1, POSITION_2);
+                    goTo(1, POSITION_3);
                 break;
             case FtcGamePad.GAMEPAD_DPAD_UP:
                 if(pressed)
-                    goTo(1, POSITION_3);
+                    goTo(1, POSITION_4);
                 break;
             case FtcGamePad.GAMEPAD_DPAD_RIGHT:
                 if(pressed)
-                    goTo(1, POSITION_4);
+                    goTo(1, POSITION_5);
                 break;
         }
     }
