@@ -8,6 +8,9 @@ public class ArmsController {
     public final Servo leftArm;
     public final Servo rightArm;
 
+    public static final int MAX_ARM_POSITION = 1;
+    public static final int MIN_ARM_POSITION = 0;
+
     public enum ArmSide {
         LEFT,
         RIGHT

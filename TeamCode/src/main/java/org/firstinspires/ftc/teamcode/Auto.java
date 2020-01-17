@@ -82,107 +82,32 @@ public class Auto extends BaseLinearOpMode {
     }
 
     private void redBricks() {
-        if(config.getStopPosition() == Config.StopPosition.WALL) {
-            drive.moveByInches(1, 10, 1.5);
-
-            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
-
-            super.initIntake();
-
-            liftController.goTo(1, LiftController.POSITION_1);
-
-            runtime.reset();
-            drive.drive(0, -0.5, 0);
-            while(opModeIsActive() && runtime.seconds() < 2) {}
-
-            drive.moveByInches(1, 20, 1.5);
-        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
-            drive.moveByInches(1, 18, 1.5);
-
-            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
-
-            super.initIntake();
-
-            liftController.goTo(1, LiftController.POSITION_1);
-
-            drive.moveByInches(1, 25, 1.5);
-        }
-
-//        // Move off the wall.
-//        drive.moveByInches(0.8, 20, 1);
-
-        // Init Intake
-
-//        // Move Swing to Inside
-//        liftController.swing.setPosition(LiftController.MIN_SWING_POSITION);
+//        if(config.getStopPosition() == Config.StopPosition.WALL) {
+//            drive.moveByInches(1, 10, 1.5);
 //
-//        // Turn 90 degrees towards the wall.
-//        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1);
+//            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
 //
-//        // Put Lift Down
-//        liftController.goTo(1, LiftController.POSITION_1, 1);
+//            super.initIntake();
 //
-//        // Move backwards.
-//        drive.moveByInches(0.8, 30, 1);
+//            liftController.goTo(1, LiftController.POSITION_1);
 //
-//        // Move towards bricks.
-//        drive.drive(0, -0.5, 0);
+//            runtime.reset();
+//            drive.drive(0, -0.5, 0);
+//            while(opModeIsActive() && runtime.seconds() < 2) {}
 //
-//        // Wait until we are 90mm away from the bricks.
-//        while(opModeIsActive()) {
-//            if(sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 90) {
-//                drive.stop();
-//                break;
-//            }
+//            drive.moveByInches(1, 20, 1.5);
+//        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+//            drive.moveByInches(1, 18, 1.5);
+//
+//            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+//
+//            super.initIntake();
+//
+//            liftController.goTo(1, LiftController.POSITION_1);
+//
+//            drive.moveByInches(1, 25, 1.5);
 //        }
-//
-//        // Hit against the wall to straighten out.
-//        drive.moveByInches(1, 5, 1);
-//
-//        // Check for the yellow brick.
-//        while(opModeIsActive()) {
-//            telemetry.addData("Is Skystone", sensors.isSkystone(ColorSensors.SensorSide.RIGHT));
-//            telemetry.update();
-////            if(sensors.isSkystone(ColorSensors.SensorSide.RIGHT)) {
-////                drive.stop();
-////                break;
-////            } else {
-////                // Move forward slowly
-////                drive.drive(-0.5, 0, 0);
-////            }
-//        }
-//
-//        // Grab the yellow brick with front arm.
-//        armsController.rightArm.setPosition(-1);
-//
-//        while(opModeIsActive()) {}
-//
-//        // Wait for arm to move
-//        runtime.reset();
-//        while(opModeIsActive() && runtime.seconds() < 1) {}
-//
-//        drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 2);
-//
-//        // Move forward depending on the park position
-//        if(config.getParkPosition() == Config.ParkPosition.BRIDGE) {
-//            drive.moveByInches(1, -10, 2);
-//        } else {
-//            drive.moveByInches(1, -25, 2);
-//        }
-//
-//        // Turn back.
-//        drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 2);
-//
-//        // Move under the sky bridge
-//        drive.moveByInches(1, -75, 3);
-//
-//        // Drop off the brick
-//        armsController.rightArm.setPosition(1);
-//        runtime.reset();
-//        while(opModeIsActive() && runtime.seconds() < 1) {}
-//
-//        // Move backwards.
-//        drive.moveByInches(1, 35, 1.5);
+
     }
 
     private void redBuilding() {

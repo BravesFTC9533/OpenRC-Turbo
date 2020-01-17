@@ -38,6 +38,7 @@ public class LiftController {
         grab = hardwareMap.get(Servo.class, "grabArm");
 
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
+
         swing.setDirection(Servo.Direction.REVERSE);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -52,6 +53,9 @@ public class LiftController {
     }
 
     public void positionForBrick() {
+
+        grab.setPosition(0.65);
+
         if(lift.getCurrentPosition() != POSITION_3) {
             goTo(1, POSITION_3);
         }
@@ -74,7 +78,7 @@ public class LiftController {
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.85) {}
 
-        grab.setPosition(1);
+        grab.setPosition(0.65);
 
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.5) {}
