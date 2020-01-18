@@ -8,8 +8,7 @@ public class ArmsController {
     public final Servo leftArm;
     public final Servo rightArm;
 
-    public static final int MAX_ARM_POSITION = 1;
-    public static final int MIN_ARM_POSITION = 0;
+    public static final double MAX_LEFT_ARM_POSITION = 0.75;
 
     public enum ArmSide {
         LEFT,
@@ -20,12 +19,13 @@ public class ArmsController {
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
 
+        leftArm.setDirection(Servo.Direction.REVERSE);
         rightArm.setDirection(Servo.Direction.REVERSE);
     }
 
     public void init() {
         rightArm.setPosition(-1);
-        leftArm.setPosition(1);
+        leftArm.setPosition(MAX_LEFT_ARM_POSITION);
     }
 
     public void toggleArm(ArmSide armSide) {
@@ -50,10 +50,10 @@ public class ArmsController {
     public void openArm(ArmSide armSide) {
         switch (armSide) {
             case LEFT:
-                leftArm.setPosition(1);
+                leftArm.setPosition(MAX_LEFT_ARM_POSITION);
                 break;
             case RIGHT:
-                rightArm.setPosition(1);
+                rightArm.setPosition(-1);
                 break;
         }
     }
@@ -64,7 +64,7 @@ public class ArmsController {
                 leftArm.setPosition(-1);
                 break;
             case RIGHT:
-                rightArm.setPosition(-1);
+                rightArm.setPosition(1);
                 break;
         }
     }

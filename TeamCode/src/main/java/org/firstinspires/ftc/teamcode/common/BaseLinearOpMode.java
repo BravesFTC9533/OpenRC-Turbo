@@ -51,6 +51,14 @@ public class BaseLinearOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot = new Robot(hardwareMap, telemetry);
+
+        robot.imu.initialize(robot.params);
+
+        while(!isStopRequested() && !robot.imu.isGyroCalibrated()) {
+            sleep(50);
+            idle();
+        }
+
         config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
         sensors = new ColorSensors(hardwareMap);

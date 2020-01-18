@@ -6,6 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREVColorDistance;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Robot {
 
@@ -29,6 +32,11 @@ public class Robot {
     public final DcMotorEx fr;
     public final DcMotorEx bl;
     public final DcMotorEx br;
+
+    public Orientation angles = new Orientation();
+
+    public final BNO055IMU imu;
+    public final BNO055IMU.Parameters params;
 
     private Telemetry telemetry;
 
@@ -48,6 +56,17 @@ public class Robot {
 
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
+
+        params = new BNO055IMU.Parameters();
+
+        params.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        params.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        params.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        params.loggingEnabled      = true;
+        params.loggingTag          = "IMU";
+        params.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
     public void setMode(DcMotor.RunMode runMode) {
