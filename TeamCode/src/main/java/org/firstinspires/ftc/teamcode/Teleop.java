@@ -59,19 +59,6 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
         runtime.reset();
 
 
-        //TODO INTAKE AUTO
-//        intakeController.turnOnIntake();
-//
-//        liftController.positionForBrick();
-//
-//        runtime.reset();
-//        while(opModeIsActive() && runtime.seconds() < 5) {}
-//
-//        intakeController.stopIntake();
-//
-//        liftController.grabAndMoveBrick();
-
-        // TODO NORMAL SEQUENCE
 
         while (opModeIsActive()) {
             drive.handleTeleop(driverGamePad);

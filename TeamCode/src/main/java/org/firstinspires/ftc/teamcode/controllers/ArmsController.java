@@ -9,6 +9,7 @@ public class ArmsController {
     public final Servo rightArm;
 
     public static final double MAX_LEFT_ARM_POSITION = 0.8;
+    public static final double MAX_RIGHT_ARM_POSITION = 0.45;
 
     public enum ArmSide {
         LEFT,
@@ -24,7 +25,7 @@ public class ArmsController {
     }
 
     public void init() {
-        rightArm.setPosition(-0.65);
+        rightArm.setPosition(MAX_RIGHT_ARM_POSITION);
         leftArm.setPosition(MAX_LEFT_ARM_POSITION);
     }
 
@@ -53,7 +54,7 @@ public class ArmsController {
                 leftArm.setPosition(MAX_LEFT_ARM_POSITION);
                 break;
             case RIGHT:
-                rightArm.setPosition(-0.65);
+                rightArm.setPosition(0);
                 break;
         }
     }
@@ -61,7 +62,7 @@ public class ArmsController {
     public void closeArm(ArmSide armSide) {
         switch (armSide) {
             case LEFT:
-                leftArm.setPosition(-1);
+                leftArm.setPosition(MAX_RIGHT_ARM_POSITION);
                 break;
             case RIGHT:
                 rightArm.setPosition(1);
