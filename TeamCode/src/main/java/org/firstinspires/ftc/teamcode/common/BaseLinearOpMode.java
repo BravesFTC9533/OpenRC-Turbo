@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.IntakeController;
@@ -54,7 +55,10 @@ public class BaseLinearOpMode extends LinearOpMode {
 
         robot.imu.initialize(robot.params);
 
-        while(!isStopRequested() && !robot.imu.isGyroCalibrated()) {
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(!isStopRequested() && !robot.imu.isGyroCalibrated() && timer.seconds() < 1.75) {
             sleep(50);
             idle();
         }
