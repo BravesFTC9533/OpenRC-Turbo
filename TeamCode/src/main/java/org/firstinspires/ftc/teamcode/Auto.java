@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.common.Robot;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
+import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
@@ -168,47 +169,6 @@ public class Auto extends BaseLinearOpMode {
         }
     }
 
-    private void redBuilding() {
-
-        // Hit the wall
-        drive.moveByInches(0.8, 24, 1.5);
-
-        runtime.reset();
-        drive.drive(0, 0.5, 0);
-        while(opModeIsActive() && runtime.seconds() < 3) {}
-        drive.stop();
-
-        // Get flush against wall
-        drive.moveByInches(0.8, 20, 1);
-
-        // Back up
-        drive.moveByInches(0.6, -10, 1);
-
-        // Lower the arm
-        armsController.closeArm(ArmsController.ArmSide.LEFT);
-
-        // Delay 0.5s
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.5) {}
-
-        // Turn and back-up
-        drive.drive(-1, 0.5, 0.7);
-
-        // Wait five seconds
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1.5) {}
-        drive.stop();
-
-        // Go forward
-
-        drive.drive(0.8, 0, 0);
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 3) {}
-        drive.stop();
-
-    }
-
     private void blueBricks() {
         // Hit the Wall
         drive.moveByInches(0.8, 28, 1.5);
@@ -312,7 +272,31 @@ public class Auto extends BaseLinearOpMode {
         }
     }
 
-    private void blueBuilding() {
+    private void redBuilding() {
+        
+    }
 
+    private void blueBuilding() {
+        if(config.getStopPosition() == Config.StopPosition.WALL) {
+            drive.moveByInches(1, 10, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            runtime.reset();
+            drive.drive(0, -0.5, 0);
+            while(opModeIsActive() && runtime.seconds() < 2) {}
+
+            drive.moveByInches(1, 20, 1.5);
+        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 18, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            drive.moveByInches(1, 25, 1.5);
+        }
     }
 }
