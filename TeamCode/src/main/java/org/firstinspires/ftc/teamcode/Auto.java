@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.common.Robot;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
+import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
@@ -273,7 +274,27 @@ public class Auto extends BaseLinearOpMode {
     }
 
     private void redBuilding() {
-        
+        if(config.getStopPosition() == Config.StopPosition.WALL) {
+            drive.moveByInches(1, 10, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            runtime.reset();
+            drive.drive(0, 0.5, 0);
+            while(opModeIsActive() && runtime.seconds() < 2) {}
+
+            drive.moveByInches(1, 20, 1.5);
+        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 18, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            drive.moveByInches(1, 25, 1.5);
+        }
     }
 
     private void blueBuilding() {
