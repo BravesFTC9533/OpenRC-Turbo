@@ -19,10 +19,14 @@ dependencies {
     turboImplementation project(':Hardware')
     turboImplementation project(':RobotCore')
     turboImplementation project(':FtcCommon')
+    //turboImplementation project(':EvLib')
 
     extremeTurboImplementation project(':Hardware')
     extremeTurboImplementation project(':RobotCore')
     extremeTurboImplementation project(':FtcCommon')
+    //extremeTurboImplementation project(':EvLib')
 
     implementation 'com.acmerobotics.dashboard:dashboard:0.3.6'
+    //implementation project(path: ':EvLib')
+
 }
