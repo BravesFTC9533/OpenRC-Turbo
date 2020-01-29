@@ -37,6 +37,7 @@ public class IntakeController {
         openIntake();
     }
 
+    private boolean yAlreadyPressed = false;
     public void handle(int button, boolean pressed) {
         switch (button) {
             case FtcGamePad.GAMEPAD_X:
@@ -50,14 +51,14 @@ public class IntakeController {
                     }
                 }
                 break;
-//            case FtcGamePad.GAMEPAD_B:
-//                if(pressed) {
-//                    if(intake.getCurrentPosition() > 0) {
-//                        closeIntake();
-//                    } else {
-//                        openIntake();
-//                    }
-//                }
+            case FtcGamePad.GAMEPAD_Y:
+                if(pressed) {
+                    if(!yAlreadyPressed) {
+                        init();
+                        yAlreadyPressed = true;
+                    }
+                }
+                break;
         }
     }
 
