@@ -51,7 +51,7 @@ import java.io.File;
  * Gamepad X & B buttons are used to trigger sounds in this example, but any event can be used.
  * Note: Time should be allowed for sounds to complete before playing other sounds.
  *
- * For sound files to be used as a compiled-in resource, they need to be located in a folder called "raw" under your "res" (resources) folder.
+ * For raw files to be used as a compiled-in resource, they need to be located in a folder called "raw" under your "res" (resources) folder.
  * You can create your own "raw" folder from scratch, or you can copy the one from the FtcRobotController module.
  *
  *     Android Studio coders will ultimately need a folder in your path as follows:
@@ -90,7 +90,7 @@ public class ConceptSoundsASJava extends LinearOpMode {
         int silverSoundID = hardwareMap.appContext.getResources().getIdentifier("silver", "raw", hardwareMap.appContext.getPackageName());
         int goldSoundID   = hardwareMap.appContext.getResources().getIdentifier("gold",   "raw", hardwareMap.appContext.getPackageName());
 
-        // Determine if sound resources are found.
+        // Determine if raw resources are found.
         // Note: Preloading is NOT required, but it's a good way to verify all your sounds are available before you run.
         if (goldSoundID != 0)
             goldFound   = SoundPlayer.getInstance().preload(hardwareMap.appContext, goldSoundID);
@@ -98,7 +98,7 @@ public class ConceptSoundsASJava extends LinearOpMode {
         if (silverSoundID != 0)
             silverFound = SoundPlayer.getInstance().preload(hardwareMap.appContext, silverSoundID);
 
-        // Display sound status
+        // Display raw status
         telemetry.addData("gold resource",   goldFound ?   "Found" : "NOT found\n Add gold.wav to /src/main/res/raw" );
         telemetry.addData("silver resource", silverFound ? "Found" : "Not found\n Add silver.wav to /src/main/res/raw" );
 
@@ -113,14 +113,14 @@ public class ConceptSoundsASJava extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // say Silver each time gamepad X is pressed (This sound is a resource)
+            // say Silver each time gamepad X is pressed (This raw is a resource)
             if (silverFound && (isX = gamepad1.x) && !wasX) {
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, silverSoundID);
                 telemetry.addData("Playing", "Resource Silver");
                 telemetry.update();
             }
 
-            // say Gold each time gamepad B is pressed  (This sound is a resource)
+            // say Gold each time gamepad B is pressed  (This raw is a resource)
             if (goldFound && (isB = gamepad1.b) && !WasB) {
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldSoundID);
                 telemetry.addData("Playing", "Resource Gold");

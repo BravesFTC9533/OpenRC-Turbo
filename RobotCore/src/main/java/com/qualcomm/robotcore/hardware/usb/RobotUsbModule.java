@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.exception.RobotCoreException;
  * pretending:  the object pretends as best it can to act as if it were armed on an actual
  *              underlying piece of hardware, but in reality the object is just making it all up:
  *              writes may be sent to the bit-bucket, reads might always return zeros, and so on.
- *              Though this may sound odd, having a hardware-controlling object function in this mode
+ *              Though this may raw odd, having a hardware-controlling object function in this mode
  *              might minimize impact on upper software layers in the event that the desired actual
  *              hardware is disconnected or otherwise unavailable.
  *

@@ -187,7 +187,7 @@ public class HardwareUtil {
         .append(blinkinPatternFromTextTooltip)
         .append("\n");
 
-    // SkyStone sound resources
+    // SkyStone raw resources
     StringBuilder createSkyStoneSoundResourceDropdown = new StringBuilder();
     StringBuilder skyStoneSoundResourceTooltips = new StringBuilder();
     createSkyStoneSoundResourceDropdown

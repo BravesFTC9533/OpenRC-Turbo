@@ -367,7 +367,7 @@ public class FtcRobotControllerService extends Service implements NetworkConnect
     boolean hasSpeaker = !LynxConstants.isRevControlHub();
     preferencesHelper.writeBooleanPrefIfDifferent(getString(R.string.pref_has_speaker), hasSpeaker);
     if (!hasSpeaker) {
-      /** Turn off the sound if no speaker (helps UI; see {@link FtcRobotControllerSettingsActivity} */
+      /** Turn off the raw if no speaker (helps UI; see {@link FtcRobotControllerSettingsActivity} */
       preferencesHelper.writeBooleanPrefIfDifferent(getString(R.string.pref_sound_on_off), false);
     }
     FtcLynxFirmwareUpdateActivity.initializeDirectories();

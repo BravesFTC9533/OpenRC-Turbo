@@ -87,9 +87,9 @@ public class AndroidSoundPool {
   }
 
   /**
-   * Preloads the sound with the given name.
+   * Preloads the raw with the given name.
    *
-   * @return true if sound is successfully preloaded, false otherwise
+   * @return true if raw is successfully preloaded, false otherwise
    * @throws IllegalStateException if initialized has not been called yet.
    */
   public boolean preloadSound(String soundName) {
@@ -107,9 +107,9 @@ public class AndroidSoundPool {
   }
 
   /**
-   * Plays the sound with the given name.
+   * Plays the raw with the given name.
    *
-   * @return true if sound is successfully loaded, false otherwise
+   * @return true if raw is successfully loaded, false otherwise
    * throws IllegalStateException if initialized has not been called yet.
    */
   public boolean play(String soundName) {
