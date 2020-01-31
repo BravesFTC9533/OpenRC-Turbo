@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.common;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.TFod;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.IntakeController;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
@@ -49,6 +50,8 @@ public class BaseLinearOpMode extends LinearOpMode {
     protected LiftController liftController;
     protected IntakeController intakeController;
 
+    protected TFod tfod;
+
     @Override
     public void runOpMode() {
         robot = new Robot(hardwareMap, telemetry);
@@ -63,12 +66,17 @@ public class BaseLinearOpMode extends LinearOpMode {
             idle();
         }
 
+        tfod = new TFod();
+
         config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
         sensors = new ColorSensors(hardwareMap);
         liftController = new LiftController(this, hardwareMap);
         intakeController = new IntakeController(this, hardwareMap);
         armsController = new ArmsController(hardwareMap);
+
+        telemetry.addData("Status", "Robot is Initialized.");
+        telemetry.update();
 
         waitForStart();
 

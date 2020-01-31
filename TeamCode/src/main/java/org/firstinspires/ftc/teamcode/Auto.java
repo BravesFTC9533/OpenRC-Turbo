@@ -68,8 +68,6 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-//        while(opModeIsActive()) {}
-
         switch (startingPosition) {
             case RED_BRICKS:
                 redBricks();
