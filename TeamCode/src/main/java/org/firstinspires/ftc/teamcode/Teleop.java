@@ -87,6 +87,7 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
     private void handleOperatorGamepad(int button, boolean pressed) {
         liftController.handle(button, pressed);
         intakeController.handle(button, pressed);
+        armsController.handle(button, pressed);
     }
 
 }

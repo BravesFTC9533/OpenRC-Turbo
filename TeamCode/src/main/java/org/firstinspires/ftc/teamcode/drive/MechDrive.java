@@ -94,9 +94,10 @@ public class MechDrive extends Drive {
     public void handleTeleop(FtcGamePad driverGamepad){
         double h, v, r;
 
-        h = -driverGamepad.getLeftStickX();
-        v = -driverGamepad.getLeftStickY();
-        r = driverGamepad.getRightStickX();
+        h = Math.pow(-driverGamepad.getLeftStickX(), 3) + Math.pow(driverGamepad.getLeftTrigger(), 3)
+                - Math.pow(driverGamepad.getRightTrigger(), 3);
+        v = Math.pow(-driverGamepad.getLeftStickY(), 3);
+        r = Math.pow(driverGamepad.getRightStickX(), 3);
 
         if(Math.abs(h) < MIN_SPEED) {
             h = 0;
