@@ -43,6 +43,7 @@ import org.firstinspires.ftc.teamcode.common.Robot;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
@@ -71,18 +72,7 @@ public class Auto extends BaseLinearOpMode {
 
 //        while(opModeIsActive()) {}
 
-        double start = getCompass();
-
-
-        while (opModeIsActive()) {
-            double diff = Range.clip(getCompass() - start, -1, 1);
-            double drift = Range.clip(robot.imu.getLinearAcceleration().xAccel, -1, 1);
-            diff /= 10;
-            drift /= 10;
-            drive.drive(-drift, 0.5, diff);
-            telemetry.addData("Diff", -drift);
-            telemetry.update();
-        }
+        ((MechDrive) drive).strafe(0.5, 30);
 
 //        switch (startingPosition) {
 //            case RED_BRICKS:
