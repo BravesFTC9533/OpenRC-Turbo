@@ -64,7 +64,6 @@ public class Robot {
         params.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
         params.loggingEnabled      = true;
         params.loggingTag          = "IMU";
-        params.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
