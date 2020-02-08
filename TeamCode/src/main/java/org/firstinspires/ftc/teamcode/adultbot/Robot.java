@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.adultbot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,6 +19,8 @@ public class Robot {
 
 
 
+
+
     public HardwareMap hardwareMap;
 
     public DcMotorEx frontLeft;
@@ -29,6 +32,11 @@ public class Robot {
 
     public Robot(HardwareMap hardwarMap) {
         this.hardwareMap = hardwarMap;
+
+
+        initializeImu(hardwareMap);
+
+
 
 
         frontLeft = hardwareMap.get(DcMotorEx.class, "fl");
@@ -50,6 +58,20 @@ public class Robot {
 
     }
 
+    private void initializeImu(HardwareMap hardwareMap) {
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+    }
+
 
     public void InitializeDrive(IDrive drive){
         DcMotorEx[] motors = new DcMotorEx[4];
@@ -58,6 +80,7 @@ public class Robot {
         motors[2] = frontLeft;
         motors[3] = backLeft;
         drive.AddMotors(motors);
+        drive.AddIMU(this.imu);
     }
 
 }

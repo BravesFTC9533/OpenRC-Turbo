@@ -27,11 +27,9 @@ public class AdultTeleop extends LinearOpMode implements FtcGamePad.ButtonHandle
     MecDrive drive;
     @Override public void runOpMode() {
 
-
         robot = new Robot(hardwareMap);
 
         drive = new MecDrive();
-
 
         robot.InitializeDrive(drive);
 
@@ -86,19 +84,20 @@ public class AdultTeleop extends LinearOpMode implements FtcGamePad.ButtonHandle
         while (opModeIsActive()) {
 
 
+            driverGamePad.update();
             drive.handle(driverGamePad);
 
             // As an illustration, show some loop timing information
             telemetry.addData("loop count", loopCount);
             telemetry.addData("ms/loop", "%.3f ms", opmodeRunTime.milliseconds() / loopCount);
 
-            // Show joystick information as some other illustrative data
-            telemetry.addLine("left joystick | ")
-                    .addData("x", gamepad1.left_stick_x)
-                    .addData("y", gamepad1.left_stick_y);
-            telemetry.addLine("right joystick | ")
-                    .addData("x", gamepad1.right_stick_x)
-                    .addData("y", gamepad1.right_stick_y);
+            telemetry.addData("mode", drive.getDriveMode().name());
+
+//            telemetry.addData("reverse", new Func<String>() {
+//                        @Override public String value() {
+//                            return Boolean.toString( drive.getIsReverse());
+//                        }
+//                    });
 
             /**
              * Transmit the telemetry to the driver station, subject to throttling.
@@ -125,6 +124,25 @@ public class AdultTeleop extends LinearOpMode implements FtcGamePad.ButtonHandle
 
     @Override
     public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
+        switch(button) {
 
+
+            case FtcGamePad.GAMEPAD_B:
+
+                if(pressed) {
+                   drive.setIsReverse(!drive.isReverse);
+                }
+                break;
+            case FtcGamePad.GAMEPAD_A:
+                if(pressed) {
+                    drive.changeDriveMode();
+                }
+                break;
+            case FtcGamePad.GAMEPAD_Y:
+                if(pressed) {
+
+                }
+                break;
+        }
     }
 }
