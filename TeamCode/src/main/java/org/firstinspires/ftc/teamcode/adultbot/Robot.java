@@ -29,15 +29,34 @@ public class Robot {
 
     public Robot(HardwareMap hardwarMap) {
         this.hardwareMap = hardwarMap;
+
+
+        frontLeft = hardwareMap.get(DcMotorEx.class, "fl");
+        frontRight = hardwareMap.get(DcMotorEx.class, "fr");
+        backLeft = hardwareMap.get(DcMotorEx.class, "bl");
+        backRight = hardwareMap.get(DcMotorEx.class, "br");
+
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+
+
+
     }
 
 
     public void InitializeDrive(IDrive drive){
         DcMotorEx[] motors = new DcMotorEx[4];
-        motors[0] = frontLeft;
-        motors[1] = frontRight;
-        motors[2] = backLeft;
-        motors[3] = backRight;
+        motors[0] = frontRight;
+        motors[1] = backRight;
+        motors[2] = frontLeft;
+        motors[3] = backLeft;
         drive.AddMotors(motors);
     }
 

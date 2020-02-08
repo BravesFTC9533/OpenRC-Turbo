@@ -34,6 +34,18 @@ public class MecanumDrive implements IDrive {
         LEFT, RIGHT
     }
 
+
+    public MecanumDrive(LinearOpMode opMode, DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br) {
+        this.opMode = opMode;
+        this.fl = fl;
+        this.fr = fr;
+        this.bl = bl;
+        this.br = br;
+
+        robot = null;
+
+    }
+
     public MecanumDrive(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
         this.robot = robot;
@@ -45,6 +57,7 @@ public class MecanumDrive implements IDrive {
 
     public boolean getIsReverse(){
         return robot.isReverse();
+
     }
 
     public void setIsReverse(boolean value){
@@ -58,9 +71,9 @@ public class MecanumDrive implements IDrive {
     public void handle(FtcGamePad driverGamepad){
         double h, v, r;
 
-        h = -driverGamepad.getLeftStickX();
-        v = -driverGamepad.getLeftStickY();
-        r = -driverGamepad.getRightStickX();
+        h = Math.pow(-driverGamepad.getLeftStickX(), 3);
+        v = Math.pow(-driverGamepad.getLeftStickY(), 3);
+        r = Math.pow(-driverGamepad.getRightStickX(), 3);
 
         if(Math.abs(h) < MIN_SPEED) {
             h = 0;
