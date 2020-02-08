@@ -1,0 +1,42 @@
+//apply plugin: 'com.android.library'
+apply from: '../build.common.gradle'
+//android {
+//
+//    defaultConfig {
+//        minSdkVersion 19
+//        targetSdkVersion 28
+//    }
+//
+//    compileSdkVersion 28
+//
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_7
+//        targetCompatibility JavaVersion.VERSION_1_7
+//    }
+//}
+
+dependencies {
+    implementation files('../libs/state-machine-framework-0.7.10.jar')
+    implementation project(':RobotCore')
+    implementation project(':RobotServer')
+    implementation project(':FtcCommon')
+    implementation project(':Hardware')
+
+    turboImplementation project(':Hardware')
+    turboImplementation project(':RobotCore')
+    turboImplementation project(':FtcCommon')
+    //turboImplementation project(':EvLib')
+
+    extremeTurboImplementation project(':Hardware')
+    extremeTurboImplementation project(':RobotCore')
+    extremeTurboImplementation project(':FtcCommon')
+    //extremeTurboImplementation project(':EvLib')
+}
+
+//repositories {
+//    flatDir {
+//        dirs '../libs'
+//    }
+//}
+//
+//apply from: 'build.release.gradle'
