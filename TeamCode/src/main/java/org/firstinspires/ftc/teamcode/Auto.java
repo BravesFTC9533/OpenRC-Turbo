@@ -42,6 +42,7 @@ import org.firstinspires.ftc.teamcode.common.Robot;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
@@ -67,7 +68,7 @@ public class Auto extends BaseLinearOpMode {
 
         waitForStart();
         runtime.reset();
-
+        
 //        while(opModeIsActive()) {}
 
         switch (startingPosition) {
@@ -88,86 +89,86 @@ public class Auto extends BaseLinearOpMode {
 
     private void redBricks() {
 
-        // Hit the Wall
-        drive.moveByInches(0.8, 28, 1.5);
-
-        // Get flush against the wall
-        drive.moveByInches(0.5, 10, 1);
-
-        // Strafe towards the bricks
-        drive.drive(0, -0.5, 0);
-        while (opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) >= 55) {}
-        drive.stop();
-
-        double startInches = robot.fl.getCurrentPosition() / Robot.COUNTS_PER_INCH;
-        double inchesMoved = 0;
-
-        // Drive against the bricks until it finds the SkyStone
-        while(opModeIsActive()) {
-            if(sensors.isSkystone(ColorSensors.SensorSide.RIGHT)) {break;}
-            drive.drive(-0.6, 0, 0);
-            inchesMoved = (robot.fl.getCurrentPosition() / Robot.COUNTS_PER_INCH) - startInches;
-        }
-        drive.stop();
-
-        // Delay for 0.5 seconds
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.5) {}
-
-        // Close Right Arm
-        armsController.closeArm(ArmsController.ArmSide.RIGHT);
-
-        // Delay for 0.5 seconds
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.5) {}
-
-        // Determine the stop position
-        float stopTime = 3.3f;
-        if(stopPosition == Config.StopPosition.WALL) {stopTime = 5f;}
-
-        // Flip Intake
-        initIntake();
-
-        while(opModeIsActive() && intakeController.intake.getCurrentPosition() < 20) {}
-
-        // Move towards the wall
-        double start = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-
-        drive.drive(0, 0.5, 0);
-        while(opModeIsActive() && runtime.seconds() < stopTime) {
-            double diff = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle - start;
-            drive.drive(0, 0.5, diff / 100);
-        }
-        drive.stop();
-
-        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
-            drive.moveByInches(1, -63 - (int) inchesMoved, 2);
-        } else {
-            drive.moveByInches(1, -42 - (int) inchesMoved, 2);
-        }
-
-        armsController.openArm(ArmsController.ArmSide.RIGHT);
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.25) {}
-
-        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
-            drive.moveByInches(1, 23, 1.5);
-        } else {
-            drive.moveByInches(1, 18, 1.5);
-        }
-
-        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
-            runtime.reset();
-            drive.drive(0, -0.5, 0);
-            while (opModeIsActive() && runtime.seconds() < 2.5) {}
-            drive.stop();
-        } else {
-            runtime.reset();
-            drive.drive(0, 0.5, 0);
-            while(opModeIsActive() && runtime.seconds() < 1) {}
-            drive.stop();
-        }
+//        // Hit the Wall
+//        drive.moveByInches(0.8, 28, 1.5);
+//
+//        // Get flush against the wall
+//        drive.moveByInches(0.5, 10, 1);
+//
+//        // Strafe towards the bricks
+//        drive.drive(0, -0.5, 0);
+//        while (opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) >= 55) {}
+//        drive.stop();
+//
+//        double startInches = robot.fl.getCurrentPosition() / Robot.COUNTS_PER_INCH;
+//        double inchesMoved = 0;
+//
+//        // Drive against the bricks until it finds the SkyStone
+//        while(opModeIsActive()) {
+//            if(sensors.isSkystone(ColorSensors.SensorSide.RIGHT)) {break;}
+//            drive.drive(-0.6, 0, 0);
+//            inchesMoved = (robot.fl.getCurrentPosition() / Robot.COUNTS_PER_INCH) - startInches;
+//        }
+//        drive.stop();
+//
+//        // Delay for 0.5 seconds
+//        runtime.reset();
+//        while(opModeIsActive() && runtime.seconds() < 0.5) {}
+//
+//        // Close Right Arm
+//        armsController.closeArm(ArmsController.ArmSide.RIGHT);
+//
+//        // Delay for 0.5 seconds
+//        runtime.reset();
+//        while(opModeIsActive() && runtime.seconds() < 0.5) {}
+//
+//        // Determine the stop position
+//        float stopTime = 3.3f;
+//        if(stopPosition == Config.StopPosition.WALL) {stopTime = 5f;}
+//
+//        // Flip Intake
+//        initIntake();
+//
+//        while(opModeIsActive() && intakeController.intake.getCurrentPosition() < 20) {}
+//
+//        // Move towards the wall
+//        double start = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+//
+//        drive.drive(0, 0.5, 0);
+//        while(opModeIsActive() && runtime.seconds() < stopTime) {
+//            double diff = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle - start;
+//            drive.drive(0, 0.5, diff / 100);
+//        }
+//        drive.stop();
+//
+//        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+//            drive.moveByInches(1, -63 - (int) inchesMoved, 2);
+//        } else {
+//            drive.moveByInches(1, -42 - (int) inchesMoved, 2);
+//        }
+//
+//        armsController.openArm(ArmsController.ArmSide.RIGHT);
+//
+//        runtime.reset();
+//        while(opModeIsActive() && runtime.seconds() < 0.25) {}
+//
+//        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+//            drive.moveByInches(1, 23, 1.5);
+//        } else {
+//            drive.moveByInches(1, 18, 1.5);
+//        }
+//
+//        if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+//            runtime.reset();
+//            drive.drive(0, -0.5, 0);
+//            while (opModeIsActive() && runtime.seconds() < 2.5) {}
+//            drive.stop();
+//        } else {
+//            runtime.reset();
+//            drive.drive(0, 0.5, 0);
+//            while(opModeIsActive() && runtime.seconds() < 1) {}
+//            drive.stop();
+//        }
     }
 
     private void blueBricks() {
