@@ -6,10 +6,16 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 import org.firstinspires.ftc.teamcode.common.Robot;
 
 public class MechDrive extends Drive {
+
+    public static final double COMPASS_CORRECT_SPEED = 0.1;
+    public static final double ACCEL_CORRECT_SPEED = 0.1;
 
     private static final double MIN_SPEED = 0.2;
 
@@ -51,11 +57,27 @@ public class MechDrive extends Drive {
         br.setTargetPosition(br.getCurrentPosition() + rightTicks);
     }
 
-    public void strafe() {
-        fl.setVelocity(-1000);
-        bl.setVelocity(1000);
-        fr.setVelocity(1000);
-        br.setVelocity(-1000);
+    public void strafe(double h, double timeoutSeconds) {
+        double startCompass = getCompass();
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(opMode.opModeIsActive() && timer.seconds() < timeoutSeconds) {
+            double compassDiff = Range.clip(getCompass() - startCompass, -COMPASS_CORRECT_SPEED, COMPASS_CORRECT_SPEED);
+            double accelDrift = Range.clip(robot.imu.getLinearAcceleration().xAccel, -ACCEL_CORRECT_SPEED, ACCEL_CORRECT_SPEED);
+
+            // TODO: Plug the negative of accel drift to get accel. correction into the v parameter.
+            drive(0, h, compassDiff);
+            opMode.telemetry.addData("Compass Diff", compassDiff);
+            opMode.telemetry.addData("Accel Correction", -accelDrift);
+            opMode.telemetry.update();
+        }
+        stop();
+    }
+
+    private double getCompass() {
+        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
     }
 
     @Override
@@ -94,9 +116,10 @@ public class MechDrive extends Drive {
     public void handleTeleop(FtcGamePad driverGamepad){
         double h, v, r;
 
-        h = -driverGamepad.getLeftStickX();
-        v = -driverGamepad.getLeftStickY();
-        r = driverGamepad.getRightStickX();
+        h = Math.pow(-driverGamepad.getLeftStickX(), 3) + Math.pow(driverGamepad.getLeftTrigger(), 3)
+                - Math.pow(driverGamepad.getRightTrigger(), 3);
+        v = Math.pow(-driverGamepad.getLeftStickY(), 3);
+        r = Math.pow(driverGamepad.getRightStickX(), 3);
 
         if(Math.abs(h) < MIN_SPEED) {
             h = 0;
@@ -141,20 +164,6 @@ public class MechDrive extends Drive {
         fr.setVelocity(frontRight * Robot.MAX_NEVE_VELOCITY);
         bl.setVelocity(backLeft * Robot.MAX_NEVE_VELOCITY);
         br.setVelocity(backRight * Robot.MAX_NEVE_VELOCITY);
-    }
-
-    public void strafeSeconds(double power, StrafeDirection direction, double seconds) {
-        ElapsedTime timer = new ElapsedTime();
-
-        if(direction == StrafeDirection.RIGHT) {
-            power = -power;
-        }
-
-        drive(0, power, 0);
-        timer.reset();
-
-        while(opMode.opModeIsActive() && timer.seconds() < seconds) {}
-        stop();
     }
 
     @Override

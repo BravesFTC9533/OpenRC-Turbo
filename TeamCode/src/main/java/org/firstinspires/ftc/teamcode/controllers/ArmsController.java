@@ -3,13 +3,18 @@ package org.firstinspires.ftc.teamcode.controllers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+
 public class ArmsController {
 
     public final Servo leftArm;
     public final Servo rightArm;
 
-    public static final double MAX_LEFT_ARM_POSITION = 0.8;
-    public static final double MAX_RIGHT_ARM_POSITION = 0.45;
+    public static final double MAX_LEFT_ARM_POSITION = 1;
+    public static final double MAX_RIGHT_ARM_POSITION = 1;
+    public static final double MIN_LEFT_ARM_POSITION = -1;
+    public static final double MIN_RIGHT_ARM_POSITION = -1;
+
 
     public enum ArmSide {
         LEFT,
@@ -21,7 +26,7 @@ public class ArmsController {
         rightArm = hardwareMap.get(Servo.class, "rightArm");
 
         leftArm.setDirection(Servo.Direction.REVERSE);
-        rightArm.setDirection(Servo.Direction.REVERSE);
+        rightArm.setDirection(Servo.Direction.FORWARD);
     }
 
     public void init() {
@@ -32,17 +37,17 @@ public class ArmsController {
     public void toggleArm(ArmSide armSide) {
         switch (armSide) {
             case LEFT:
-                if(leftArm.getPosition() > 0) {
-                    leftArm.setPosition(0);
+                if(leftArm.getPosition() > MIN_LEFT_ARM_POSITION) {
+                    leftArm.setPosition(MIN_LEFT_ARM_POSITION);
                 } else {
-                    leftArm.setPosition(0.8);
+                    leftArm.setPosition(MAX_LEFT_ARM_POSITION);
                 }
                 break;
             case RIGHT:
-                if(rightArm.getPosition() > 0) {
-                    rightArm.setPosition(0);
+                if(rightArm.getPosition() > MIN_RIGHT_ARM_POSITION) {
+                    rightArm.setPosition(MIN_RIGHT_ARM_POSITION);
                 } else {
-                    rightArm.setPosition(1);
+                    rightArm.setPosition(MAX_RIGHT_ARM_POSITION);
                 }
                 break;
         }
@@ -54,7 +59,7 @@ public class ArmsController {
                 leftArm.setPosition(MAX_LEFT_ARM_POSITION);
                 break;
             case RIGHT:
-                rightArm.setPosition(0);
+                rightArm.setPosition(MAX_RIGHT_ARM_POSITION);
                 break;
         }
     }
@@ -62,10 +67,20 @@ public class ArmsController {
     public void closeArm(ArmSide armSide) {
         switch (armSide) {
             case LEFT:
-                leftArm.setPosition(MAX_RIGHT_ARM_POSITION);
+                leftArm.setPosition(MIN_LEFT_ARM_POSITION);
                 break;
             case RIGHT:
-                rightArm.setPosition(1);
+                rightArm.setPosition(MIN_RIGHT_ARM_POSITION);
+                break;
+        }
+    }
+
+    public void handle(int button, boolean pressed) {
+        switch (button) {
+            case FtcGamePad.GAMEPAD_BACK:
+                if(pressed) {
+                    toggleArm(ArmSide.LEFT);
+                }
                 break;
         }
     }

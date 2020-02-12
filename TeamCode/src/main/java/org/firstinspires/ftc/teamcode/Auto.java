@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -71,23 +72,39 @@ public class Auto extends BaseLinearOpMode {
         
 //        while(opModeIsActive()) {}
 
-        switch (startingPosition) {
-            case RED_BRICKS:
-                redBricks();
-                break;
-            case BLUE_BRICKS:
-                blueBricks();
-                break;
-            case RED_BUILDING:
-                redBuilding();
-                break;
-            case BLUE_BUILDING:
-                blueBuilding();
-                break;
-        }
+        ((MechDrive) drive).strafe(0.5, 30);
+
+//        switch (startingPosition) {
+//            case RED_BRICKS:
+//                redBricks();
+//                break;
+//            case BLUE_BRICKS:
+//                blueBricks();
+//                break;
+//            case RED_BUILDING:
+//                redBuilding();
+//                break;
+//            case BLUE_BUILDING:
+//                blueBuilding();
+//                break;
+//
+    }
+
+    private double getCompass() {
+        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
     }
 
     private void redBricks() {
+
+        // Strafe towards bricks
+        double start = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+
+        drive.drive(0, -0.8, 0);
+        while(opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) >= 60) {
+            double diff = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle + start;
+            drive.drive(0, -0.8, diff / 100);
+        }
+        drive.stop();
 
 //        // Hit the Wall
 //        drive.moveByInches(0.8, 28, 1.5);
