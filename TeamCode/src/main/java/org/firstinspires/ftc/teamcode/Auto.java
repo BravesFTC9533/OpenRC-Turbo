@@ -96,7 +96,7 @@ public class Auto extends BaseLinearOpMode {
         // Determine SkyStone Position
 
         while(opModeIsActive()) {
-            updateTFOD();
+            updateTFOD(this);
         }
 
 //        switch (skystonePosition) {
