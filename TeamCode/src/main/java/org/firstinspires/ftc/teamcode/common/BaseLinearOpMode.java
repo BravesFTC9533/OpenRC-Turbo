@@ -145,25 +145,23 @@ public class BaseLinearOpMode extends LinearOpMode {
         }
     }
 
-    protected void updateTFOD(LinearOpMode opMode) {
-        if(opMode.opModeIsActive()) {
-            if (opMode.opModeIsActive() && tfod != null) {
+    protected void updateTFOD() {
+        if(opModeIsActive()) {
+            if (opModeIsActive() && tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null && opMode.opModeIsActive()) {
+                if (updatedRecognitions != null && opModeIsActive()) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     // step through the list of recognitions and display boundary info.
                     int i = 0;
-                    if(opMode.opModeIsActive()) {
+                    if(opModeIsActive()) {
                         for (Recognition recognition : updatedRecognitions) {
-                            if(opMode.opModeIsActive()) {
-                                telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                                telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                        recognition.getLeft(), recognition.getTop());
-                                telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                        recognition.getRight(), recognition.getBottom());
-                            }
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
                         }
                     }
                     telemetry.update();
