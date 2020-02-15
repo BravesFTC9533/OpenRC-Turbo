@@ -58,6 +58,9 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Initializing");
+        telemetry.update();
+
         robot = new Robot(hardwareMap, telemetry);
 
         robot.imu.initialize(robot.params);
@@ -78,6 +81,9 @@ public class BaseLinearOpMode extends LinearOpMode {
         liftController = new LiftController(this, hardwareMap);
         intakeController = new IntakeController(this, hardwareMap);
         armsController = new ArmsController(hardwareMap);
+
+        telemetry.addData("Status", "Ready");
+        telemetry.update();
 
         waitForStart();
 
@@ -145,29 +151,40 @@ public class BaseLinearOpMode extends LinearOpMode {
         }
     }
 
+    private List<Recognition> updatedRecognitions;
+
     protected void updateTFOD() {
         if(opModeIsActive()) {
             if (opModeIsActive() && tfod != null) {
+                updatedRecognitions = tfod.getUpdatedRecognitions();
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null && opModeIsActive()) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    // step through the list of recognitions and display boundary info.
-                    int i = 0;
-                    if(opModeIsActive()) {
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                        }
-                    }
                     telemetry.update();
                 }
             }
         }
+    }
+
+    protected double left = 0;
+
+    protected boolean ifSkyStone() {
+        if(opModeIsActive()) {
+            updateTFOD();
+        }
+
+        if(opModeIsActive()) {
+            if(updatedRecognitions != null) {
+                for (Recognition recognition : updatedRecognitions) {
+                    if (opModeIsActive() && recognition.getLabel().equals("Skystone")) {
+                        left = recognition.getLeft();
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -195,7 +212,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
+        tfodParameters.minimumConfidence = 0.7;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromFile(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }

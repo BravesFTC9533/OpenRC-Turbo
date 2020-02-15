@@ -31,20 +31,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
-import org.firstinspires.ftc.teamcode.common.Robot;
-import org.firstinspires.ftc.teamcode.controllers.ArmsController;
-import org.firstinspires.ftc.teamcode.controllers.LiftController;
-import org.firstinspires.ftc.teamcode.drive.Drive;
-import org.firstinspires.ftc.teamcode.drive.MechDrive;
-import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
 public class Auto extends BaseLinearOpMode {
@@ -56,16 +45,22 @@ public class Auto extends BaseLinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initializing");
-        telemetry.update();
-
         super.runOpMode();
 
         stopPosition = config.getStopPosition();
         startingPosition = config.getPosition();
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        // Determine Skystone Position
+        while(opModeIsActive() && !isStarted()) {
+            
+            double startTime = System.nanoTime();
+            while(opModeIsActive() && !isStarted()) {
+                double currentTime = System.nanoTime();
+                if((currentTime - startTime) >= 1 && !isStarted()) {
+                    break;
+                }
+            }
+        }
 
         waitForStart();
         runtime.reset();
@@ -93,10 +88,12 @@ public class Auto extends BaseLinearOpMode {
     private SkystonePosition skystonePosition;
 
     private void redBricks() {
-        // Determine SkyStone Position
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
 
         while(opModeIsActive()) {
-            updateTFOD();
+            ifSkyStone();
+            telemetry.addData("Left", super.left);
         }
 
 //        switch (skystonePosition) {
