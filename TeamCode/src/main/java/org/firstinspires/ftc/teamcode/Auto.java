@@ -52,7 +52,7 @@ public class Auto extends BaseLinearOpMode {
 
         // Determine Skystone Position
         while(opModeIsActive() && !isStarted()) {
-            
+
             double startTime = System.nanoTime();
             while(opModeIsActive() && !isStarted()) {
                 double currentTime = System.nanoTime();
