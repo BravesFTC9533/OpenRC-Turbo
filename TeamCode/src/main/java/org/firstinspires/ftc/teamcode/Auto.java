@@ -95,6 +95,10 @@ public class Auto extends BaseLinearOpMode {
     private void redBricks() {
         // Determine SkyStone Position
 
+        while(opModeIsActive()) {
+            updateTFOD();
+        }
+
 //        switch (skystonePosition) {
 //            case LEFT:
 //                break;
