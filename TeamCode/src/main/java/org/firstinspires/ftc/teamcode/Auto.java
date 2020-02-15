@@ -70,39 +70,27 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
         
-//        while(opModeIsActive()) {}
+        switch (startingPosition) {
+            case RED_BRICKS:
+                redBricks();
+                break;
+            case BLUE_BRICKS:
+                blueBricks();
+                break;
+            case RED_BUILDING:
+                redBuilding();
+                break;
+            case BLUE_BUILDING:
+                blueBuilding();
+                break;
+        }
 
-        ((MechDrive) drive).strafe(0.5, 30);
-
-//        switch (startingPosition) {
-//            case RED_BRICKS:
-//                redBricks();
-//                break;
-//            case BLUE_BRICKS:
-//                blueBricks();
-//                break;
-//            case RED_BUILDING:
-//                redBuilding();
-//                break;
-//            case BLUE_BUILDING:
-//                blueBuilding();
-//                break;
-//
     }
 
-    private double getCompass() {
-        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-    }
+    public void redBricks() {
 
-    private void redBricks() {
-
-        // Strafe towards bricks
-        double start = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-
-        drive.drive(0, -0.8, 0);
-        while(opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) >= 60) {
-            double diff = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle + start;
-            drive.drive(0, -0.8, diff / 100);
+        while(opModeIsActive() && sensors.getSensorDistance(ColorSensors.SensorSide.LEFT, DistanceUnit.MM) >= 60) {
+            ((MechDrive) drive).strafe(0.5);
         }
         drive.stop();
 

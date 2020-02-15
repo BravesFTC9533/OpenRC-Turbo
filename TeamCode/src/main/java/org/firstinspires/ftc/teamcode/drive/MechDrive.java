@@ -64,14 +64,25 @@ public class MechDrive extends Drive {
         timer.reset();
 
         while(opMode.opModeIsActive() && timer.seconds() < timeoutSeconds) {
-            double compassDiff = Range.clip(getCompass() - startCompass, -COMPASS_CORRECT_SPEED, COMPASS_CORRECT_SPEED);
-            double accelDrift = Range.clip(robot.imu.getLinearAcceleration().xAccel, -ACCEL_CORRECT_SPEED, ACCEL_CORRECT_SPEED);
+            double compassDiff = Range.clip(getCompass() - startCompass, -1, 1);
+            compassDiff /= 10;
 
-            // TODO: Plug the negative of accel drift to get accel. correction into the v parameter.
             drive(0, h, compassDiff);
-            opMode.telemetry.addData("Compass Diff", compassDiff);
-            opMode.telemetry.addData("Accel Correction", -accelDrift);
-            opMode.telemetry.update();
+        }
+        stop();
+    }
+
+    public void strafe(double h) {
+        double startCompass = getCompass();
+
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(opMode.opModeIsActive()) {
+            double compassDiff = Range.clip(getCompass() - startCompass, -1, 1);
+            compassDiff /= 10;
+
+            drive(0, h, compassDiff);
         }
         stop();
     }
