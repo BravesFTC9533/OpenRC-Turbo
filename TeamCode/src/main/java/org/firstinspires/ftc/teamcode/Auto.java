@@ -47,32 +47,39 @@ public class Auto extends BaseLinearOpMode {
     public void runOpMode() {
         super.runOpMode();
 
+        armsController.init();
+        liftController.init();
+
         stopPosition = config.getStopPosition();
         startingPosition = config.getPosition();
 
-        // Determine Skystone Position
         while(opModeIsActive() && !isStarted()) {
+            ifSkyStone();
 
+            telemetry.addData("Status", "Working");
 
-            if(runtime.seconds() >= 2.0) {
+            if(left < 100) {
+                skystonePosition = SkystonePosition.LEFT;
+            } else if(left > 400) {
+                skystonePosition = SkystonePosition.RIGHT;
+            } else {
+                skystonePosition = SkystonePosition.CENTER;
+            }
 
-                //look for skystone
+            if(runtime.seconds() >= 0.5 && !isStarted()) {
 
                 runtime.reset();
             }
-
-//            double startTime = System.nanoTime();
-//            while(opModeIsActive() && !isStarted()) {
-//                double currentTime = System.nanoTime();
-//                if((currentTime - startTime) >= 1 && !isStarted()) {
-//                    break;
-//                }
-//            }
         }
 
         waitForStart();
         runtime.reset();
-        
+
+        telemetry.addData("Brick Position", skystonePosition);
+        telemetry.update();
+
+        while(opModeIsActive()) {}
+
         switch (startingPosition) {
             case RED_BRICKS:
                 redBricks();
@@ -90,20 +97,12 @@ public class Auto extends BaseLinearOpMode {
 
     }
 
+    private SkystonePosition skystonePosition;
     private enum SkystonePosition {
         LEFT, CENTER, RIGHT
     }
-    private SkystonePosition skystonePosition;
 
     private void redBricks() {
-        ElapsedTime timer = new ElapsedTime();
-        timer.reset();
-
-        while(opModeIsActive()) {
-            ifSkyStone();
-            telemetry.addData("Left", super.left);
-        }
-
 //        switch (skystonePosition) {
 //            case LEFT:
 //                break;

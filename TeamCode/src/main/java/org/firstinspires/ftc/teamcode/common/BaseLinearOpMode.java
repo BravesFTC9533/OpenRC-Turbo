@@ -84,11 +84,6 @@ public class BaseLinearOpMode extends LinearOpMode {
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
-
-        waitForStart();
-
-        armsController.init();
-        liftController.init();
     }
 
     public void initIntake() {
@@ -169,7 +164,7 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     protected double left = 0;
 
-    protected boolean ifSkyStone() {
+    public boolean ifSkyStone() {
         if(opModeIsActive()) {
             updateTFOD();
         }
