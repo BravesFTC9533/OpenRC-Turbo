@@ -142,7 +142,7 @@ public class LiftController {
                 break;
             case FtcGamePad.GAMEPAD_Y:
                 if(pressed) {
-                    goTo(1, MAX_SWING_POSITION);
+                    goTo(1, MAX_LIFT);
                 }
                 break;
             case FtcGamePad.GAMEPAD_DPAD_DOWN:
