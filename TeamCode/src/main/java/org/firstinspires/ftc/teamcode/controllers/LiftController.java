@@ -140,15 +140,13 @@ public class LiftController {
                     }
                 }
                 break;
-//            case FtcGamePad.GAMEPAD_Y:
-//                if(pressed) {
-//                    if (swing.getPosition() > MAX_SWING_POSITION) {
-//                        swing.setPosition(MAX_SWING_POSITION);
-//                    } else {
-//                        swing.setPosition(MIN_SWING_POSITION);
-//                    }
-//                }
-//                break;
+            case FtcGamePad.GAMEPAD_Y:
+                if(pressed) {
+                    if (swing.getPosition() < MAX_SWING_POSITION) {
+                        goTo(1, MAX_SWING_POSITION);
+                    }
+                }
+                break;
             case FtcGamePad.GAMEPAD_DPAD_DOWN:
                 if(pressed)
                     goTo(1, POSITION_1);
