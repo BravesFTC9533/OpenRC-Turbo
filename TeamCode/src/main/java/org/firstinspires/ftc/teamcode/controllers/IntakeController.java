@@ -43,22 +43,18 @@ public class IntakeController {
             case FtcGamePad.GAMEPAD_X:
                 if(pressed) {
                     if(leftIntake.getPosition() > 0) {
-                        leftIntake.setPosition(0);
-                        rightIntake.setPosition(0);
+                        intakeIn();
                     } else {
-                        leftIntake.setPosition(0.5);
-                        rightIntake.setPosition(0.5);
+                        stopIntake();
                     }
                 }
                 break;
             case FtcGamePad.GAMEPAD_A:
                 if(pressed) {
                     if(leftIntake.getPosition() < 1) {
-                        leftIntake.setPosition(1);
-                        rightIntake.setPosition(1);
+                        intakeOut();
                     } else {
-                        leftIntake.setPosition(0.5);
-                        rightIntake.setPosition(0.5);
+                        stopIntake();
                     }
                 }
                 break;
@@ -73,7 +69,7 @@ public class IntakeController {
         }
     }
 
-    public void openIntake() {
+    private void openIntake() {
         intake.setTargetPosition(MAX_INTAKE_TICKS);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         intake.setPower(1);
@@ -82,21 +78,22 @@ public class IntakeController {
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void turnOnIntake() {
+    private void intakeIn() {
         leftIntake.setPosition(0);
         rightIntake.setPosition(0);
     }
 
-    public void stopIntake() {
+    private void intakeOut() {
+        leftIntake.setPosition(1);
+        rightIntake.setPosition(1);
+    }
+
+    private void stopIntake() {
         leftIntake.setPosition(0.5);
         rightIntake.setPosition(0.5);
     }
 
-    public void lockPosition() {
-        intake.setTargetPosition(intake.getCurrentPosition());
-        intake.setVelocity(MAX_REV_VELOCITY);
-    }
-
+    @Deprecated
     public void closeIntake() {
         intake.setTargetPosition(0);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
