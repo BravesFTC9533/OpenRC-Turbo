@@ -61,6 +61,7 @@ public class IntakeController {
                         rightIntake.setPosition(0);
                     }
                 }
+                break;
             case FtcGamePad.GAMEPAD_BACK:
                 if(pressed) {
                     if(!yAlreadyPressed) {
