@@ -64,7 +64,7 @@ public class LiftController {
             goTo(1, POSITION_4);
         }
 
-        swing.setPosition(0.85);
+        swing.setPosition(0.84);
 
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
