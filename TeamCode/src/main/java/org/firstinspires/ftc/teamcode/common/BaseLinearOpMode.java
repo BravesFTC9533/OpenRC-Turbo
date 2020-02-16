@@ -37,6 +37,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.Auto;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.IntakeController;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
@@ -44,6 +45,7 @@ import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseLinearOpMode extends LinearOpMode {
@@ -58,6 +60,10 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+    }
+
+    protected void Initialize() {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
@@ -72,8 +78,6 @@ public class BaseLinearOpMode extends LinearOpMode {
             sleep(50);
             idle();
         }
-
-        initiallize();
 
         config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
@@ -126,7 +130,7 @@ public class BaseLinearOpMode extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
-    protected void initiallize() {
+    protected void startVuforia() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -149,32 +153,70 @@ public class BaseLinearOpMode extends LinearOpMode {
     private List<Recognition> updatedRecognitions;
 
     protected void updateTFOD() {
-        if(opModeIsActive()) {
-            if (opModeIsActive() && tfod != null) {
+        if(!isStopRequested() && tfod != null) {
+            if (!isStopRequested() && tfod != null) {
                 updatedRecognitions = tfod.getUpdatedRecognitions();
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                if (updatedRecognitions != null && opModeIsActive()) {
+                if (updatedRecognitions != null && !isStopRequested()) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     telemetry.update();
                 }
             }
         }
+
+        if(isStopRequested()) {
+            tfod.shutdown();
+        }
     }
 
     protected double left = 0;
 
-    public boolean ifSkyStone() {
-        if(opModeIsActive()) {
+    public void deactivate() {
+        if(tfod == null) return;
+        tfod.shutdown();
+    }
+
+    public Auto.SkystonePosition detectSkystone(Config.Position position) {
+        if(!isStopRequested() && tfod != null) {
             updateTFOD();
         }
 
-        if(opModeIsActive()) {
+        if(position == Config.Position.RED_BRICKS) {
+            return detectSkystoneRedBricks();
+        } //else {
+//            detectSkystoneBlueBricks();
+//        }
+        return null;
+    }
+
+    private Auto.SkystonePosition detectSkystoneRedBricks() {
+        if(!isStopRequested() && tfod != null) {
             if(updatedRecognitions != null) {
                 for (Recognition recognition : updatedRecognitions) {
-                    if (opModeIsActive() && recognition.getLabel().equals("Skystone")) {
+                    if (!isStopRequested() && recognition.getLabel().equals("Skystone")) {
                         left = recognition.getLeft();
-                        return true;
+                        System.out.printf("Left %s%n", left);
+                        if(left < 100 && left > 25) {
+                            return Auto.SkystonePosition.LEFT;
+                        } else if(left > 325) {
+                            return Auto.SkystonePosition.RIGHT;
+                        } else {
+                            return Auto.SkystonePosition.CENTER;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean detectSkystoneBlueBricks() {
+        if(!isStopRequested() && tfod != null) {
+            if(updatedRecognitions != null) {
+                for(Recognition recognition : updatedRecognitions) {
+                    if(!isStopRequested() && recognition.getLabel().equals("Skystone")) {
+                        telemetry.addData("Left", recognition.getLeft());
                     }
                 }
             }

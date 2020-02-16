@@ -57,13 +57,22 @@ public class MechDrive extends Drive {
         br.setTargetPosition(br.getCurrentPosition() + rightTicks);
     }
 
-    public void strafe(double h, double timeoutSeconds) {
+    public void strafe(double h, double inches, double timeoutSeconds) {
+        if(inches < 0) {
+            inches = -inches;
+            h = -h;
+        }
         double startCompass = getCompass();
 
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
+        int flPositon = robot.fl.getCurrentPosition();
+        double targetPosition = Robot.COUNTS_PER_INCH * Robot.MECH_COUNTS_PER_INCH * inches;
+
         while(opMode.opModeIsActive() && timer.seconds() < timeoutSeconds) {
+            int newTickPosition = robot.fl.getCurrentPosition();
+            if(Math.abs(newTickPosition - flPositon) >= (targetPosition)) break;
             double compassDiff = Range.clip(getCompass() - startCompass, -1, 1);
             compassDiff /= 10;
 
@@ -189,7 +198,7 @@ public class MechDrive extends Drive {
 
     @Override
     public void turnDegrees(double power, TurnDirection turnDirection, int degrees, double timeoutSeconds) {
-        double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 90; // Find how many inches are in a degree
+        double inchesPerDegree = Robot.WHEEL_DISTANCE_INCHES / 71.95; // Find how many inches are in a degree
         degrees *= inchesPerDegree;
 
         if(turnDirection == TurnDirection.COUNTER_CLOCKWISE) {
@@ -209,11 +218,10 @@ public class MechDrive extends Drive {
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
 
-        while(opMode.opModeIsActive() && robot.isBusy() && runtime.seconds() <= timeoutSeconds) {}
+        while(opMode.opModeIsActive() && !robot.doneMoving() && runtime.seconds() <= timeoutSeconds) {}
+        stop();
 
         robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        stop();
     }
 
     @Override

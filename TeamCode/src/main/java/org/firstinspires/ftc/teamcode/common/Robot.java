@@ -11,14 +11,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Robot {
 
-    public static final double WHEEL_DISTANCE_INCHES = 18.1;
+    public static final double WHEEL_DISTANCE_INCHES = 17.625;
     public static final double MAX_NEVE_VELOCITY = 3120.0;
 
     public static final double     NEVE_COUNTS_PER_MOTOR_NEVE = 1120;      // eg: Rev Side motor
-    public static final double            DRIVE_GEAR_REDUCTION    = 45.0 / 35.0;             // This is < 1.0 if geared UP
-    public static final double            WHEEL_DIAMETER_INCHES   = 5.250;           // For figuring circumference
+    public static final double            DRIVE_GEAR_REDUCTION    = 35.0 / 45.0;             // This is < 1.0 if geared UP
+    public static final double            WHEEL_DIAMETER_INCHES   = 4.0;           // For figuring circumference
     public static final double     COUNTS_PER_INCH = (NEVE_COUNTS_PER_MOTOR_NEVE * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * Math.PI);
+
+    public static final double MECH_COUNTS_PER_INCH = 1.2;
 
     public final DcMotorEx fl;
     public final DcMotorEx fr;
@@ -90,5 +92,7 @@ public class Robot {
     public boolean isBusy() {
         return fl.isBusy() || fr.isBusy() || bl.isBusy() || br.isBusy();
     }
+
+    public boolean doneMoving() {return !fl.isBusy() || !fr.isBusy() || !bl.isBusy() || !br.isBusy();}
 
 }
