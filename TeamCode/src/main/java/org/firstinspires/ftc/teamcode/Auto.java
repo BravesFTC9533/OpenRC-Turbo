@@ -57,13 +57,22 @@ public class Auto extends BaseLinearOpMode {
         startingPosition = config.getPosition();
 
         while(!isStopRequested() && !isStarted()) {
-            skystonePosition = detectSkystone(startingPosition);
+            detectSkystone();
+
+
+            if(left < 100) {
+                skystonePosition = SkystonePosition.LEFT;
+            } else if(left > 400) {
+                skystonePosition = SkystonePosition.RIGHT;
+            } else {
+                skystonePosition = SkystonePosition.CENTER;
+            }
 
             telemetry.addData("Skystone Position", skystonePosition);
             telemetry.addData("Position", left);
             telemetry.update();
 
-            if(runtime.seconds() >= 0.25 && !isStarted()) {
+            if(runtime.seconds() >= 0.5 && !isStarted()) {
                 runtime.reset();
             }
         }

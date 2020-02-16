@@ -177,46 +177,19 @@ public class BaseLinearOpMode extends LinearOpMode {
         tfod.shutdown();
     }
 
-    public Auto.SkystonePosition detectSkystone(Config.Position position) {
+    public boolean detectSkystone() {
         if(!isStopRequested() && tfod != null) {
             updateTFOD();
         }
 
-        if(position == Config.Position.RED_BRICKS) {
-            return detectSkystoneRedBricks();
-        } //else {
-//            detectSkystoneBlueBricks();
-//        }
-        return null;
-    }
-
-    private Auto.SkystonePosition detectSkystoneRedBricks() {
         if(!isStopRequested() && tfod != null) {
             if(updatedRecognitions != null) {
                 for (Recognition recognition : updatedRecognitions) {
                     if (!isStopRequested() && recognition.getLabel().equals("Skystone")) {
-                        left = recognition.getLeft();
-                        System.out.printf("Left %s%n", left);
-                        if(left < 100 && left > 25) {
-                            return Auto.SkystonePosition.LEFT;
-                        } else if(left > 325) {
-                            return Auto.SkystonePosition.RIGHT;
-                        } else {
-                            return Auto.SkystonePosition.CENTER;
+                        if(recognition.getLeft() <= 25) {
+                            return false;
                         }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private boolean detectSkystoneBlueBricks() {
-        if(!isStopRequested() && tfod != null) {
-            if(updatedRecognitions != null) {
-                for(Recognition recognition : updatedRecognitions) {
-                    if(!isStopRequested() && recognition.getLabel().equals("Skystone")) {
-                        telemetry.addData("Left", recognition.getLeft());
+                        left = recognition.getLeft();
                     }
                 }
             }
