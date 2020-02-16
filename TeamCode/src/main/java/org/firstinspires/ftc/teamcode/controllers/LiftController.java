@@ -60,8 +60,8 @@ public class LiftController {
 
         grab.setPosition(0.65);
 
-        if(lift.getCurrentPosition() != POSITION_3) {
-            goTo(1, POSITION_3);
+        if(lift.getCurrentPosition() != POSITION_4) {
+            goTo(1, POSITION_4);
         }
 
         swing.setPosition(0.8);
@@ -76,9 +76,8 @@ public class LiftController {
     public void grabAndMoveBrick() {
         drive.stop();
 
-
-        if(lift.getCurrentPosition() != POSITION_GRAB) {
-            goTo(1, POSITION_GRAB);
+        if(lift.getCurrentPosition() != POSITION_3) {
+            goTo(1, POSITION_3);
         }
 
         ElapsedTime timer = new ElapsedTime();
