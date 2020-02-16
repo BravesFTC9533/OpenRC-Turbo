@@ -177,7 +177,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         tfod.shutdown();
     }
 
-    public boolean detectSkystone() {
+    public boolean detectSkystone(Config.Position position) {
         if(!isStopRequested() && tfod != null) {
             updateTFOD();
         }
@@ -186,10 +186,17 @@ public class BaseLinearOpMode extends LinearOpMode {
             if(updatedRecognitions != null) {
                 for (Recognition recognition : updatedRecognitions) {
                     if (!isStopRequested() && recognition.getLabel().equals("Skystone")) {
-                        if(recognition.getLeft() <= 25) {
-                            return false;
+                        if(position == Config.Position.RED_BRICKS) {
+                            if (recognition.getLeft() <= 25) {
+                                return false;
+                            }
+                        } else {
+                            if(recognition.getLeft() >= 550) {
+                                return false;
+                            }
                         }
                         left = recognition.getLeft();
+                        return true;
                     }
                 }
             }

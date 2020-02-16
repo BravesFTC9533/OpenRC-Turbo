@@ -57,15 +57,24 @@ public class Auto extends BaseLinearOpMode {
         startingPosition = config.getPosition();
 
         while(!isStopRequested() && !isStarted()) {
-            detectSkystone();
+            detectSkystone(startingPosition);
 
-
-            if(left < 100) {
-                skystonePosition = SkystonePosition.LEFT;
-            } else if(left > 400) {
-                skystonePosition = SkystonePosition.RIGHT;
+            if(startingPosition == Config.Position.RED_BRICKS) {
+                if (left < 100) {
+                    skystonePosition = SkystonePosition.LEFT;
+                } else if (left > 400) {
+                    skystonePosition = SkystonePosition.RIGHT;
+                } else {
+                    skystonePosition = SkystonePosition.CENTER;
+                }
             } else {
-                skystonePosition = SkystonePosition.CENTER;
+                if(left < 350) {
+                    skystonePosition = SkystonePosition.LEFT;
+                } else if(left > 500) {
+                    skystonePosition = SkystonePosition.RIGHT;
+                } else {
+                    skystonePosition = SkystonePosition.CENTER;
+                }
             }
 
             telemetry.addData("Skystone Position", skystonePosition);
@@ -104,7 +113,7 @@ public class Auto extends BaseLinearOpMode {
 
     private Drive.TurnDirection turnDirection = Drive.TurnDirection.COUNTER_CLOCKWISE;
     private int brickWidth = 8; // inches
-    private float farBrickOffset = 5.65f;
+    private float farBrickOffset = 7f;
 
     private float brickDistFromRobot = 5f;
     private float strafeDistFromBricks = 11f;
@@ -157,7 +166,7 @@ public class Auto extends BaseLinearOpMode {
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 0.5) {}
 
-        // Grab Brick
+        // Grab Brick`
         if(startingPosition == Config.Position.RED_BRICKS) {
             armsController.rightArm.setPosition(-1);
         } else {
@@ -224,7 +233,7 @@ public class Auto extends BaseLinearOpMode {
         }
 
         // Park on tape
-        drive.moveByInches(1, 10, 1);
+        drive.moveByInches(1, 20, 1);
     }
 
     private void grabStageBricks() {
