@@ -60,8 +60,8 @@ public class LiftController {
 
         grab.setPosition(0.65);
 
-        if(lift.getCurrentPosition() != POSITION_3) {
-            goTo(1, POSITION_3);
+        if(lift.getCurrentPosition() != POSITION_4) {
+            goTo(1, POSITION_4);
         }
 
         swing.setPosition(1);
@@ -90,8 +90,8 @@ public class LiftController {
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.5) {}
 
-        if(lift.getCurrentPosition() != POSITION_4) {
-            goTo(1, POSITION_4);
+        if(lift.getCurrentPosition() != POSITION_5) {
+            goTo(1, POSITION_5);
         }
 
         timer.reset();

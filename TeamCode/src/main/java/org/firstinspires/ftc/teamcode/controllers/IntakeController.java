@@ -51,7 +51,7 @@ public class IntakeController {
                     }
                 }
                 break;
-            case FtcGamePad.GAMEPAD_Y:
+            case FtcGamePad.GAMEPAD_BACK:
                 if(pressed) {
                     if(!yAlreadyPressed) {
                         init();
