@@ -32,10 +32,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
+import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
+import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto", group="Linear Opmode")
 public class Auto extends BaseLinearOpMode {
@@ -127,7 +130,7 @@ public class Auto extends BaseLinearOpMode {
     }
 
     private void runAuto() {
-        // Move Towards Bricks
+
         drive.moveByInches(1, 24, 1.5);
 
         super.initIntake();
@@ -208,7 +211,18 @@ public class Auto extends BaseLinearOpMode {
         drive.moveByInches(1, moveDistance, 2.5);
 
         // Strafe into bricks
-        ((MechDrive) drive).strafe(-0.45, strafeDistFromBricks, 2.5);
+        drive.drive(0, -0.5, 0);
+        while(opModeIsActive()) {
+            if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
+                armsController.closeArm(ArmsController.ArmSide.RIGHT);
+                drive.stop();
+                break;
+            }
+        }
+
+        // Wait 0.5s
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 0.5) {}
 
         // Grab Brick
         if(startingPosition == Config.Position.RED_BRICKS) {

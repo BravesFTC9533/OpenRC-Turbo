@@ -82,7 +82,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         config = new Config(hardwareMap.appContext);
         drive = new MechDrive(robot, this);
         sensors = new ColorSensors(hardwareMap);
-        liftController = new LiftController(this, hardwareMap);
+        liftController = new LiftController(this, hardwareMap, drive);
         intakeController = new IntakeController(this, hardwareMap);
         armsController = new ArmsController(hardwareMap);
 

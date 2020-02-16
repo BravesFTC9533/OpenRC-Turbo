@@ -65,8 +65,6 @@ public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler
             drive.handleTeleop(driverGamePad);
             driverGamePad.update();
             operatorGamePad.update();
-            telemetry.addData("Accel.", robot.imu.getLinearAcceleration());
-            telemetry.update();
         }
         drive.stop();
         liftController.setLiftPower(0);

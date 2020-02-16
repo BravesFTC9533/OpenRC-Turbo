@@ -32,12 +32,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
 import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.common.Robot;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
+import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto Test", group="Linear Opmode")
 public class AutoTest extends BaseLinearOpMode {
@@ -59,9 +61,6 @@ public class AutoTest extends BaseLinearOpMode {
 
         waitForStart();
         runtime.reset();
-
-        armsController.closeArm(ArmsController.ArmSide.RIGHT);
-        while(opModeIsActive()) {}
 
     }
 }

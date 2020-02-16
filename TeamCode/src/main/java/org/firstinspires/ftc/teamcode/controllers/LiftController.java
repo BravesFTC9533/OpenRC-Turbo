@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+import org.firstinspires.ftc.teamcode.drive.Drive;
 
 public class LiftController {
 
@@ -31,8 +32,11 @@ public class LiftController {
 
     private final LinearOpMode opMode;
 
-    public LiftController(LinearOpMode opMode, HardwareMap hardwareMap) {
+    private final Drive drive;
+
+    public LiftController(LinearOpMode opMode, HardwareMap hardwareMap, Drive drive) {
         this.opMode = opMode;
+        this.drive = drive;
         lift = hardwareMap.get(DcMotorEx.class, "lift");
         swing = hardwareMap.get(Servo.class, "swing");
         grab = hardwareMap.get(Servo.class, "grabArm");
@@ -52,6 +56,8 @@ public class LiftController {
 
     public void positionForBrick() {
 
+        drive.stop();
+
         grab.setPosition(0.65);
 
         if(lift.getCurrentPosition() != POSITION_3) {
@@ -68,6 +74,9 @@ public class LiftController {
     }
 
     public void grabAndMoveBrick() {
+        drive.stop();
+
+
         if(lift.getCurrentPosition() != POSITION_GRAB) {
             goTo(1, POSITION_GRAB);
         }
@@ -76,7 +85,7 @@ public class LiftController {
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.85) {}
 
-        grab.setPosition(0.65);
+        grab.setPosition(1);
 
         timer.reset();
         while(opMode.opModeIsActive() && timer.seconds() < 0.5) {}
