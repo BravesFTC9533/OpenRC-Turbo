@@ -18,13 +18,11 @@ public class LiftController {
     public static final int MAX_LIFT = 1325;
 
     public static final int POSITION_1 = 0;
-    public static final int POSITION_GRAB = 200;
     public static final int POSITION_3 = 618;
     public static final int POSITION_4 = 869;
     public static final int POSITION_5 = 1112;
 
     public static final int MAX_SWING_POSITION = 0;
-    public static final int MIN_SWING_POSITION = 1;
 
     public final DcMotorEx lift;
     public final Servo swing;
@@ -105,22 +103,6 @@ public class LiftController {
 
     public void handle(int button, boolean pressed) {
         switch (button) {
-//            case FtcGamePad.GAMEPAD_DPAD_DOWN:
-//                if(pressed) {
-//                    if(lift.getCurrentPosition() <= 0) {setLiftPower(0);} else
-//                    setLiftPower(-1);
-//                } else {
-//                    setLiftPower(0);
-//                }
-//                break;
-//            case FtcGamePad.GAMEPAD_DPAD_UP:
-//                if(pressed) {
-//                    if(lift.getCurrentPosition() >= MAX_LIFT) {setLiftPower(0);} else
-//                    setLiftPower(1);
-//                } else {
-//                    setLiftPower(0);
-//                }
-//                break;
             case FtcGamePad.GAMEPAD_LBUMPER:
                 if(pressed) {
                     positionForBrick();
@@ -169,12 +151,4 @@ public class LiftController {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         setLiftPower(power);
     }
-
-    public void holdPosition() {
-        lift.setTargetPosition(lift.getTargetPosition());
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setLiftPower(1);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
 }

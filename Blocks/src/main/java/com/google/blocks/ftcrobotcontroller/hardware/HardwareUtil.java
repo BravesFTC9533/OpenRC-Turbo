@@ -190,9 +190,6 @@ public class HardwareUtil {
         .append(blinkinPatternFromTextTooltip)
         .append("\n");
 
-<<<<<<< HEAD
-    // SkyStone raw resources
-=======
     // Locales
     SortedMap<String, String> languageCodes = new TreeMap<String, String>();
     SortedMap<String, String> countryCodes = new TreeMap<String, String>();
@@ -262,7 +259,6 @@ public class HardwareUtil {
         .append("\n");
 
     // SkyStone sound resources
->>>>>>> 324ed36fa4c1adb305c026f52b746acd4692e88a
     StringBuilder createSkyStoneSoundResourceDropdown = new StringBuilder();
     StringBuilder skyStoneSoundResourceTooltips = new StringBuilder();
     createSkyStoneSoundResourceDropdown

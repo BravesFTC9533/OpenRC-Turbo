@@ -37,7 +37,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.Auto;
 import org.firstinspires.ftc.teamcode.controllers.ArmsController;
 import org.firstinspires.ftc.teamcode.controllers.IntakeController;
 import org.firstinspires.ftc.teamcode.controllers.LiftController;
@@ -45,12 +44,11 @@ import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseLinearOpMode extends LinearOpMode {
 
-    protected Robot robot;
+    private Robot robot;
     protected Config config;
     protected Drive drive;
     protected ColorSensors sensors;
@@ -58,10 +56,8 @@ public class BaseLinearOpMode extends LinearOpMode {
     protected LiftController liftController;
     protected IntakeController intakeController;
 
-    @Override
-    public void runOpMode() {
-
-    }
+    // Should not contain any code!!!
+    @Override public void runOpMode() {}
 
     protected void Initialize() {
         telemetry.addData("Status", "Initializing");
@@ -90,12 +86,12 @@ public class BaseLinearOpMode extends LinearOpMode {
         telemetry.update();
     }
 
-    public void initIntake() {
+    protected void initIntake() {
         intakeController = new IntakeController(this, hardwareMap);
         intakeController.init();
     }
 
-    public void initLift() {
+    protected void initLift() {
         armsController.init();
     }
 
@@ -103,31 +99,11 @@ public class BaseLinearOpMode extends LinearOpMode {
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY =
             "AXbBhc3/////AAABmYrvTPoIKkxfmXR8QBJ3kFhjEocjRRhMOdtB3FD5YzoKJDKhgPBoVU6Q0qODLRLeUmOxRs/FN8m875DQGgty/sfg3wzFJLbjUPfMjxctY4hasa8ydNdgy1Bo4IvOnoN80gyAkhzAw2yyQgcjg4su/5nBPlVxx/JXAHMs7il8Lf2P7ZGfvZiGC+5DkVTNwPdWgXUyq5zixPy9052+jy93106KutP6JCfCrPWNZrJvKZhQDqOL7om/5gKUbGI57T8IXq/o4n6yL3ha4ADMjG2tiF54yOOfh8E96Mn3PgsuLQqoQYps/gAf3mdK0wV+qW7o0lTiZ0qtQzopxAO5Jp8nUwc1Bl5s018gLNJXouXjkgkQ";
 
-    /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
-     */
     private VuforiaLocalizer vuforia;
 
-    /**
-     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
-     * Detection engine.
-     */
     private TFObjectDetector tfod;
 
     protected void startVuforia() {
@@ -152,7 +128,7 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     private List<Recognition> updatedRecognitions;
 
-    protected void updateTFOD() {
+    private void updateTFOD() {
         if(!isStopRequested() && tfod != null) {
             if (!isStopRequested() && tfod != null) {
                 updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -172,12 +148,12 @@ public class BaseLinearOpMode extends LinearOpMode {
 
     protected double left = 0;
 
-    public void deactivate() {
+    protected void deactivateTfod() {
         if(tfod == null) return;
         tfod.shutdown();
     }
 
-    public boolean detectSkystone(Config.Position position) {
+    protected boolean detectSkystone(Config.Position position) {
         if(!isStopRequested() && tfod != null) {
             updateTFOD();
         }

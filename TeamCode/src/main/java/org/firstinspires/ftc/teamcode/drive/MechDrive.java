@@ -14,21 +14,14 @@ import org.firstinspires.ftc.teamcode.common.Robot;
 
 public class MechDrive extends Drive {
 
-    public static final double COMPASS_CORRECT_SPEED = 0.1;
-    public static final double ACCEL_CORRECT_SPEED = 0.1;
-
     private static final double MIN_SPEED = 0.2;
 
-    public final Robot robot;
+    private final Robot robot;
 
-    public final DcMotorEx fl;
-    public final DcMotorEx fr;
-    public final DcMotorEx bl;
-    public final DcMotorEx br;
-
-    public enum StrafeDirection {
-        LEFT, RIGHT
-    }
+    private final DcMotorEx fl;
+    private final DcMotorEx fr;
+    private final DcMotorEx bl;
+    private final DcMotorEx br;
 
     public MechDrive(Robot robot, LinearOpMode opMode) {
         super(opMode);
@@ -41,7 +34,7 @@ public class MechDrive extends Drive {
 
     // Scale motor power based on the max for all wheels
     // 1, 1, 1, 3 will become .33, .33, .33, 1
-    public static double scalePower(double value, double max){
+    private static double scalePower(double value, double max){
         if(max == 0){return  0;}
         return  value / max;
     }
@@ -50,7 +43,7 @@ public class MechDrive extends Drive {
         return Range.clip(value, -1, 1);
     }
 
-    public void addTargetPosition(int leftTicks, int rightTicks) {
+    private void addTargetPosition(int leftTicks, int rightTicks) {
         fl.setTargetPosition(fl.getCurrentPosition() + leftTicks);
         bl.setTargetPosition(bl.getCurrentPosition() + leftTicks);
         fr.setTargetPosition(fr.getCurrentPosition() + rightTicks);

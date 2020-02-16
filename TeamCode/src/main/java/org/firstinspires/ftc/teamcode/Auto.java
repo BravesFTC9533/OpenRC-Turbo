@@ -92,7 +92,7 @@ public class Auto extends BaseLinearOpMode {
         waitForStart();
         runtime.reset();
 
-        super.deactivate();
+        super.deactivateTfod();
 
         switch (startingPosition) {
             case RED_BRICKS:

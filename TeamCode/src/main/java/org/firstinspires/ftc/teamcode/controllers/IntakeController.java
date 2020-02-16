@@ -10,14 +10,14 @@ import org.firstinspires.ftc.teamcode.common.FtcGamePad;
 
 public class IntakeController {
 
-    public static final int MAX_REV_VELOCITY = 600;
-    public static final int MAX_INTAKE_TICKS = 100;
+    private static final int MAX_REV_VELOCITY = 600;
+    private static final int MAX_INTAKE_TICKS = 100;
 
     public final DcMotorEx intake;
-    public final Servo leftIntake;
-    public final Servo rightIntake;
+    private final Servo leftIntake;
+    private final Servo rightIntake;
 
-    public final LinearOpMode opMode;
+    private final LinearOpMode opMode;
 
     public IntakeController(LinearOpMode opMode, HardwareMap hardwareMap) {
         this.opMode = opMode;
