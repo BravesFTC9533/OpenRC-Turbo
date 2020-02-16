@@ -29,66 +29,39 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.common.BaseLinearOpMode;
-import org.firstinspires.ftc.teamcode.common.FtcGamePad;
+import org.firstinspires.ftc.teamcode.common.Config;
 import org.firstinspires.ftc.teamcode.common.Robot;
-import org.firstinspires.ftc.teamcode.controllers.LiftController;
+import org.firstinspires.ftc.teamcode.controllers.ArmsController;
+import org.firstinspires.ftc.teamcode.drive.Drive;
+import org.firstinspires.ftc.teamcode.drive.MechDrive;
 
-@TeleOp(name="Teleop", group="Linear Opmode")
-public class Teleop extends BaseLinearOpMode implements FtcGamePad.ButtonHandler {
+@Autonomous(name="Auto Test", group="Linear Opmode")
+public class AutoTest extends BaseLinearOpMode {
 
-    private FtcGamePad driverGamePad;
-    private FtcGamePad operatorGamePad;
-
+    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private Config.StopPosition stopPosition;
+    private Config.Position startingPosition;
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
         super.Initialize();
-        super.initLift();
 
-        driverGamePad = new FtcGamePad("Driver Gampad", gamepad1, this);
-        operatorGamePad = new FtcGamePad("Operator Gampad", gamepad2, this);
+        armsController.init();
+        liftController.init();
+
+        stopPosition = config.getStopPosition();
+        startingPosition = config.getPosition();
 
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-            drive.handleTeleop(driverGamePad);
-            driverGamePad.update();
-            operatorGamePad.update();
-            telemetry.addData("Accel.", robot.imu.getLinearAcceleration());
-            telemetry.update();
-        }
-        drive.stop();
-        liftController.setLiftPower(0);
-        intakeController.intake.setPower(0);
-    }
+        armsController.closeArm(ArmsController.ArmSide.RIGHT);
+        while(opModeIsActive()) {}
 
-    @Override
-    public void gamepadButtonEvent(FtcGamePad gamepad, int button, boolean pressed) {
-        if(gamepad == driverGamePad)
-            handleDriverGamepad(button, pressed);
-        else
-            handleOperatorGamepad(button, pressed);
     }
-
-    private void handleDriverGamepad(int button, boolean pressed) {
-        drive.handleTeleop(driverGamePad);
-    }
-
-    private void handleOperatorGamepad(int button, boolean pressed) {
-        liftController.handle(button, pressed);
-        intakeController.handle(button, pressed);
-        armsController.handle(button, pressed);
-    }
-
 }
