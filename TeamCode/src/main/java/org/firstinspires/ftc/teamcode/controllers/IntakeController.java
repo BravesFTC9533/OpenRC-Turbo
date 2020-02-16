@@ -42,23 +42,23 @@ public class IntakeController {
         switch (button) {
             case FtcGamePad.GAMEPAD_X:
                 if(pressed) {
-                    if(leftIntake.getPosition() < 0.5) {
-                        leftIntake.setPosition(0.5);
-                        rightIntake.setPosition(0.5);
-                    } else {
+                    if(leftIntake.getPosition() > 0) {
                         leftIntake.setPosition(0);
                         rightIntake.setPosition(0);
+                    } else {
+                        leftIntake.setPosition(0.5);
+                        rightIntake.setPosition(0.5);
                     }
                 }
                 break;
             case FtcGamePad.GAMEPAD_A:
                 if(pressed) {
-                    if(leftIntake.getPosition() > -0.5) {
-                        leftIntake.setPosition(-0.5);
-                        rightIntake.setPosition(-0.5);
+                    if(leftIntake.getPosition() < 1) {
+                        leftIntake.setPosition(1);
+                        rightIntake.setPosition(1);
                     } else {
-                        leftIntake.setPosition(0);
-                        rightIntake.setPosition(0);
+                        leftIntake.setPosition(0.5);
+                        rightIntake.setPosition(0.5);
                     }
                 }
                 break;
