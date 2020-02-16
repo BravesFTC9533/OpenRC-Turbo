@@ -113,7 +113,7 @@ public class Auto extends BaseLinearOpMode {
 
     private Drive.TurnDirection turnDirection = Drive.TurnDirection.COUNTER_CLOCKWISE;
     private int brickWidth = 8; // inches
-    private float farBrickOffset = 7f;
+    private float farBrickOffset = 7.65f;
 
     private float brickDistFromRobot = 5f;
     private float strafeDistFromBricks = 11f;
