@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.R;
-
 @TeleOp(name="Max Velocity", group="Util Opmode")
+@Disabled
 public class MaxVelocityTest extends LinearOpMode {
 
     DcMotorEx motor;
