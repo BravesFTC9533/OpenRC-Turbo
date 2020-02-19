@@ -123,6 +123,8 @@ public class Auto extends BaseLinearOpMode {
 
     private float baseDistanceFar = -53f;
 
+    private float strafeAdjust = -3f;
+
     private void blueBricks() {
         turnDirection = Drive.TurnDirection.CLOCKWISE;
         brickDistFromRobot = -brickDistFromRobot;
@@ -163,13 +165,20 @@ public class Auto extends BaseLinearOpMode {
         }
 
         // Move Into From Bricks
-        ((MechDrive) drive).strafe(-0.5, brickDistFromRobot, 2);
+        drive.drive(0, -0.5, 0);
+        while(opModeIsActive()) {
+            if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
+                armsController.closeArm(ArmsController.ArmSide.RIGHT);
+                drive.stop();
+                break;
+            }
+        }
 
         // Delay 0.5s
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 0.5) {}
 
-        // Grab Brick`
+        // Grab Brick
         if(startingPosition == Config.Position.RED_BRICKS) {
             armsController.rightArm.setPosition(-1);
         } else {
@@ -220,9 +229,16 @@ public class Auto extends BaseLinearOpMode {
             }
         }
 
+        // Wait 0.25s
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 0.25) {}
+
+        // Strafe Adjustment
+        drive.moveByInches(0.8, strafeAdjust, 1);
+
         // Wait 0.5s
         runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 0.5) {}
+        while(opModeIsActive() && runtime.seconds() < 1.25) {}
 
         // Grab Brick
         if(startingPosition == Config.Position.RED_BRICKS) {
@@ -248,6 +264,12 @@ public class Auto extends BaseLinearOpMode {
 
         // Park on tape
         drive.moveByInches(1, 20, 1);
+
+        // Strafe towards wall
+        drive.drive(0, -0.5, 0);
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1) {}
+        drive.stop();
     }
 
     private void grabStageBricks() {
