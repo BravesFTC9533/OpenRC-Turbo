@@ -59,33 +59,36 @@ public class Auto extends BaseLinearOpMode {
         stopPosition = config.getStopPosition();
         startingPosition = config.getPosition();
 
-        while(!isStopRequested() && !isStarted()) {
-            detectSkystone(startingPosition);
+        if(startingPosition == Config.Position.BLUE_BRICKS ||
+           startingPosition == Config.Position.RED_BRICKS) {
+            while (!isStopRequested() && !isStarted()) {
+                detectSkystone(startingPosition);
 
-            if(startingPosition == Config.Position.RED_BRICKS) {
-                if (left < 100) {
-                    skystonePosition = SkystonePosition.LEFT;
-                } else if (left > 400) {
-                    skystonePosition = SkystonePosition.RIGHT;
+                if (startingPosition == Config.Position.RED_BRICKS) {
+                    if (left < 100) {
+                        skystonePosition = SkystonePosition.LEFT;
+                    } else if (left > 400) {
+                        skystonePosition = SkystonePosition.RIGHT;
+                    } else {
+                        skystonePosition = SkystonePosition.CENTER;
+                    }
                 } else {
-                    skystonePosition = SkystonePosition.CENTER;
+                    if (left < 350) {
+                        skystonePosition = SkystonePosition.LEFT;
+                    } else if (left > 500) {
+                        skystonePosition = SkystonePosition.RIGHT;
+                    } else {
+                        skystonePosition = SkystonePosition.CENTER;
+                    }
                 }
-            } else {
-                if(left < 350) {
-                    skystonePosition = SkystonePosition.LEFT;
-                } else if(left > 500) {
-                    skystonePosition = SkystonePosition.RIGHT;
-                } else {
-                    skystonePosition = SkystonePosition.CENTER;
+
+                telemetry.addData("Skystone Position", skystonePosition);
+                telemetry.addData("Position", left);
+                telemetry.update();
+
+                if (runtime.seconds() >= 0.5 && !isStarted()) {
+                    runtime.reset();
                 }
-            }
-
-            telemetry.addData("Skystone Position", skystonePosition);
-            telemetry.addData("Position", left);
-            telemetry.update();
-
-            if(runtime.seconds() >= 0.5 && !isStarted()) {
-                runtime.reset();
             }
         }
 
@@ -96,12 +99,20 @@ public class Auto extends BaseLinearOpMode {
 
         switch (startingPosition) {
             case RED_BRICKS:
+                bricksAuto();
                 break;
             case BLUE_BRICKS:
                 blueBricks();
+                bricksAuto();
+                break;
+            case RED_BUILDING:
+                buildingsAuto();
+                break;
+            case BLUE_BUILDING:
+                blueBuilding();
+                buildingsAuto();
                 break;
         }
-        runAuto();
     }
 
     private SkystonePosition skystonePosition = SkystonePosition.CENTER;
@@ -131,8 +142,7 @@ public class Auto extends BaseLinearOpMode {
         strafeDistFromBricks = -strafeDistFromBricks;
     }
 
-    private void runAuto() {
-
+    private void bricksAuto() {
         drive.moveByInches(1, 24, 1.5);
 
         super.initIntake();
@@ -272,16 +282,35 @@ public class Auto extends BaseLinearOpMode {
         drive.stop();
     }
 
-    private void grabStageBricks() {
-
-    }
-
-    private void redBuilding() {
-
-    }
+    private float strafeMovement = 42f;
+    private float distFromFoundation = 28f;
 
     private void blueBuilding() {
-
+        strafeMovement = -strafeMovement;
     }
 
+    private void buildingsAuto() {
+        // Move towards the building zone
+        drive.moveByInches(1, distFromFoundation, 1.5);
+
+        // Grab the bricks
+
+        // Initialize Intake
+        super.initIntake();
+
+        // Wait 1s
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1) {}
+
+        // Move backwards
+        drive.moveByInches(1, -distFromFoundation, 1.5);
+
+        // Determine the stop position
+        if(stopPosition == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 22f, 1.5);
+        }
+
+        // Strafe over tape
+        ((MechDrive) drive).strafe(0.5, strafeMovement, 5);
+    }
 }
