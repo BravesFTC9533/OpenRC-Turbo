@@ -23,6 +23,7 @@ public class AutonomousConfig extends LinearOpMode {
 
         menu.addOption("Position", Config.Position.class, config.getPosition());
         menu.addOption("StopPosition", Config.StopPosition.class, config.getStopPosition());
+        menu.addOption("OnlyPark", Config.OnlyPark.class, config.getOnlyPark());
         menu.addOption("Max Lift Ticks", 10000, 0, 1, config.getMaxLiftTicks());
         menu.addOption("Max Servo Position", 1, 0, 0.1, config.getMaxLiftTicks());
         menu.setGamepad(gamepad1);
@@ -55,6 +56,15 @@ public class AutonomousConfig extends LinearOpMode {
                     break;
                 case "RED_BUILDING":
                     config.setPosition(Config.Position.RED_BUILDING);
+                    break;
+            }
+
+            switch (menu.getCurrentChoiceOf("OnlyPark")) {
+                case "TRUE":
+                    config.setOnlyPark(Config.OnlyPark.TRUE);
+                    break;
+                case "FALSE":
+                    config.setOnlyPark(Config.OnlyPark.FALSE);
                     break;
             }
 

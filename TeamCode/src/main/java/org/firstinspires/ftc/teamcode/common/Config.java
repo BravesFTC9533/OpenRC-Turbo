@@ -49,6 +49,20 @@ public class Config {
         }
     }
 
+    public static final String ONLY_PARK = "OnlyPark";
+    public static OnlyPark _onlyPark;
+    public enum OnlyPark {
+        TRUE, FALSE;
+
+        public static OnlyPark toOnlyPark(String park) {
+            try {
+                return valueOf(park);
+            } catch (Exception e) {
+                return FALSE;
+            }
+        }
+    }
+
     public static final String MAX_LIFT_TICKS = "MaxLiftTicks";
     public static int _maxLiftTicks;
 
@@ -66,6 +80,7 @@ public class Config {
 
         editor.putString(POSITION, _position.name());
         editor.putString(STOP_POSITION, _stopPosition.name());
+        editor.putString(ONLY_PARK, _onlyPark.name());
         editor.putString(PARK_POSITION, _parkPosition.name());
         editor.putInt(MAX_LIFT_TICKS, _maxLiftTicks);
         editor.putFloat(MAX_SERVO_POSITION, _maxServoPosition);
@@ -77,6 +92,7 @@ public class Config {
         _position = Position.toPosition(sp.getString(POSITION, "BLUE_BRICKS"));
         _stopPosition = StopPosition.toStopPosition(sp.getString(STOP_POSITION, "WALL"));
         _parkPosition = ParkPosition.toParkPosition(sp.getString(PARK_POSITION, "WALL"));
+        _onlyPark = OnlyPark.toOnlyPark(sp.getString(ONLY_PARK, "FALSE"));
         _maxLiftTicks = sp.getInt(MAX_LIFT_TICKS, 1000);
         _maxServoPosition = sp.getFloat(MAX_SERVO_POSITION, 0.5f);
     }
@@ -107,6 +123,10 @@ public class Config {
     public void setMaxServoPosition(float maxServoPosition) {
         _maxServoPosition = maxServoPosition;
     }
+
+    public OnlyPark getOnlyPark() {return _onlyPark;}
+
+    public void setOnlyPark(OnlyPark onlyPark) {_onlyPark = onlyPark;}
 
     public void setParkPosition(ParkPosition parkPosition) {_parkPosition = parkPosition;}
 

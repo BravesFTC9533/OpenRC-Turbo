@@ -47,6 +47,7 @@ public class Auto extends BaseLinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private Config.StopPosition stopPosition;
     private Config.Position startingPosition;
+    private Config.OnlyPark onlyPark;
 
     @Override
     public void runOpMode() {
@@ -58,9 +59,10 @@ public class Auto extends BaseLinearOpMode {
 
         stopPosition = config.getStopPosition();
         startingPosition = config.getPosition();
+        onlyPark = config.getOnlyPark();
 
         if(startingPosition == Config.Position.BLUE_BRICKS ||
-           startingPosition == Config.Position.RED_BRICKS) {
+           startingPosition == Config.Position.RED_BRICKS && onlyPark == Config.OnlyPark.FALSE) {
             while (!isStopRequested() && !isStarted()) {
                 detectSkystone(startingPosition);
 
@@ -99,17 +101,32 @@ public class Auto extends BaseLinearOpMode {
 
         switch (startingPosition) {
             case RED_BRICKS:
+                if(onlyPark == Config.OnlyPark.TRUE) {
+                    onlyParkBricks();
+                }
                 bricksAuto();
                 break;
             case BLUE_BRICKS:
                 blueBricks();
+                if(onlyPark == Config.OnlyPark.TRUE) {
+                    onlyParkBricks();
+                    break;
+                }
                 bricksAuto();
                 break;
             case RED_BUILDING:
+                if(onlyPark == Config.OnlyPark.TRUE) {
+                    onlyParkBuilding();
+                    break;
+                }
                 buildingsAuto();
                 break;
             case BLUE_BUILDING:
                 blueBuilding();
+                if(onlyPark == Config.OnlyPark.TRUE) {
+                    onlyParkBuilding();
+                    break;
+                }
                 buildingsAuto();
                 break;
         }
@@ -140,6 +157,10 @@ public class Auto extends BaseLinearOpMode {
         turnDirection = Drive.TurnDirection.CLOCKWISE;
         brickDistFromRobot = -brickDistFromRobot;
         strafeDistFromBricks = -strafeDistFromBricks;
+    }
+
+    private void onlyParkBricks() {
+
     }
 
     private void bricksAuto() {
@@ -287,6 +308,24 @@ public class Auto extends BaseLinearOpMode {
 
     private void blueBuilding() {
         strafeMovement = -strafeMovement;
+    }
+
+    private void onlyParkBuilding() {
+        // Determine the stop position
+        if(stopPosition == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 22f, 1.5);
+        } else {
+            drive.moveByInches(1, 15, 1);
+        }
+
+        super.initIntake();
+
+        if(stopPosition == Config.StopPosition.WALL) {
+            drive.moveByInches(1, -15, 1);
+        }
+
+        // Strafe over tape
+        ((MechDrive) drive).strafe(0.5, strafeMovement, 5);
     }
 
     private void buildingsAuto() {
