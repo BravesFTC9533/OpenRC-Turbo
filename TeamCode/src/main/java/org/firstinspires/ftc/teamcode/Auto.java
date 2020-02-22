@@ -101,33 +101,17 @@ public class Auto extends BaseLinearOpMode {
 
         switch (startingPosition) {
             case RED_BRICKS:
-                if(onlyPark == Config.OnlyPark.TRUE) {
-                    onlyParkBricks();
-                }
                 bricksAuto();
                 break;
             case BLUE_BRICKS:
                 blueBricks();
-                if(onlyPark == Config.OnlyPark.TRUE) {
-                    onlyParkBricks();
-                    break;
-                }
                 bricksAuto();
                 break;
             case RED_BUILDING:
-                if(onlyPark == Config.OnlyPark.TRUE) {
-                    onlyParkBuilding();
-                    break;
-                }
-                buildingsAuto();
+                redBuilding();
                 break;
             case BLUE_BUILDING:
                 blueBuilding();
-                if(onlyPark == Config.OnlyPark.TRUE) {
-                    onlyParkBuilding();
-                    break;
-                }
-                buildingsAuto();
                 break;
         }
     }
@@ -153,10 +137,14 @@ public class Auto extends BaseLinearOpMode {
 
     private float strafeAdjust = -3f;
 
+    private float strafePower = -0.4f;
+
     private void blueBricks() {
         turnDirection = Drive.TurnDirection.CLOCKWISE;
         brickDistFromRobot = -brickDistFromRobot;
         strafeDistFromBricks = -strafeDistFromBricks;
+        strafePower = -strafePower;
+        strafeAdjust = -strafeAdjust;
     }
 
     private void onlyParkBricks() {
@@ -196,12 +184,20 @@ public class Auto extends BaseLinearOpMode {
         }
 
         // Move Into From Bricks
-        drive.drive(0, -0.5, 0);
+        drive.drive(0, strafePower, 0);
         while(opModeIsActive()) {
-            if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
-                armsController.closeArm(ArmsController.ArmSide.RIGHT);
-                drive.stop();
-                break;
+            if(startingPosition == Config.Position.RED_BRICKS) {
+                if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
+                    armsController.closeArm(ArmsController.ArmSide.RIGHT);
+                    drive.stop();
+                    break;
+                }
+            } else {
+                if (sensors.getSensorDistance(ColorSensors.SensorSide.LEFT, DistanceUnit.MM) <= 55) {
+                    armsController.closeArm(ArmsController.ArmSide.LEFT);
+                    drive.stop();
+                    break;
+                }
             }
         }
 
@@ -251,12 +247,20 @@ public class Auto extends BaseLinearOpMode {
         drive.moveByInches(1, moveDistance, 2.5);
 
         // Strafe into bricks
-        drive.drive(0, -0.5, 0);
+        drive.drive(0, strafePower, 0);
         while(opModeIsActive()) {
-            if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
-                armsController.closeArm(ArmsController.ArmSide.RIGHT);
-                drive.stop();
-                break;
+            if(startingPosition == Config.Position.RED_BRICKS) {
+                if (sensors.getSensorDistance(ColorSensors.SensorSide.RIGHT, DistanceUnit.MM) <= 55) {
+                    armsController.closeArm(ArmsController.ArmSide.RIGHT);
+                    drive.stop();
+                    break;
+                }
+            } else {
+                if (sensors.getSensorDistance(ColorSensors.SensorSide.LEFT, DistanceUnit.MM) <= 55) {
+                    armsController.closeArm(ArmsController.ArmSide.LEFT);
+                    drive.stop();
+                    break;
+                }
             }
         }
 
@@ -297,59 +301,58 @@ public class Auto extends BaseLinearOpMode {
         drive.moveByInches(1, 20, 1);
 
         // Strafe towards wall
-        drive.drive(0, -0.5, 0);
+        drive.drive(0, strafePower, 0);
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < 1) {}
         drive.stop();
     }
 
-    private float strafeMovement = 42f;
-    private float distFromFoundation = 28f;
+    private void redBuilding() {
+        if(config.getStopPosition() == Config.StopPosition.WALL) {
+            drive.moveByInches(1, 10, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            runtime.reset();
+            drive.drive(0, 0.5, 0);
+            while(opModeIsActive() && runtime.seconds() < 2) {}
+
+            drive.moveByInches(1, 20, 1.5);
+        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 18, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.COUNTER_CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            drive.moveByInches(1, 25, 1.5);
+        }
+
+    }
 
     private void blueBuilding() {
-        strafeMovement = -strafeMovement;
-    }
+        if(config.getStopPosition() == Config.StopPosition.WALL) {
+            drive.moveByInches(1, 10, 1.5);
 
-    private void onlyParkBuilding() {
-        // Determine the stop position
-        if(stopPosition == Config.StopPosition.BRIDGE) {
-            drive.moveByInches(1, 22f, 1.5);
-        } else {
-            drive.moveByInches(1, 15, 1);
+            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            runtime.reset();
+            drive.drive(0, -0.5, 0);
+            while(opModeIsActive() && runtime.seconds() < 2) {}
+
+            drive.moveByInches(1, 20, 1.5);
+        } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
+            drive.moveByInches(1, 18, 1.5);
+
+            drive.turnDegrees(1, Drive.TurnDirection.CLOCKWISE, 90, 1.5);
+
+            super.initIntake();
+
+            drive.moveByInches(1, 25, 1.5);
         }
-
-        super.initIntake();
-
-        if(stopPosition == Config.StopPosition.WALL) {
-            drive.moveByInches(1, -15, 1);
-        }
-
-        // Strafe over tape
-        ((MechDrive) drive).strafe(0.5, strafeMovement, 5);
-    }
-
-    private void buildingsAuto() {
-        // Move towards the building zone
-        drive.moveByInches(1, distFromFoundation, 1.5);
-
-        // Grab the bricks
-
-        // Initialize Intake
-        super.initIntake();
-
-        // Wait 1s
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1) {}
-
-        // Move backwards
-        drive.moveByInches(1, -distFromFoundation, 1.5);
-
-        // Determine the stop position
-        if(stopPosition == Config.StopPosition.BRIDGE) {
-            drive.moveByInches(1, 22f, 1.5);
-        }
-
-        // Strafe over tape
-        ((MechDrive) drive).strafe(0.5, strafeMovement, 5);
     }
 }

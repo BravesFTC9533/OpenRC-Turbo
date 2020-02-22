@@ -9,8 +9,9 @@ public class ArmsController {
 
     public final Servo leftArm;
     public final Servo rightArm;
+    public final Servo foundationArm;
 
-    public static final double MAX_LEFT_ARM_POSITION = 1;
+    public static final double MAX_LEFT_ARM_POSITION = 0.8;
     public static final double MAX_RIGHT_ARM_POSITION = 1;
     public static final double MIN_LEFT_ARM_POSITION = -1;
     public static final double MIN_RIGHT_ARM_POSITION = -1;
@@ -27,11 +28,23 @@ public class ArmsController {
 
         leftArm.setDirection(Servo.Direction.REVERSE);
         rightArm.setDirection(Servo.Direction.FORWARD);
+
+        foundationArm = hardwareMap.get(Servo.class, "foundation");
+        foundationArm.setDirection(Servo.Direction.REVERSE);
     }
 
     public void init() {
         rightArm.setPosition(MAX_RIGHT_ARM_POSITION);
         leftArm.setPosition(MAX_LEFT_ARM_POSITION);
+        releaseFoundation();
+    }
+
+    public void grabFoundation() {
+        foundationArm.setPosition(1);
+    }
+
+    public void releaseFoundation() {
+        foundationArm.setPosition(-1);
     }
 
     public void toggleArm(ArmSide armSide) {
@@ -77,9 +90,13 @@ public class ArmsController {
 
     public void handle(int button, boolean pressed) {
         switch (button) {
-            case FtcGamePad.GAMEPAD_BACK:
+            case FtcGamePad.GAMEPAD_X:
                 if(pressed) {
-                    toggleArm(ArmSide.LEFT);
+                    if (foundationArm.getPosition() > 0) {
+                        foundationArm.setPosition(-1);
+                    } else {
+                        foundationArm.setPosition(1);
+                    }
                 }
                 break;
         }

@@ -43,7 +43,6 @@ import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto Test", group="Linear Opmode")
-@Disabled
 public class AutoTest extends BaseLinearOpMode {
 
     // Declare OpMode members.
@@ -63,6 +62,13 @@ public class AutoTest extends BaseLinearOpMode {
 
         waitForStart();
         runtime.reset();
+
+        armsController.grabFoundation();
+
+        runtime.reset();
+        while(opModeIsActive() && runtime.seconds() < 1) {}
+
+        drive.moveByInches(1, -15, 1);
 
     }
 }
