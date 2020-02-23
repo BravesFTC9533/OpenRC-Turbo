@@ -319,7 +319,7 @@ public class Auto extends BaseLinearOpMode {
             drive.drive(0, 0.5, 0);
             while(opModeIsActive() && runtime.seconds() < 2) {}
 
-            drive.moveByInches(1, 20, 1.5);
+            drive.moveByInches(1, 38, 1.5);
         } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
             drive.moveByInches(1, 18, 1.5);
 
@@ -327,7 +327,9 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            drive.moveByInches(1, 25, 1.5);
+            drive.moveByInches(1, 38, 1.5);
+
+            ((MechDrive) drive).strafe(0.5, -5, 0);
         }
 
     }
@@ -344,7 +346,7 @@ public class Auto extends BaseLinearOpMode {
             drive.drive(0, -0.5, 0);
             while(opModeIsActive() && runtime.seconds() < 2) {}
 
-            drive.moveByInches(1, 20, 1.5);
+            drive.moveByInches(1, 38, 1.5);
         } else if(config.getStopPosition() == Config.StopPosition.BRIDGE) {
             drive.moveByInches(1, 18, 1.5);
 
@@ -352,7 +354,9 @@ public class Auto extends BaseLinearOpMode {
 
             super.initIntake();
 
-            drive.moveByInches(1, 25, 1.5);
+            drive.moveByInches(1, 38, 1.5);
+
+            ((MechDrive) drive).strafe(0.5, 5, 0);
         }
     }
 }

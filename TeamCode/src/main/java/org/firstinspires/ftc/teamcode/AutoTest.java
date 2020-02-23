@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -43,32 +45,25 @@ import org.firstinspires.ftc.teamcode.drive.MechDrive;
 import org.firstinspires.ftc.teamcode.sensor.ColorSensors;
 
 @Autonomous(name="Auto Test", group="Linear Opmode")
-public class AutoTest extends BaseLinearOpMode {
+public class AutoTest extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private Config.StopPosition stopPosition;
-    private Config.Position startingPosition;
+
 
     @Override
     public void runOpMode() {
-        super.Initialize();
-
-        armsController.init();
-        liftController.init();
-
-        stopPosition = config.getStopPosition();
-        startingPosition = config.getPosition();
+        DcMotor lift  = hardwareMap.dcMotor.get("lift");
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
         runtime.reset();
 
-        armsController.grabFoundation();
-
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1) {}
-
-        drive.moveByInches(1, -15, 1);
-
+        while(opModeIsActive()) {
+            telemetry.addData("Lift", lift.getCurrentPosition());
+            telemetry.update();
+        }
     }
 }
